@@ -3,6 +3,7 @@ import { IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 
 const CallComponent = ({ subopen, key, cal, subMember }) => {
+  const { agent, commission, totalAmount } = cal;
   return (
     <Stack
       width={"100%"}
@@ -18,10 +19,10 @@ const CallComponent = ({ subopen, key, cal, subMember }) => {
         // bgcolor={"red"}
         textAlign={"left"}
       >
-        {cal.customer.name}
+        {agent.name}
       </Typography>
-      <Typography>{cal.commission}</Typography>
-      <Typography>{cal.totalAmount}</Typography>
+      <Typography>{commission}</Typography>
+      <Typography>{totalAmount}</Typography>
       <Stack direction={"row"}>
         <IconButton size="small">
           <Edit fontSize="small" />

@@ -16,7 +16,7 @@ import Axios from "../../shared/Axios";
 const Lottery = () => {
   const [lottery, setLottery] = useState([]);
   useEffect(() => {
-    Axios.get("/lottery")
+    Axios.get("/lotterys")
       .then((res) => {
         setLottery(res.data.lotteries);
       })

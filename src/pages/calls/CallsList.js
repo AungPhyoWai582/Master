@@ -59,23 +59,24 @@ const CallsList = () => {
         placeholder="search call or id"
         sx={{ width: "50%", marginBottom: 1 }}
       />
-      {call.map((cal, key) => (
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <CallComponent cal={cal} key={key} />
-          </AccordionSummary>
-          <AccordionDetails sx={{ maxHeight: 200, overflowY: "scroll" }}>
-            {cal.numbers &&
-              cal.numbers.map((nums, key) => (
-                <CallListComponent nums={nums} key={key} />
-              ))}
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      {call &&
+        call.map((cal, key) => (
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <CallComponent cal={cal} key={key} />
+            </AccordionSummary>
+            <AccordionDetails sx={{ maxHeight: 200, overflowY: "scroll" }}>
+              {cal.numbers &&
+                cal.numbers.map((nums, key) => (
+                  <CallListComponent nums={nums} key={key} />
+                ))}
+            </AccordionDetails>
+          </Accordion>
+        ))}
     </Stack>
   );
 };

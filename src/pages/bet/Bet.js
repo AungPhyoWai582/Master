@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { green, red } from "@mui/material/colors";
+import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import ReactFileReader from "react-file-reader";
@@ -26,6 +27,7 @@ const Bet = ({}) => {
   // console.log(choseFun);
 
   const [agents, setAgents] = useState([]);
+
   useEffect(() => {
     Axios.get(`/agents`, {
       headers: {
@@ -60,7 +62,7 @@ const Bet = ({}) => {
   const [autoCompleteValue, setAutoCompleteValue] = useState();
 
   const [call, setCall] = useState({
-    agents: "",
+    agent: "",
     numbers: [],
   });
 
@@ -97,6 +99,7 @@ const Bet = ({}) => {
         numbers: [...call.numbers, onchange],
       });
       setOnchange({ number: "", amount: onchange.amount });
+      setEditCtlBtn(false);
     } else {
       console.log("error");
     }
@@ -108,36 +111,30 @@ const Bet = ({}) => {
 
     const reader = new FileReader();
     reader.onload = (e) => {
+      const ReadData = [];
+
       const text = e.target.result;
       console.log(text);
       const cells = text.split("\n").map((el) => el.split(/\s+/));
-      console.log(cells);
+      // console.log(cells);
       const headings = cells.shift();
+      console.log(cells);
       // console.log(headings);
 
-      const obj = cells.map((el) => {
-        let data = {};
-        for (let i = 0; i < el.length; i++) {
-          let a = el[i].split(" ");
-          console.log(a[1]);
-        }
-      });
+      cells.map((el) => ReadData.push({ number: el[0], amount: el[1] }));
+
+      console.log(ReadData);
+      if (ReadData.length) {
+        setCall({ ...call, numbers: ReadData });
+      }
     };
 
+    // setCall({ ...call, numbers: ReadData });
+
     reader.readAsText(e.target.files[0]);
-
-    // fetch(file.fileList)
-    //   .then((res) => res.text())
-    //   .then((data) => console.log(data));
-
-    // let resp = await axios.get(file.base64);
-    // let final = await resp.data();
-
-    // console.log(final);
-
-    // setPreview(file.base64);
-    // setUserInfo({ ...userInfo, profile: file.fileList[0] });
   };
+
+  console.log(call);
 
   const readFile = (e) => {
     e.preventDefault();
@@ -168,7 +165,28 @@ const Bet = ({}) => {
       })
       .catch((err) => console.log(err));
   };
-
+  //callList crud
+  const [editCtlBtn, setEditCtlBtn] = useState(false);
+  const [keydemo, setKeyDemo] = useState();
+  const editHandle = (key) => {
+    setEditCtlBtn(true);
+    // console.log(editCtlBtn);
+    setKeyDemo(key);
+    setOnchange({
+      number: call.numbers[key].number,
+      amount: call.numbers[key].amount,
+    });
+    console.log(call.numbers);
+  };
+  //editReading
+  const editReadData = () => {
+    let demo = call.numbers;
+    console.log(demo[keydemo]);
+    console.log(onchange);
+    demo.splice(keydemo, 1, onchange);
+    console.log(demo);
+    setCall({ ...call, numbers: demo });
+  };
   return (
     <Stack height={"100%"}>
       {success && (
@@ -258,7 +276,19 @@ const Bet = ({}) => {
         />
       </Stack>
       <Stack padding={1}>
-        <BetButtonCom onClick={choice} btnText={"ရွေးမည်"} color={"success"} />
+        {editCtlBtn ? (
+          <BetButtonCom
+            onClick={editReadData}
+            btnText={"ပြင်မည်"}
+            color={"success"}
+          />
+        ) : (
+          <BetButtonCom
+            onClick={choice}
+            btnText={"ရွေးမည်"}
+            color={"success"}
+          />
+        )}
       </Stack>
       <Stack alignItems={"start"} paddingX={{ md: 4 }}>
         {/* <BetCom
@@ -275,7 +305,7 @@ const Bet = ({}) => {
           sx={{ width: 300 }}
           onChange={(e, value) => {
             setAutoCompleteValue(value);
-            setCall({ ...call, agents: value._id });
+            setCall({ ...call, agent: value._id });
           }}
           renderInput={(params) => <TextField {...params} label="Customer" />}
         />
@@ -290,9 +320,13 @@ const Bet = ({}) => {
         boxShadow={1}
         borderBottom={1}
       >
-        {call.numbers.map((cal, key) => (
-          <BetListCom call={cal} key={key} />
-        ))}
+        {call.numbers.map((cal, key) => {
+          console.log(key);
+          console.log(cal);
+          return (
+            <BetListCom call={cal} key={key} onClick={() => editHandle(key)} />
+          );
+        })}
       </Stack>
       <Stack
         component={"button"}
