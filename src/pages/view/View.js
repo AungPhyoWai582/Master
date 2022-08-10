@@ -22,6 +22,7 @@ import {
   Collapse,
   Box,
   Tab,
+  Autocomplete,
 } from "@mui/material";
 import { common, teal } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
@@ -31,48 +32,42 @@ import ExportPDFModal from "./ExportPDFModal";
 
 const Row = ({ lag, key, selectCheck }) => {
   // const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const { _id, _date, _time, totalAmount, lottery, commission, win } = lag;
-  const date = new Date(_date);
+  // const [open, setOpen] = React.useState(false);
+  // const { _id, _date, _time, totalAmount, lottery, commission, win } = lag;
+  // const date = new Date(_date);
 
   // console.log(lag.data);
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
-        {/* <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        </TableCell> */}
-        <TableCell>
-          <Checkbox
-            // key={key}
-            checked={lag.checked}
-            onChange={(e) => selectCheck(e, key)}
-          ></Checkbox>
+        <TableCell>OOO</TableCell>
+        <TableCell align="center">
+          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
+          1/1/1 PM
         </TableCell>
-        {/* <TableCell component="th" scope="row">
-          {_id}
-        </TableCell> */}
-        <TableCell align="center">{`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`}</TableCell>
-        <TableCell align="center">{totalAmount}</TableCell>
-        <TableCell align="center">{commission}</TableCell>
-        <TableCell align="center">{win}</TableCell>
+        <TableCell align="center">
+          {/* {totalAmount} */}
+          1000000
+        </TableCell>
+        <TableCell align="center">
+          {/* {commission} */}
+          10000
+        </TableCell>
+        <TableCell align="center">
+          {/* {win} */}
+          90000
+        </TableCell>
 
         <TableCell align="center">
-          <NavLink
+          {/* <NavLink
             to={`/view/lager/${lottery}`}
             state={{ lager: lag }}
             style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <IconButton>
-              <VisibilityOutlined />
-            </IconButton>
-          </NavLink>
+          > */}
+          <IconButton>
+            <VisibilityOutlined />
+          </IconButton>
+          {/* </NavLink> */}
         </TableCell>
       </TableRow>
     </React.Fragment>
@@ -137,6 +132,8 @@ const View = () => {
 
   //pdf
   const [open, setOpen] = useState(false);
+  //
+  // const a = [{ "A"}, { "B"}, { "C"}];
   return (
     <Stack
       width={{ xs: "100%" }}
@@ -148,7 +145,15 @@ const View = () => {
       // marginX={0}
     >
       <Stack direction={"row"} spacing={1} padding={2} justifyContent={"end"}>
-        {/* <FormControlLabel label={"All"} control={<Checkbox />} /> */}
+        <Autocomplete
+          size={"small"}
+          id="combo-box-demo"
+          // options={}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Select Reports" size={"small"} />
+          )}
+        />
         <Button
           variant={"contained"}
           size={"small"}
@@ -171,14 +176,7 @@ const View = () => {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              <TableCell>
-                {" "}
-                <Checkbox
-                  // onChange={(e) => setCheck(e.target.checked)}
-                  defaultChecked={true}
-                ></Checkbox>{" "}
-              </TableCell>
-              {/* <TableCell>id</TableCell> */}
+              <TableCell>Name</TableCell>
               <TableCell align="center">date</TableCell>
               <TableCell align="center">Total</TableCell>
               <TableCell align="center">Commission</TableCell>
@@ -186,19 +184,16 @@ const View = () => {
               <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
-          {lager && (
-            <TableBody>
-              {lager.map((lag, key) => (
-                <Row
-                  check={check}
-                  setCheck={setCheck}
-                  lag={lag}
-                  key={key}
-                  selectCheck={(e) => selectCheck(e, key)}
-                />
-              ))}
-            </TableBody>
-          )}
+
+          <TableBody>
+            <Row
+            // check={check}
+            // setCheck={setCheck}
+            // lag={lag}
+            // key={key}
+            // selectCheck={(e) => selectCheck(e, key)}
+            />
+          </TableBody>
         </Table>
       </TableContainer>
     </Stack>

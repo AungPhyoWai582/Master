@@ -1,33 +1,53 @@
-import { AddSharp, Close } from "@mui/icons-material";
+import {
+  AddSharp,
+  ArrowBack,
+  ArrowForward,
+  Close,
+  Edit,
+} from "@mui/icons-material";
 import {
   Alert,
   Autocomplete,
   Button,
+  Dialog,
   IconButton,
+  Pagination,
+  PaginationItem,
   Paper,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { green, red } from "@mui/material/colors";
+import { green, grey, red, yellow } from "@mui/material/colors";
 import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import ReactFileReader from "react-file-reader";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import BetButtonCom from "../../components/BetButtonCom";
 import BetCom from "../../components/BetCom";
 import BetListCom from "../../components/BetListCom";
+import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
+import Lager from "../../pages/lager/Lager";
 // import { content } from "../../components/TwoDSign";
 
-const Bet = ({}) => {
+const Bet = () => {
   // const choseFun = useContext(content);
   // console.log(choseFun);
+  const [callcrud, setCallcrud] = useState(null);
+  const [lager, setLager] = useState();
+  const [call, setCall] = useState({
+    agent: "",
+    numbers: [],
+  });
+  const [callList, setCallList] = useState([]);
 
   const [agents, setAgents] = useState([]);
 
+  const showCalls = [];
+  // console.log(agents);
   useEffect(() => {
     Axios.get(`/agents`, {
       headers: {
@@ -43,16 +63,31 @@ const Bet = ({}) => {
           setAgents(agents);
           setAutoCompleteValue(agents[0]);
         }
-        // console.log(res.data.customers[0]._id);
-        // const { customers } = res.data;
-        // if (customers) {
-        //   setCustomer(res.data.customers);
+      })
+      .catch((err) => console.log(err));
 
-        //   setAutoCompleteValue(res.data.customers[0]);
-        // }
+    Axios.get(`/lagers/${lotteryId}`, {
+      headers: {
+        authorization: "Bearer " + localStorage.getItem("access-token"),
+      },
+    })
+      .then((res) => {
+        setLager(res.data.data);
+        setCallList(res.data.data.in.read);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  console.log(lager);
+  console.log(callList);
+
+  callList.map((clist) => {
+    if (clist.agent.toString() === call.agent.toString()) {
+      showCalls.push(clist);
+    }
+  });
+
+  console.log(showCalls);
 
   const { lotteryId } = useParams();
   const [success, setSuccess] = useState(false);
@@ -60,11 +95,6 @@ const Bet = ({}) => {
 
   //For twoD sign state
   const [autoCompleteValue, setAutoCompleteValue] = useState();
-
-  const [call, setCall] = useState({
-    agent: "",
-    numbers: [],
-  });
 
   const [onchange, setOnchange] = useState({
     number: "",
@@ -80,25 +110,15 @@ const Bet = ({}) => {
 
   const choice = (e) => {
     e.preventDefault();
-
-    if (
-      // onchange.number === "1" ||
-      // onchange.number === "2" ||
-      // onchange.number === "3" ||
-      // onchange.number === "4" ||
-      // onchange.number === "5" ||
-      // onchange.number === "6" ||
-      // onchange.number === "7" ||
-      // onchange.number === "8" ||
-      // onchange.number === "9" ||
-      // onchange.number === "0"
-      onchange.number.length <= 2
-    ) {
+    if (onchange.number !== "" && onchange.number.length == 2) {
       setCall({
         ...call,
         numbers: [...call.numbers, onchange],
       });
-      setOnchange({ number: "", amount: onchange.amount });
+      {
+        setOnchange({ number: "", amount: onchange.amount });
+      }
+
       setEditCtlBtn(false);
     } else {
       console.log("error");
@@ -134,13 +154,13 @@ const Bet = ({}) => {
     reader.readAsText(e.target.files[0]);
   };
 
-  console.log(call);
+  // console.log(call);
 
-  const readFile = (e) => {
-    e.preventDefault();
-    console.log(e.target.file);
-    console.log(e.target.result);
-  };
+  // const readFile = (e) => {
+  //   e.preventDefault();
+  //   console.log(e.target.file);
+  //   console.log(e.target.result);
+  // };
 
   const bet = (e) => {
     e.preventDefault();
@@ -155,7 +175,7 @@ const Bet = ({}) => {
         console.log(res.data);
         setSuccess(true);
         setCall({
-          callname: "",
+          agent: "",
           numbers: [],
         });
         setOnchange({
@@ -165,6 +185,7 @@ const Bet = ({}) => {
       })
       .catch((err) => console.log(err));
   };
+  // console.log(la);
   //callList crud
   const [editCtlBtn, setEditCtlBtn] = useState(false);
   const [keydemo, setKeyDemo] = useState();
@@ -176,8 +197,10 @@ const Bet = ({}) => {
       number: call.numbers[key].number,
       amount: call.numbers[key].amount,
     });
-    console.log(call.numbers);
+    // console.log(call.agent);
+    console.log(agents);
   };
+  console.log(callcrud);
   //editReading
   const editReadData = () => {
     let demo = call.numbers;
@@ -185,8 +208,38 @@ const Bet = ({}) => {
     console.log(onchange);
     demo.splice(keydemo, 1, onchange);
     console.log(demo);
-    setCall({ ...call, numbers: demo });
+    setCall({ ...call, agent: call.agent, numbers: demo });
   };
+
+  //lager open
+  const [lagerOpen, setLagerOpen] = useState(false);
+
+  //get api lager
+  // const [agentcall, setAgentcall] = useState([]);
+  // const [showagentcall, setShowagentcall] = useState([]);
+  // console.log(call.agent);
+  // useEffect(() => {
+  //   Axios.get(`/lagers/${lotteryId}`, {
+  //     headers: {
+  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
+  //     },
+  //   }).then((res) => {
+  //     console.log(res.data.data.in.read);
+  //     setAgentcall(res.data.data.in.read);
+  //   });
+  // }, []);
+
+  // let l;
+  // if (call.agent) {
+  //   l = lager.in.read.map((lir) => {
+  //     if (lir.agent == call.agent) {
+  //       return lir;
+  //     }
+  //   });
+  // }
+
+  // console.log(l);
+
   return (
     <Stack height={"100%"}>
       {success && (
@@ -244,30 +297,62 @@ const Bet = ({}) => {
         justifyContent={"center"}
         boxShadow={1}
       >
+        <Autocomplete
+          size="small"
+          id="combo-box-demo"
+          options={agents}
+          value={autoCompleteValue}
+          getOptionLabel={(cus) => cus.name}
+          sx={{ width: 300 }}
+          onChange={(e, value) => {
+            setAutoCompleteValue(value);
+            setCall({ ...call, agent: value._id });
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Agent"
+              size="small"
+              color={"success"}
+            />
+          )}
+        />
         <BetCom name="select" type={"file"} onChange={handleFiles} />
-        {/* <ReactFileReader base64={true} handleFiles={handleFiles}>
-          <BetButtonCom
-            onClick={choice}
-            btnText={"Read File"}
-            color={"secondary"}
-          />
-        </ReactFileReader> */}
+        <Stack direction={"row"} spacing={1}>
+          <Button
+            variant={"contained"}
+            size={"small"}
+            color={"success"}
+            onClick={() => setLagerOpen(true)}
+          >
+            <Typography fontSize={12} variant={"caption"} fontWeight={100}>
+              Lager
+            </Typography>
+          </Button>
+
+          <Button variant={"contained"} size={"small"} color={"success"}>
+            <Typography fontSize={12} variant={"caption"} fontWeight={100}>
+              In/Out
+            </Typography>
+          </Button>
+        </Stack>
       </Stack>
       <Stack
         padding={1}
         spacing={1}
         direction={"row"}
-        justifyContent={"space-around"}
+        justifyContent={"center"}
         boxShadow={1}
       >
         <BetCom
+          width={50}
           name="number"
           value={onchange.number}
           onChange={onChangeHandler}
           label={"နံပါတ်"}
         />
 
-        <TwoDSign />
+        {/* <TwoDSign /> */}
         <BetCom
           name="amount"
           value={onchange.amount}
@@ -290,43 +375,99 @@ const Bet = ({}) => {
           />
         )}
       </Stack>
-      <Stack alignItems={"start"} paddingX={{ md: 4 }}>
-        {/* <BetCom
+      {/* <Stack alignItems={"start"} paddingX={{ md: 4 }}>
+        <BetCom
           style={{ marginTop: 1 }}
           value={call.callname}
           onChange={(e) => setCall({ ...call, callname: e.target.value })}
           label="အမည်"
-        /> */}
-        <Autocomplete
-          id="combo-box-demo"
-          options={agents}
-          value={autoCompleteValue}
-          getOptionLabel={(cus) => cus.name}
-          sx={{ width: 300 }}
-          onChange={(e, value) => {
-            setAutoCompleteValue(value);
-            setCall({ ...call, agent: value._id });
-          }}
-          renderInput={(params) => <TextField {...params} label="Customer" />}
+        />
+        
+      </Stack> */}
+      <Stack justifyContent={"right"} width={"100%"} direction={"row"}>
+        <Pagination
+          size="small"
+          page={call.numbers}
+          count={call.numbers}
+          boundaryCount={2}
+          siblingCount={-1}
+          renderItem={(item) => (
+            <PaginationItem
+              size="small"
+              components={{ previous: ArrowBack, next: ArrowForward }}
+              {...item}
+            />
+          )}
         />
       </Stack>
-      <Stack
-        alignItems={"center"}
-        width={"100%"}
-        maxHeight={500}
-        // height={"100%"}
-        // minHeight={400}
-        overflow={"scroll"}
-        boxShadow={1}
-        borderBottom={1}
-      >
-        {call.numbers.map((cal, key) => {
-          console.log(key);
-          console.log(cal);
-          return (
-            <BetListCom call={cal} key={key} onClick={() => editHandle(key)} />
-          );
-        })}
+      <Stack direction={"row"}>
+        <Stack
+          direction={"column"}
+          alignItems={"center"}
+          width={"30%"}
+          maxHeight={500}
+          height={"100%"}
+          minHeight={400}
+          overflow={"scroll"}
+          boxShadow={1}
+          borderBottom={1}
+          padding={1}
+          spacing={1}
+        >
+          {call.agent && call.numbers.length && call.numbers.length
+            ? call.numbers.map((cal, key) => {
+                console.log(key);
+                console.log(cal);
+                return (
+                  <BetListCom
+                    call={cal}
+                    key={key}
+                    onClick={() => editHandle(key)}
+                  />
+                );
+              })
+            : showCalls.map((scal, key) => (
+                <Stack
+                  component={"button"}
+                  width={"100%"}
+                  bgcolor={`${key % 2 === 0 ? yellow[300] : green[300]}`}
+                  borderBottom={1}
+                  borderColor={grey[500]}
+                  onClick={() => setCallcrud(showCalls[key])}
+                >
+                  {scal.numbers.map((cal) => (
+                    <BetListCom call={cal} />
+                  ))}
+                </Stack>
+              ))}
+        </Stack>
+
+        <Stack
+          direction={"column"}
+          alignItems={"center"}
+          width={"30%"}
+          maxHeight={500}
+          height={"100%"}
+          minHeight={400}
+          boxShadow={1}
+          borderBottom={1}
+          padding={1}
+          spacing={1}
+        >
+          {callcrud !== null &&
+            callcrud.numbers.map((calc, key) => {
+              return (
+                <BetListCom call={calc}>
+                  <Stack direction={"row"} width={"60%"}>
+                    <Button size="small">
+                      <Edit fontSize="18" />
+                    </Button>
+                  </Stack>
+                </BetListCom>
+              );
+            })}
+        </Stack>
+        <Stack width={"30%"}>Hello</Stack>
       </Stack>
       <Stack
         component={"button"}
@@ -336,7 +477,7 @@ const Bet = ({}) => {
             cursor: "pointer",
           },
         }}
-        // textAlign="center"
+        textAlign="center"
         position={"absolute"}
         bottom={4}
         width="100%"
@@ -348,16 +489,23 @@ const Bet = ({}) => {
           Bet
         </Typography>
       </Stack>
-      {/* <Stack
-        width={"100%"}
-        // padding={1}
-        position={"absolute"}
-        bottom={3}
-        left={3}
-        right={3}
-      >
-        <BetButtonCom fullWidth={true} btnText={"ရွေးမည်"} color={"success"} />
-      </Stack> */}
+      <Dialog fullScreen open={lagerOpen}>
+        <Stack alignItems={"end"}>
+          <IconButton onClick={() => setLagerOpen(false)}>
+            <Close />
+          </IconButton>
+        </Stack>
+        <Stack maxWidth={"100%"} padding={1}>
+          <Stack direction={"row"} padding={1}>
+            <TextField
+              label={"Break Amount"}
+              size={"small"}
+              onChange={(e) => lagerOpen && console.log(e.target.value)}
+            />
+          </Stack>
+          <LagerCom />
+        </Stack>
+      </Dialog>
     </Stack>
   );
 };

@@ -56,7 +56,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
       <Box
         display={"flex"}
         sx={{ marginTop: "10" }}
-        width={{ xs: 200, md: 400 }}
+        width={{ xs: 250, md: 400 }}
       >
         <Stack width={"100%"}>
           <Stack width={"100%"} height={80} bgcolor={grey[300]}>
@@ -111,7 +111,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                 <ListItemIcon>
                   <ListAlt />
                 </ListItemIcon>
-                <ListItemText primary="Customer" />
+                <ListItemText primary="Agent" />
               </ListItem>
             </NavLink>
 

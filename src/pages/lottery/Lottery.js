@@ -83,7 +83,10 @@ const Lottery = () => {
                     <List fontSize="small" />
                   </IconButton>
                 </NavLink>
-                <NavLink to={`/lottery/bet/${l._id}`}>
+                <NavLink
+                  to={`/lottery/bet/${l._id}`}
+                  state={{ lotteryId: l._id }}
+                >
                   <IconButton size="small" sx={{ color: "black" }}>
                     <AddSharp fontSize="small" />
                   </IconButton>
