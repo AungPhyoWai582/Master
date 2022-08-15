@@ -36,7 +36,7 @@ import ExportPDFModal from "./ExportPDFModal";
 const Row = ({ lag, selectCheck, onClick }) => {
   // const { row } = props;
   const [open, setOpen] = React.useState(false);
-  // const { _id, _date, _time, lottery } = lag;
+  const { _id, _date, _time, lottery } = lag;
   // const { totalAmount, commission, win } = lag.in;
   // const date = new Date(_date);
 
@@ -236,6 +236,7 @@ const View = () => {
         authorization: `Bearer ` + localStorage.getItem("access-token"),
       },
     }).then((res) => {
+      console.log(res.data.data);
       const data = [...res.data.data];
       setLager(data);
     });
@@ -290,6 +291,11 @@ const View = () => {
 
   //in/out autocomplete
   const selectType = [{ label: "In" }, { label: "Out" }];
+  const [inLag, setInLag] = useState([]);
+  const [outLag, setOutLag] = useState([]);
+  const changeInOut = (e) => {
+    console.log(e.target.innerText);
+  };
 
   //date picker
   const [value, setValue] = React.useState(null);
@@ -334,6 +340,7 @@ const View = () => {
         </LocalizationProvider>
 
         <Autocomplete
+          onChange={changeInOut}
           size={"small"}
           id="combo-box-demo"
           options={selectType}
@@ -379,19 +386,19 @@ const View = () => {
           </TableHead>
 
           <TableBody>
-            {/* {lager &&
-              lager.map((lag, key) => ( */}
-            <React.Fragment>
-              <Row
-                onClick={() => setDetailreportopen(true)}
-                // check={check}
-                // setCheck={setCheck}
-                // lag={lag}
-                // key={key}
-                // selectCheck={(e) => selectCheck(e, key)}
-              />
-            </React.Fragment>
-            {/* ))} */}
+            {lager &&
+              lager.map((lag, key) => (
+                <React.Fragment>
+                  <Row
+                    onClick={() => setDetailreportopen(true)}
+                    // check={check}
+                    // setCheck={setCheck}
+                    lag={lag}
+                    // key={key}
+                    // selectCheck={(e) => selectCheck(e, key)}
+                  />
+                </React.Fragment>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

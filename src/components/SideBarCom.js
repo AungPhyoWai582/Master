@@ -78,6 +78,18 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
           <List>
             <NavLink
               style={{ textDecoration: "none" }}
+              to="/account_info"
+              onClick={() => setHandleOpen(false)}
+            >
+              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
+                <ListItemIcon>
+                  <NoteAddIcon />
+                </ListItemIcon>
+                <ListItemText primary="Account" />
+              </ListItem>
+            </NavLink>
+            <NavLink
+              style={{ textDecoration: "none" }}
               to="/lotery"
               onClick={() => setHandleOpen(false)}
             >
@@ -112,12 +124,12 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
               <ListItemText primary="Agents" />
               {subopen ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={subopen} timeout="auto" unmountOnExit>
+            <Collapse in={!subopen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <NavLink
                   style={{ textDecoration: "none", color: "inherit" }}
                   to="/agents/agent_create"
-                  // onClick={() => setToggle(false)}
+                  onClick={() => setHandleOpen(false)}
                 >
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemIcon>
@@ -130,7 +142,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                 <NavLink
                   style={{ textDecoration: "none", color: "inherit" }}
                   to="/agents/agent_list"
-                  // onClick={() => setToggle(false)}
+                  onClick={() => setHandleOpen(false)}
                 >
                   <ListItemButton sx={{ pl: 4 }}>
                     <ListItemIcon>
@@ -143,18 +155,6 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
               </List>
             </Collapse>
 
-            <NavLink
-              style={{ textDecoration: "none" }}
-              to="/account_info"
-              onClick={() => setHandleOpen(false)}
-            >
-              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
-                <ListItemIcon>
-                  <NoteAddIcon />
-                </ListItemIcon>
-                <ListItemText primary="Account" />
-              </ListItem>
-            </NavLink>
             <NavLink
               style={{ textDecoration: "none" }}
               to="/view"

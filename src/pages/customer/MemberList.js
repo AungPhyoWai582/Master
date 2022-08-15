@@ -1,4 +1,6 @@
+import { VisibilityOutlined } from "@mui/icons-material";
 import {
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -10,9 +12,46 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import Axios from "../../shared/Axios";
 
 const MemberList = () => {
+  // const UserContent = useContext(Context);
+
+  const [users, setUsers] = useState({
+    count: null,
+    data: null,
+  });
+
+  // const [page, setPage] = useState(1);
+  // const [rowperpage, setRowPerPage] = useState(5);
+  const [ctrlEffect, setCtrlEffect] = useState(true);
+
+  useEffect(() => {
+    console.log("Start");
+    Axios.get(`agents`, {
+      headers: {
+        authorization: `Bearer ` + localStorage.getItem("access-token"),
+      },
+    }).then((res) => {
+      let resData = res.data;
+      console.log(resData);
+      setUsers({
+        count: resData.counts,
+        data: resData.data,
+      });
+      setCtrlEffect(false);
+    });
+  }, [ctrlEffect]);
+  console.log(users);
+  const getUser = (e) => {
+    e.preventDefault();
+    console.log("API REQUEST");
+  };
+  // console.log(page);
+  // console.log(rowperpage);
+  const [inputsearch, setInputsearch] = useState("");
   return (
     <Paper sx={{ padding: "1", height: "100%" }}>
       <Stack direction={"row"} padding={1}>
@@ -21,28 +60,28 @@ const MemberList = () => {
           label={"Search"}
           color={"success"}
           sx={{ width: "40%" }}
-          // onChange={(e) => setInputsearch(e.target.value)}
+          onChange={(e) => setInputsearch(e.target.value)}
         />
       </Stack>
       <Stack padding={1} height={"70%"}>
         <TableContainer>
           <Table stickyHeader>
             <TableHead>
-              {/* <TableCell>No</TableCell> */}
+              <TableCell>No</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align="center">UserName</TableCell>
-              {/* <TableCell>Phone No</TableCell> */}
+              <TableCell>Phone No</TableCell>
               <TableCell align="center">Divider</TableCell>
               <TableCell align="right">Za</TableCell>
               <TableCell align="right">Detail</TableCell>
             </TableHead>
             <TableBody>
-              {/* {users.data &&
+              {users.data &&
                 users.data
                   .filter((user, keey) => {
-                    // if (inputsearch === "") {
-                    //   return user;
-                    // }
+                    if (inputsearch === "") {
+                      return user;
+                    }
                     return (
                       user.username
                         .toLowerCase()
@@ -68,7 +107,7 @@ const MemberList = () => {
                         <IconButton
                           size="small"
                           color="success"
-                          onClick={() => UserContent.setDetailUser(user._id)}
+                          // onClick={() => UserContent.setDetailUser(user._id)}
                         >
                           <NavLink to={"/detail"}>
                             <VisibilityOutlined />
@@ -76,7 +115,7 @@ const MemberList = () => {
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                  ))} */}
+                  ))}
             </TableBody>
           </Table>
         </TableContainer>
