@@ -89,20 +89,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
               </ListItem>
             </NavLink>
 
-            <NavLink
-              style={{ textDecoration: "none" }}
-              to="/view"
-              onClick={() => setHandleOpen(false)}
-            >
-              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
-                <ListItemIcon>
-                  <ListAlt />
-                </ListItemIcon>
-                <ListItemText primary="View" />
-              </ListItem>
-            </NavLink>
-
-            <NavLink
+            {/* <NavLink
               style={{ textDecoration: "none" }}
               to="/customer"
               onClick={() => setHandleOpen(false)}
@@ -113,23 +100,23 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                 </ListItemIcon>
                 <ListItemText primary="Agent" />
               </ListItem>
-            </NavLink>
+            </NavLink> */}
 
-            {/* <ListItemButton
+            <ListItemButton
               sx={{ ":hover": { bgcolor: teal[100] } }}
               onClick={subMember}
             >
               <ListItemIcon>
                 <ListAlt />
               </ListItemIcon>
-              <ListItemText primary="Customer" />
+              <ListItemText primary="Agents" />
               {subopen ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={subopen} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <NavLink
                   style={{ textDecoration: "none", color: "inherit" }}
-                  to="/member/member_create"
+                  to="/agents/agent_create"
                   // onClick={() => setToggle(false)}
                 >
                   <ListItemButton sx={{ pl: 4 }}>
@@ -142,7 +129,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                 </NavLink>
                 <NavLink
                   style={{ textDecoration: "none", color: "inherit" }}
-                  to="/member/member_lists"
+                  to="/agents/agent_list"
                   // onClick={() => setToggle(false)}
                 >
                   <ListItemButton sx={{ pl: 4 }}>
@@ -154,9 +141,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                   </ListItemButton>
                 </NavLink>
               </List>
-            </Collapse> */}
-
-            {/*  */}
+            </Collapse>
 
             <NavLink
               style={{ textDecoration: "none" }}
@@ -170,7 +155,18 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                 <ListItemText primary="Account" />
               </ListItem>
             </NavLink>
-
+            <NavLink
+              style={{ textDecoration: "none" }}
+              to="/view"
+              onClick={() => setHandleOpen(false)}
+            >
+              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
+                <ListItemIcon>
+                  <ListAlt />
+                </ListItemIcon>
+                <ListItemText primary="Reports" />
+              </ListItem>
+            </NavLink>
             <NavLink
               style={{ textDecoration: "none" }}
               to="/change_password"

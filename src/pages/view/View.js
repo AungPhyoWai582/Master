@@ -30,46 +30,62 @@ import { NavLink } from "react-router-dom";
 import Axios from "../../shared/Axios";
 import ExportPDFModal from "./ExportPDFModal";
 
-const Row = ({ lag, key, selectCheck }) => {
+const Row = ({ lag, selectCheck }) => {
   // const { row } = props;
-  // const [open, setOpen] = React.useState(false);
-  // const { _id, _date, _time, totalAmount, lottery, commission, win } = lag;
-  // const date = new Date(_date);
+  const [open, setOpen] = React.useState(false);
+  const { _id, _date, _time, lottery } = lag;
+  const { totalAmount, commission, win } = lag.in;
+  const date = new Date(_date);
 
-  // console.log(lag.data);
+  console.log(lag);
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
-        <TableCell>OOO</TableCell>
+        <TableCell>TGG</TableCell>
         <TableCell align="center">
-          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
-          1/1/1 PM
+          {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`}
+          {/* 1/1/1 PM */}
         </TableCell>
-        <TableCell align="center">
-          {/* {totalAmount} */}
-          1000000
-        </TableCell>
-        <TableCell align="center">
-          {/* {commission} */}
-          10000
-        </TableCell>
-        <TableCell align="center">
-          {/* {win} */}
-          90000
-        </TableCell>
+        <TableCell align="center">{totalAmount}</TableCell>
+        <TableCell align="center">{commission}</TableCell>
+        <TableCell align="center">{win}</TableCell>
 
         <TableCell align="center">
-          {/* <NavLink
-            to={`/view/lager/${lottery}`}
+          <NavLink
+            to={`/report/agent`}
             state={{ lager: lag }}
             style={{ textDecoration: "none", color: "inherit" }}
-          > */}
-          <IconButton>
-            <VisibilityOutlined />
-          </IconButton>
-          {/* </NavLink> */}
+          >
+            <IconButton size="small">
+              <VisibilityOutlined fontSize="small" />
+            </IconButton>
+          </NavLink>
         </TableCell>
       </TableRow>
+      {/* <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1, width: "100%" }}>
+              <Table size="small" component={"table"}>
+                <TableBody>
+                  <TableRow>
+                    <TableCell width={"25%"}>Date</TableCell>
+                    <TableCell width={"25%"}>Total</TableCell>
+                    <TableCell width={"25%"}>Commission</TableCell>
+                    <TableCell width={"25%"}>Win/Lose</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell width={"25%"}>Date</TableCell>
+                    <TableCell width={"25%"}>Total</TableCell>
+                    <TableCell width={"25%"}>Commission</TableCell>
+                    <TableCell width={"25%"}>Win/Lose</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow> */}
     </React.Fragment>
   );
 };
@@ -134,6 +150,10 @@ const View = () => {
   const [open, setOpen] = useState(false);
   //
   // const a = [{ "A"}, { "B"}, { "C"}];
+  const [detailreportopen, setDetailreportopen] = useState(false);
+
+  //in/out autocomplete
+  const selectType = [{ label: "In" }, { label: "Out" }];
   return (
     <Stack
       width={{ xs: "100%" }}
@@ -148,10 +168,10 @@ const View = () => {
         <Autocomplete
           size={"small"}
           id="combo-box-demo"
-          // options={}
+          options={selectType}
           sx={{ width: 300 }}
           renderInput={(params) => (
-            <TextField {...params} label="Select Reports" size={"small"} />
+            <TextField {...params} label="Select In/Out" size={"small"} />
           )}
         />
         <Button
@@ -177,7 +197,7 @@ const View = () => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align="center">date</TableCell>
+              <TableCell align="center">Date</TableCell>
               <TableCell align="center">Total</TableCell>
               <TableCell align="center">Commission</TableCell>
               <TableCell align="center">Win</TableCell>
@@ -186,13 +206,19 @@ const View = () => {
           </TableHead>
 
           <TableBody>
-            <Row
-            // check={check}
-            // setCheck={setCheck}
-            // lag={lag}
-            // key={key}
-            // selectCheck={(e) => selectCheck(e, key)}
-            />
+            {lager &&
+              lager.map((lag, key) => (
+                <React.Fragment>
+                  <Row
+                    // onClick={() => setDetailreportopen(true)}
+                    // check={check}
+                    // setCheck={setCheck}
+                    lag={lag}
+                    // key={key}
+                    // selectCheck={(e) => selectCheck(e, key)}
+                  />
+                </React.Fragment>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

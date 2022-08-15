@@ -81,11 +81,11 @@ const Bet = () => {
   console.log(lager);
   console.log(callList);
 
-  callList.map((clist) => {
-    if (clist.agent.toString() === call.agent.toString()) {
-      showCalls.push(clist);
-    }
-  });
+  // callList.map((clist) => {
+  //   if (clist.agent.toString() === call.agent.toString()) {
+  //     showCalls.push(clist);
+  //   }
+  // });
 
   console.log(showCalls);
 
@@ -240,6 +240,31 @@ const Bet = () => {
 
   // console.log(l);
 
+  //Lager Break
+  const [lagerBreak, setLagerBreak] = useState();
+  const [demoLager, setDemolager] = useState();
+  const [callDemo, setCallDemo] = useState([]);
+  const setBreak = () => {
+    console.log(demoLager);
+    console.log(lagerBreak);
+    const extraArray = [];
+    demoLager.map((demol, key) => {
+      if (Number(demol.amount) > Number(lagerBreak)) {
+        // console.log(Number(demol.amount) - Number(lagerBreak));
+        let obj = {
+          number: demol.number,
+          amount: Number(demol.amount) - Number(lagerBreak),
+        };
+        extraArray.push(obj);
+      }
+      // console.log(array);
+    });
+    console.log(extraArray);
+    setCallDemo(extraArray);
+    // setDemolager(callDemo);
+    setLagerOpen(false);
+  };
+  console.log(callDemo);
   return (
     <Stack height={"100%"}>
       {success && (
@@ -323,7 +348,10 @@ const Bet = () => {
             variant={"contained"}
             size={"small"}
             color={"success"}
-            onClick={() => setLagerOpen(true)}
+            onClick={() => {
+              setLagerOpen(true);
+              setDemolager(lager.in.numbers);
+            }}
           >
             <Typography fontSize={12} variant={"caption"} fontWeight={100}>
               Lager
@@ -467,7 +495,20 @@ const Bet = () => {
               );
             })}
         </Stack>
-        <Stack width={"30%"}>Hello</Stack>
+        <Stack width={"30%"}>
+          {callDemo !== null &&
+            callDemo.map((calc, key) => {
+              return (
+                <BetListCom call={calc}>
+                  <Stack direction={"row"} width={"60%"}>
+                    <Button size="small">
+                      <Edit fontSize="18" />
+                    </Button>
+                  </Stack>
+                </BetListCom>
+              );
+            })}
+        </Stack>
       </Stack>
       <Stack
         component={"button"}
@@ -498,10 +539,19 @@ const Bet = () => {
         <Stack maxWidth={"100%"} padding={1}>
           <Stack direction={"row"} padding={1}>
             <TextField
+              value={lagerBreak}
               label={"Break Amount"}
               size={"small"}
-              onChange={(e) => lagerOpen && console.log(e.target.value)}
+              onChange={(e) => setLagerBreak(e.target.value)}
             />
+            <Button
+              size="small"
+              variant={"contained"}
+              color={"success"}
+              onClick={setBreak}
+            >
+              Set
+            </Button>
           </Stack>
           <LagerCom />
         </Stack>
