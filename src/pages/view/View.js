@@ -25,41 +25,177 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { common, teal } from "@mui/material/colors";
+import { width } from "@mui/system";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Axios from "../../shared/Axios";
 import ExportPDFModal from "./ExportPDFModal";
 
-const Row = ({ lag, selectCheck }) => {
+const Row = ({ lag, selectCheck, onClick }) => {
   // const { row } = props;
   const [open, setOpen] = React.useState(false);
-  const { _id, _date, _time, lottery } = lag;
-  const { totalAmount, commission, win } = lag.in;
-  const date = new Date(_date);
+  // const { _id, _date, _time, lottery } = lag;
+  // const { totalAmount, commission, win } = lag.in;
+  // const date = new Date(_date);
 
   console.log(lag);
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
         <TableCell>TGG</TableCell>
-        <TableCell align="center">
-          {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`}
-          {/* 1/1/1 PM */}
+        <TableCell align="left">
+          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
+          1/1/1 PM
         </TableCell>
-        <TableCell align="center">{totalAmount}</TableCell>
-        <TableCell align="center">{commission}</TableCell>
-        <TableCell align="center">{win}</TableCell>
+        <TableCell align="center">
+          {/* {totalAmount} */}
+          11111
+        </TableCell>
+        <TableCell align="center">
+          {/* {commission} */}
+          7777777
+        </TableCell>
+        <TableCell align="center">
+          {/* {win} */}
+          9000000
+        </TableCell>
 
         <TableCell align="center">
-          <NavLink
+          {/* <NavLink
             to={`/report/agent`}
             state={{ lager: lag }}
             style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <IconButton size="small">
-              <VisibilityOutlined fontSize="small" />
-            </IconButton>
-          </NavLink>
+          > */}
+          <IconButton size="small" onClick={onClick}>
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+          {/* </NavLink> */}
+        </TableCell>
+      </TableRow>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
+        <TableCell>TGG</TableCell>
+        <TableCell align="left">
+          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
+          1/1/1 PM
+        </TableCell>
+        <TableCell align="center">
+          {/* {totalAmount} */}
+          11111
+        </TableCell>
+        <TableCell align="center">
+          {/* {commission} */}
+          7777777
+        </TableCell>
+        <TableCell align="center">
+          {/* {win} */}
+          9000000
+        </TableCell>
+
+        <TableCell align="center">
+          {/* <NavLink
+            to={`/report/agent`}
+            state={{ lager: lag }}
+            style={{ textDecoration: "none", color: "inherit" }}
+          > */}
+          <IconButton size="small" onClick={onClick}>
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+          {/* </NavLink> */}
+        </TableCell>
+      </TableRow>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
+        <TableCell>TGG</TableCell>
+        <TableCell align="left">
+          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
+          1/1/1 PM
+        </TableCell>
+        <TableCell align="center">
+          {/* {totalAmount} */}
+          11111
+        </TableCell>
+        <TableCell align="center">
+          {/* {commission} */}
+          7777777
+        </TableCell>
+        <TableCell align="center">
+          {/* {win} */}
+          9000000
+        </TableCell>
+
+        <TableCell align="center">
+          {/* <NavLink
+            to={`/report/agent`}
+            state={{ lager: lag }}
+            style={{ textDecoration: "none", color: "inherit" }}
+          > */}
+          <IconButton size="small" onClick={onClick}>
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+          {/* </NavLink> */}
+        </TableCell>
+      </TableRow>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
+        <TableCell>TGG</TableCell>
+        <TableCell align="left">
+          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
+          1/1/1 PM
+        </TableCell>
+        <TableCell align="center">
+          {/* {totalAmount} */}
+          11111
+        </TableCell>
+        <TableCell align="center">
+          {/* {commission} */}
+          7777777
+        </TableCell>
+        <TableCell align="center">
+          {/* {win} */}
+          9000000
+        </TableCell>
+
+        <TableCell align="center">
+          {/* <NavLink
+            to={`/report/agent`}
+            state={{ lager: lag }}
+            style={{ textDecoration: "none", color: "inherit" }}
+          > */}
+          <IconButton size="small" onClick={onClick}>
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+          {/* </NavLink> */}
+        </TableCell>
+      </TableRow>
+      <TableRow sx={{ "& > *": { borderBottom: "unset" }, padding: 0.5 }}>
+        <TableCell>Total</TableCell>
+        <TableCell align="left">
+          {/* {`${date.getDate()}/${date.getMonth()}/${date.getFullYear()}/ ${_time}`} */}
+          1/1/1 PM
+        </TableCell>
+        <TableCell align="center">
+          {/* {totalAmount} */}
+          11111
+        </TableCell>
+        <TableCell align="center">
+          {/* {commission} */}
+          7777777
+        </TableCell>
+        <TableCell align="center">
+          {/* {win} */}
+          9000000
+        </TableCell>
+
+        <TableCell align="center">
+          {/* <NavLink
+            to={`/report/agent`}
+            state={{ lager: lag }}
+            style={{ textDecoration: "none", color: "inherit" }}
+          > */}
+          <IconButton size="small" onClick={onClick}>
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+          {/* </NavLink> */}
         </TableCell>
       </TableRow>
       {/* <TableRow>
@@ -154,6 +290,13 @@ const View = () => {
 
   //in/out autocomplete
   const selectType = [{ label: "In" }, { label: "Out" }];
+
+  //date picker
+  const [value, setValue] = React.useState(null);
+  // const [open, setOpen] = useState(false);
+  const DiaOpen = () => {
+    setOpen(!open);
+  };
   return (
     <Stack
       width={{ xs: "100%" }}
@@ -164,14 +307,44 @@ const View = () => {
       padding={1}
       // marginX={0}
     >
-      <Stack direction={"row"} spacing={1} padding={2} justifyContent={"end"}>
+      <Stack direction={"row"} spacing={2} padding={2} justifyContent={"start"}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="Start Date"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} size={"small"} sx={{ width: 130 }} />
+            )}
+          />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="End Date"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} size={"small"} sx={{ width: 130 }} />
+            )}
+          />
+        </LocalizationProvider>
+
         <Autocomplete
           size={"small"}
           id="combo-box-demo"
           options={selectType}
           sx={{ width: 300 }}
           renderInput={(params) => (
-            <TextField {...params} label="Select In/Out" size={"small"} />
+            <TextField
+              {...params}
+              label="Select In/Out"
+              size={"small"}
+              sx={{ width: 150 }}
+            />
           )}
         />
         <Button
@@ -197,7 +370,7 @@ const View = () => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell align="center">Date</TableCell>
+              <TableCell align="left">Date</TableCell>
               <TableCell align="center">Total</TableCell>
               <TableCell align="center">Commission</TableCell>
               <TableCell align="center">Win</TableCell>
@@ -206,19 +379,19 @@ const View = () => {
           </TableHead>
 
           <TableBody>
-            {lager &&
-              lager.map((lag, key) => (
-                <React.Fragment>
-                  <Row
-                    // onClick={() => setDetailreportopen(true)}
-                    // check={check}
-                    // setCheck={setCheck}
-                    lag={lag}
-                    // key={key}
-                    // selectCheck={(e) => selectCheck(e, key)}
-                  />
-                </React.Fragment>
-              ))}
+            {/* {lager &&
+              lager.map((lag, key) => ( */}
+            <React.Fragment>
+              <Row
+                onClick={() => setDetailreportopen(true)}
+                // check={check}
+                // setCheck={setCheck}
+                // lag={lag}
+                // key={key}
+                // selectCheck={(e) => selectCheck(e, key)}
+              />
+            </React.Fragment>
+            {/* ))} */}
           </TableBody>
         </Table>
       </TableContainer>
