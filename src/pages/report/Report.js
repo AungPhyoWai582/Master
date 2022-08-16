@@ -9,37 +9,99 @@ import {
   Stack,
   Typography,
   TextField,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
   Button,
   TableBody,
   TableRow,
   IconButton,
+  Autocomplete,
 } from "@mui/material";
 import { teal } from "@mui/material/colors";
 import { useLocation, NavLink } from "react-router-dom";
 import Axios from "../../shared/Axios";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 const Report = () => {
   const location = useLocation();
-  const { lotteryId } = location.state;
-  console.log(lotteryId);
+  // const { lotteryId } = location.state;
+  // console.log(lotteryId);
 
   const [report, setReport] = useState([]);
 
-  useEffect(() => {
-    Axios.get(`/reports/agent/${lotteryId}`, {
-      headers: {
-        authorization: `Bearer ` + localStorage.getItem("access-token"),
-      },
-    }).then((res) => {
-      setReport(res.data.resReport);
-    });
-  }, []);
+  //pdf
+  const [open, setOpen] = useState(false);
+  //
+  // const a = [{ "A"}, { "B"}, { "C"}];
+  const [detailreportopen, setDetailreportopen] = useState(false);
+
+  //in/out autocomplete
+  const selectType = [{ label: "In" }, { label: "Out" }];
+  const [inLag, setInLag] = useState([]);
+  const [outLag, setOutLag] = useState([]);
+  const changeInOut = (e) => {
+    console.log(e.target.innerText);
+  };
+
+  //date picker
+  const [value, setValue] = React.useState(null);
+  // const [open, setOpen] = useState(false);
+  const DiaOpen = () => {
+    setOpen(!open);
+  };
+
+  // useEffect(() => {
+  //   Axios.get(`/reports/agent/${lotteryId}`, {
+  //     headers: {
+  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
+  //     },
+  //   }).then((res) => {
+  //     setReport(res.data.resReport);
+  //   });
+  // }, []);
   return (
     <Stack>
+      <Stack direction={"row"} spacing={2} padding={2} justifyContent={"start"}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="Start Date"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} size={"small"} sx={{ width: 130 }} />
+            )}
+          />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="End Date"
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} size={"small"} sx={{ width: 130 }} />
+            )}
+          />
+        </LocalizationProvider>
+
+        <Autocomplete
+          onChange={changeInOut}
+          size={"small"}
+          id="combo-box-demo"
+          options={selectType}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Select In/Out"
+              size={"small"}
+              sx={{ width: 150 }}
+            />
+          )}
+        />
+      </Stack>
       {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
       <Table
         // sx={{ minWidth: "max-content" }}
@@ -56,7 +118,7 @@ const Report = () => {
           </TableRow>
         </TableHead>
         <TableBody sx={{ overflow: "scroll" }}>
-          {report.map((rp) => {
+          {/* {report.map((rp) => {
             return (
               <TableRow>
                 <TableCell>{rp.userId.username}</TableCell>
@@ -75,7 +137,7 @@ const Report = () => {
                 </TableCell>
               </TableRow>
             );
-          })}
+          })} */}
         </TableBody>
       </Table>
       {/* </TableContainer> */}

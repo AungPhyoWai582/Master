@@ -59,7 +59,7 @@ const Dashboard = () => {
       <Route path="/lottery/calls/:lotteryId" element={<CallsList />} />
       <Route path="/lottery/lager/:lotteryId" element={<Lager />} />
 
-      <Route path="/reports/agent/:lotteryId" element={<Report />} />
+      <Route path="/reports" element={<Report />} />
       <Route
         path="/reports/agent/:agentId/calls/:lotteryId"
         element={<ReportCalls />}

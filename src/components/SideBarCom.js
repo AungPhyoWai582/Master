@@ -157,7 +157,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
 
             <NavLink
               style={{ textDecoration: "none" }}
-              to="/view"
+              to="/reports"
               onClick={() => setHandleOpen(false)}
             >
               <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
