@@ -63,7 +63,7 @@ const MemberList = () => {
           onChange={(e) => setInputsearch(e.target.value)}
         />
       </Stack>
-      <Stack padding={1} height={"70%"}>
+      <Stack padding={1}>
         <TableContainer>
           <Table stickyHeader>
             <TableHead>

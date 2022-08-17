@@ -1,9 +1,13 @@
-import { TextField } from "@mui/material";
+import { TextField, Stack } from "@mui/material";
 import React from "react";
 import LagerCom from "../../components/LagerCom";
 
 const Lager = () => {
-  return <LagerCom addField={true} />;
+  return (
+    <Stack>
+      <LagerCom addField={true} />
+    </Stack>
+  );
 };
 
 export default Lager;
