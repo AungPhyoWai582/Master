@@ -6,7 +6,7 @@ const BetListCom = ({ call, key, onClick, children }) => {
   // console.log(setEdtiNum);
   console.log(call);
   return (
-    <Stack direction={"row"} width={"100%"} justifyContent={"space-around"}>
+    <Stack direction={"row"} justifyContent={"space-around"}>
       <Typography padding={0.3} width={"30%"} textAlign={"center"}>
         {call.number}
       </Typography>

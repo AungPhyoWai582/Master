@@ -488,22 +488,22 @@ const Bet = () => {
                 <BetListCom call={calc}>
                   <Stack direction={"row"} width={"60%"}>
                     <Button size="small">
-                      <Edit fontSize="18" />
+                      <Edit fontSize="10" />
                     </Button>
                   </Stack>
                 </BetListCom>
               );
             })}
         </Stack>
-        <Stack width={"30%"}>
+        <Stack width={"40%"}>
           {callDemo !== null &&
             callDemo.map((calc, key) => {
               return (
                 <BetListCom call={calc}>
-                  <Stack direction={"row"} width={"60%"}>
-                    <Button size="small">
-                      <Edit fontSize="18" />
-                    </Button>
+                  <Stack direction={"row"}>
+                    <IconButton size="small">
+                      <Edit fontSize="10" />
+                    </IconButton>
                   </Stack>
                 </BetListCom>
               );
