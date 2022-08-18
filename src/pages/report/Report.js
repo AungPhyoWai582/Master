@@ -103,7 +103,7 @@ const Report = () => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Select In/Out"
+              label="In/Out"
               size={"small"}
               sx={{ width: 150 }}
             />
@@ -122,9 +122,9 @@ const Report = () => {
               Name
             </TableCell>
             <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+            {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
               Comission
-            </TableCell>
+            </TableCell> */}
             <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
               Win/Lose
             </TableCell>
@@ -140,7 +140,7 @@ const Report = () => {
                 <TableRow>
                   <TableCell>{rp.name.toString()}</TableCell>
                   <TableCell>{rp.totalAmount.toString()}</TableCell>
-                  <TableCell>{rp.totalCommission.toString()}</TableCell>
+                  {/* <TableCell>{rp.totalCommission.toString()}</TableCell> */}
                   <TableCell>{rp.totalWin.toString()}</TableCell>
                   {/* <TableCell> */}
                   {/* <IconButton color="success">
@@ -165,9 +165,9 @@ const Report = () => {
             <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
               {report.me.totalAmount}
             </TableCell>
-            <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+            {/* <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
               {report.me.totalCommission}
-            </TableCell>
+            </TableCell> */}
             <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
               {report.me.totalWin}
             </TableCell>

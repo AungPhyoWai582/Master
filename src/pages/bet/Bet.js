@@ -36,6 +36,7 @@ import Lager from "../../pages/lager/Lager";
 const Bet = () => {
   // const choseFun = useContext(content);
   // console.log(choseFun);
+  const [agentcall, setAgentcall] = useState([]);
   const [callcrud, setCallcrud] = useState(null);
   const [lager, setLager] = useState();
   const [call, setCall] = useState({
@@ -80,6 +81,7 @@ const Bet = () => {
 
   console.log(lager);
   console.log(callList);
+  console.log(agents);
 
   // callList.map((clist) => {
   //   if (clist.agent.toString() === call.agent.toString()) {
@@ -265,6 +267,20 @@ const Bet = () => {
     setLagerOpen(false);
   };
   console.log(callDemo);
+
+  // call
+  useEffect(() => {
+    Axios.get(`/call/${lotteryId}`, {
+      headers: {
+        authorization: `Bearer ` + localStorage.getItem("access-token"),
+      },
+    }).then((res) => {
+      console.log(res.data.data);
+      setAgentcall(res.data.data);
+    });
+  }, []);
+  console.log(call.agent.toString());
+  console.log(agentcall.agent && agentcall.agent);
   return (
     <Stack height={"100%"}>
       {success && (
@@ -324,11 +340,11 @@ const Bet = () => {
       >
         <Autocomplete
           size="small"
-          id="combo-box-demo"
+          // id="combo-box-demo"
           options={agents}
           value={autoCompleteValue}
-          getOptionLabel={(cus) => cus.name}
-          sx={{ width: 300 }}
+          sx={{ width: 200 }}
+          getOptionLabel={(cus) => cus.username}
           onChange={(e, value) => {
             setAutoCompleteValue(value);
             setCall({ ...call, agent: value._id });
@@ -336,6 +352,7 @@ const Bet = () => {
           renderInput={(params) => (
             <TextField
               {...params}
+              sx={{ fontSize: 8 }}
               label="Agent"
               size="small"
               color={"success"}
