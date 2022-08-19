@@ -139,9 +139,9 @@ const Report = () => {
               Name
             </TableCell>
             <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell>
-            {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              Comission
-            </TableCell> */}
+            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+              GameX
+            </TableCell>
             <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
               Win/Lose
             </TableCell>
@@ -158,6 +158,8 @@ const Report = () => {
                   <TableRow>
                     <TableCell>{rp.name.toString()}</TableCell>
                     <TableCell>{rp.totalAmount.toString()}</TableCell>
+                    <TableCell>{rp.pout_tee_amount.toString()}</TableCell>
+
                     <TableCell>{rp.totalWin.toString()}</TableCell>
                   </TableRow>
                 </>
@@ -191,7 +193,7 @@ const Report = () => {
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                 {report.me.totalAmount}
               </TableCell>
-
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}></TableCell>
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                 {report.me.totalWin}
               </TableCell>

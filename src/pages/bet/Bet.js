@@ -83,11 +83,12 @@ const Bet = () => {
   console.log(callList);
   console.log(agents);
 
-  // callList.map((clist) => {
-  //   if (clist.agent.toString() === call.agent.toString()) {
-  //     showCalls.push(clist);
-  //   }
-  // });
+  // callList &&
+  //   callList.map((clist) => {
+  //     if (clist.agent.toString() === call.agent.toString()) {
+  //       showCalls.push(clist);
+  //     }
+  //   });
 
   console.log(showCalls);
 
@@ -216,32 +217,6 @@ const Bet = () => {
   //lager open
   const [lagerOpen, setLagerOpen] = useState(false);
 
-  //get api lager
-  // const [agentcall, setAgentcall] = useState([]);
-  // const [showagentcall, setShowagentcall] = useState([]);
-  // console.log(call.agent);
-  // useEffect(() => {
-  //   Axios.get(`/lagers/${lotteryId}`, {
-  //     headers: {
-  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
-  //     },
-  //   }).then((res) => {
-  //     console.log(res.data.data.in.read);
-  //     setAgentcall(res.data.data.in.read);
-  //   });
-  // }, []);
-
-  // let l;
-  // if (call.agent) {
-  //   l = lager.in.read.map((lir) => {
-  //     if (lir.agent == call.agent) {
-  //       return lir;
-  //     }
-  //   });
-  // }
-
-  // console.log(l);
-
   //Lager Break
   const [lagerBreak, setLagerBreak] = useState();
   const [demoLager, setDemolager] = useState();
@@ -280,11 +255,12 @@ const Bet = () => {
     });
   }, []);
   console.log(call.agent.toString());
-  const b = [...agentcalls].filter((a) => {
-    return call.agent.toString() === a.agent._id.toString();
-  });
+  // const b = [...agentcalls].filter((a) => {
+  //   return call.agent.toString() === a.agent._id.toString();
+  // });
   console.log(agentcalls);
-  console.log(b);
+  // console.log(b);
+  console.log(showCalls);
   return (
     <Stack height={"100%"}>
       {success && (
@@ -466,7 +442,6 @@ const Bet = () => {
         >
           {onchange.number === ""
             ? agentcalls
-
                 .filter(
                   (ag) => ag.agent._id.toString() == call.agent.toString()
                 )
@@ -491,19 +466,8 @@ const Bet = () => {
                     </Stack>
                   );
                 })
-            : showCalls.map((scal, key) => (
-                <Stack
-                  component={"button"}
-                  width={"100%"}
-                  bgcolor={`${key % 2 === 0 ? yellow[300] : green[300]}`}
-                  borderBottom={1}
-                  borderColor={grey[500]}
-                  onClick={() => setCallcrud(showCalls[key])}
-                >
-                  {scal.numbers.map((cal) => (
-                    <BetListCom call={cal} />
-                  ))}
-                </Stack>
+            : call.numbers.map((cal, key) => (
+                <BetListCom call={cal} key={key} />
               ))}
         </Stack>
 
