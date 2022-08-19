@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
+import {
+  Search,
+  VisibilityOffOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 import {
   Table,
   TableCell,
@@ -52,23 +56,44 @@ const Report = () => {
     setOpen(!open);
   };
 
-  useEffect(() => {
-    Axios.get(`/reports/members-collections`, {
-      headers: {
-        authorization: `Bearer ` + localStorage.getItem("access-token"),
-      },
-    }).then((res) => {
-      console.log(res.data.report);
-      const { me, memberReport } = res.data.report;
-      console.log(me, memberReport);
-      // setReport(res.data.report);
-      setReport({ me: me, memberReport: memberReport });
-    });
-  }, []);
+  const searchReport = () => {
+    Axios.get(
+      `/reports/members-collections?start_date=${startDate}&end_date=${endDate}`,
+      {
+        headers: {
+          authorization: `Bearer ` + localStorage.getItem("access-token"),
+        },
+      }
+    )
+      .then((res) => {
+        console.log(res.data.report);
+
+        const { me, memberReport } = res.data.report;
+        console.log(me, memberReport);
+        // setReport(res.data.report);
+        setReport({ me: me, memberReport: memberReport });
+      })
+      .catch((err) => setReport({ me: {}, memberReport: [] }));
+  };
   console.log(report);
   return (
     <Stack>
       <Stack direction={"row"} spacing={2} padding={2} justifyContent={"start"}>
+        <Autocomplete
+          onChange={changeInOut}
+          size="small"
+          id="combo-box-demo"
+          // sx={{ width: 50 }}
+          options={selectType}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="In/Out"
+              size={"small"}
+              sx={{ width: 100 }}
+            />
+          )}
+        />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="Start Date"
@@ -77,7 +102,7 @@ const Report = () => {
               setStartDate(newValue);
             }}
             renderInput={(params) => (
-              <TextField {...params} size={"small"} sx={{ width: 130 }} />
+              <TextField {...params} size={"small"} sx={{ width: 150 }} />
             )}
           />
         </LocalizationProvider>
@@ -89,26 +114,18 @@ const Report = () => {
               setEndDate(newValue);
             }}
             renderInput={(params) => (
-              <TextField {...params} size={"small"} sx={{ width: 130 }} />
+              <TextField {...params} size={"small"} sx={{ width: 150 }} />
             )}
           />
         </LocalizationProvider>
-
-        <Autocomplete
-          onChange={changeInOut}
-          size={"small"}
-          id="combo-box-demo"
-          options={selectType}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="In/Out"
-              size={"small"}
-              sx={{ width: 150 }}
-            />
-          )}
-        />
+        <IconButton
+          size="small"
+          color={"success"}
+          bgcolor={"gray"}
+          onClick={searchReport}
+        >
+          <Search fontSize="10" />
+        </IconButton>
       </Stack>
       {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
       <Table
@@ -134,47 +151,54 @@ const Report = () => {
           </TableRow>
         </TableHead>
         <TableBody sx={{ overflow: "scroll" }}>
-          {report &&
+          {report.memberReport && report.memberReport.length ? (
             [...report.memberReport].map((rp) => {
               return (
-                <TableRow>
-                  <TableCell>{rp.name.toString()}</TableCell>
-                  <TableCell>{rp.totalAmount.toString()}</TableCell>
-                  {/* <TableCell>{rp.totalCommission.toString()}</TableCell> */}
-                  <TableCell>{rp.totalWin.toString()}</TableCell>
-                  {/* <TableCell> */}
-                  {/* <IconButton color="success">
-                    <NavLink
-                    // to={`/reports/agent/${rp.userId._id}/calls/${lotteryId}`}
-                    // state={{ lotteryId: lotteryId }}
-                    >
-                      <VisibilityOutlined />
-                    </NavLink>
-                  </IconButton> */}
-                  {/* </TableCell> */}
-                </TableRow>
+                <>
+                  <TableRow>
+                    <TableCell>{rp.name.toString()}</TableCell>
+                    <TableCell>{rp.totalAmount.toString()}</TableCell>
+                    <TableCell>{rp.totalWin.toString()}</TableCell>
+                  </TableRow>
+                </>
               );
-            })}
-          <TableRow
-            // sx={{ fontSize: 12, fontWeight: "bold" }}
-            style={{
-              backgroundColor: grey[300],
-            }}
-          >
-            <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>Total</TableCell>
-            <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-              {report.me.totalAmount}
-            </TableCell>
-            {/* <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-              {report.me.totalCommission}
-            </TableCell> */}
-            <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-              {report.me.totalWin}
-            </TableCell>
-          </TableRow>
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={3}>
+                <Typography
+                  padding={1}
+                  fontSize={18}
+                  fontWeight={500}
+                  color={"red"}
+                  textAlign="center"
+                  gridColumn={3}
+                >
+                  Reports Not Found !!!
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
+          {report.memberReport.length != 0 && (
+            <TableRow
+              style={{
+                backgroundColor: grey[300],
+              }}
+            >
+              <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+                Total
+              </TableCell>
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                {report.me.totalAmount}
+              </TableCell>
+
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                {report.me.totalWin}
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
-      {/* </TableContainer> */}
     </Stack>
   );
 };

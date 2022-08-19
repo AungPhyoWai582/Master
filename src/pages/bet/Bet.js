@@ -36,7 +36,7 @@ import Lager from "../../pages/lager/Lager";
 const Bet = () => {
   // const choseFun = useContext(content);
   // console.log(choseFun);
-  const [agentcall, setAgentcall] = useState([]);
+  const [agentcall, setAgentcall] = useState({});
   const [callcrud, setCallcrud] = useState(null);
   const [lager, setLager] = useState();
   const [call, setCall] = useState({
@@ -280,7 +280,7 @@ const Bet = () => {
     });
   }, []);
   console.log(call.agent.toString());
-  console.log(agentcall.agent && agentcall.agent);
+  console.log(agentcall._id);
   return (
     <Stack height={"100%"}>
       {success && (
@@ -459,8 +459,12 @@ const Bet = () => {
           padding={1}
           spacing={1}
         >
-          {call.agent && call.numbers.length && call.numbers.length
-            ? call.numbers.map((cal, key) => {
+          {call.agent &&
+          call.numbers.length &&
+          call.numbers.length &&
+          agentcall.agent &&
+          agentcall.agent == call.agent
+            ? agentcall.numbers.map((cal, key) => {
                 console.log(key);
                 console.log(cal);
                 return (
