@@ -7,6 +7,7 @@ import {
 } from "@mui/icons-material";
 import {
   Alert,
+  AlertTitle,
   Autocomplete,
   Button,
   Dialog,
@@ -36,6 +37,9 @@ import Lager from "../../pages/lager/Lager";
 const Bet = () => {
   // const choseFun = useContext(content);
   // console.log(choseFun);
+  const [beterrorcontrol, setBeterrorcontrol] = useState(false);
+  const [callandBetlistctleff, setCallandBetlistctleff] = useState(true);
+
   const [agentcalls, setAgentcalls] = useState([]);
   const [callcrud, setCallcrud] = useState(null);
   const [lager, setLager] = useState();
@@ -113,7 +117,12 @@ const Bet = () => {
 
   const choice = (e) => {
     e.preventDefault();
-    if (onchange.number !== "" && onchange.number.length == 2) {
+    if (
+      // onchange.number !== "" &&
+      onchange.number.length == 2 &&
+      // onchange.amount !== "" &&
+      onchange.amount.length !== 3
+    ) {
       setCall({
         ...call,
         numbers: [...call.numbers, onchange],
@@ -123,8 +132,10 @@ const Bet = () => {
       }
 
       setEditCtlBtn(false);
+      setCallandBetlistctleff(false);
     } else {
-      console.log("error");
+      console.log((e) => e);
+      setBeterrorcontrol(true);
     }
   };
 
@@ -164,7 +175,6 @@ const Bet = () => {
   //   console.log(e.target.file);
   //   console.log(e.target.result);
   // };
-
   const bet = (e) => {
     e.preventDefault();
     console.log(call);
@@ -176,6 +186,7 @@ const Bet = () => {
     })
       .then((res) => {
         console.log(res.data);
+
         setSuccess(true);
         setCall({
           agent: "",
@@ -185,6 +196,7 @@ const Bet = () => {
           number: "",
           amount: "",
         });
+        setCallandBetlistctleff(true);
       })
       .catch((err) => console.log(err));
   };
@@ -311,6 +323,26 @@ const Bet = () => {
           Error
         </Alert>
       )}
+      {beterrorcontrol === true && (
+        <Alert
+          variant="filled"
+          severity="warning"
+          action={
+            <IconButton
+              aria-label="close"
+              color="error"
+              size="small"
+              onClick={() => {
+                setBeterrorcontrol(false);
+              }}
+            >
+              <Close fontSize="12" />
+            </IconButton>
+          }
+        >
+          This is bet error alert — check it out!
+        </Alert>
+      )}
       <Stack
         padding={1}
         spacing={1}
@@ -430,9 +462,8 @@ const Bet = () => {
         <Stack
           direction={"column"}
           alignItems={"center"}
-          width={"30%"}
-          maxHeight={500}
-          height={"100%"}
+          width={"50%"}
+          maxHeight={400}
           minHeight={400}
           overflow={"scroll"}
           boxShadow={1}
@@ -440,7 +471,7 @@ const Bet = () => {
           padding={1}
           spacing={1}
         >
-          {onchange.number === ""
+          {callandBetlistctleff === true
             ? agentcalls
                 .filter(
                   (ag) => ag.agent._id.toString() == call.agent.toString()
@@ -471,11 +502,11 @@ const Bet = () => {
               ))}
         </Stack>
 
-        <Stack
+        {/* <Stack
           direction={"column"}
           alignItems={"center"}
           width={"30%"}
-          maxHeight={500}
+          maxHeight={400}
           height={"100%"}
           minHeight={400}
           boxShadow={1}
@@ -495,8 +526,19 @@ const Bet = () => {
                 </BetListCom>
               );
             })}
-        </Stack>
-        <Stack width={"40%"}>
+        </Stack> */}
+        <Stack
+          direction={"column"}
+          alignItems={"center"}
+          width={"50%"}
+          maxHeight={400}
+          minHeight={400}
+          overflow={"scroll"}
+          boxShadow={1}
+          borderBottom={1}
+          padding={1}
+          spacing={1}
+        >
           {callDemo !== null &&
             callDemo.map((calc, key) => {
               return (
