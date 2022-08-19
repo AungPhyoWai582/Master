@@ -36,7 +36,7 @@ import Lager from "../../pages/lager/Lager";
 const Bet = () => {
   // const choseFun = useContext(content);
   // console.log(choseFun);
-  const [agentcall, setAgentcall] = useState({});
+  const [agentcalls, setAgentcalls] = useState([]);
   const [callcrud, setCallcrud] = useState(null);
   const [lager, setLager] = useState();
   const [call, setCall] = useState({
@@ -276,11 +276,15 @@ const Bet = () => {
       },
     }).then((res) => {
       console.log(res.data.data);
-      setAgentcall(res.data.data);
+      setAgentcalls(res.data.data);
     });
   }, []);
   console.log(call.agent.toString());
-  console.log(agentcall._id);
+  const b = [...agentcalls].filter((a) => {
+    return call.agent.toString() === a.agent._id.toString();
+  });
+  console.log(agentcalls);
+  console.log(b);
   return (
     <Stack height={"100%"}>
       {success && (
@@ -356,6 +360,7 @@ const Bet = () => {
               label="Agent"
               size="small"
               color={"success"}
+              defaultValue={autoCompleteValue}
             />
           )}
         />
@@ -459,22 +464,33 @@ const Bet = () => {
           padding={1}
           spacing={1}
         >
-          {call.agent &&
-          call.numbers.length &&
-          call.numbers.length &&
-          agentcall.agent &&
-          agentcall.agent == call.agent
-            ? agentcall.numbers.map((cal, key) => {
-                console.log(key);
-                console.log(cal);
-                return (
-                  <BetListCom
-                    call={cal}
-                    key={key}
-                    onClick={() => editHandle(key)}
-                  />
-                );
-              })
+          {onchange.number === ""
+            ? agentcalls
+
+                .filter(
+                  (ag) => ag.agent._id.toString() == call.agent.toString()
+                )
+                .map((cal, key) => {
+                  console.log(key);
+                  console.log(cal);
+
+                  return (
+                    <Stack
+                      width={"100%"}
+                      bgcolor={`${key % 2 == 0 ? grey[300] : ""}`}
+                    >
+                      {cal.numbers.map((ca, key) => {
+                        return (
+                          <BetListCom
+                            call={ca}
+                            key={key}
+                            onClick={() => editHandle(key)}
+                          />
+                        );
+                      })}
+                    </Stack>
+                  );
+                })
             : showCalls.map((scal, key) => (
                 <Stack
                   component={"button"}

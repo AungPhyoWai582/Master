@@ -118,14 +118,14 @@ const Report = () => {
             )}
           />
         </LocalizationProvider>
-        <IconButton
+        <Button
+          sx={{ bgcolor: "ButtonShadow" }}
           size="small"
           color={"success"}
-          bgcolor={"gray"}
           onClick={searchReport}
         >
-          <Search fontSize="10" />
-        </IconButton>
+          <Search fontSize="10" color={"success"} />
+        </Button>
       </Stack>
       {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
       <Table
