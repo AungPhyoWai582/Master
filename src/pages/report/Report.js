@@ -156,7 +156,7 @@ const Report = () => {
               return (
                 <>
                   <TableRow>
-                    <TableCell sx={{ overflow: "scroll" }}>
+                    <TableCell sx={{ overflow: "scroll/" }}>
                       {rp.name.toString()}
                     </TableCell>
                     <TableCell>{rp.totalAmount.toString()}</TableCell>
@@ -198,10 +198,7 @@ const Report = () => {
                 {report.me.totalAmount}
               </TableCell>
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                {report.memberReport &&
-                  report.memberReport.map((add, key) => {
-                    return add[key] !== null && add[key];
-                  })}
+                {report.me.pout_tee_amount}
               </TableCell>
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                 {report.me.totalWin}
