@@ -156,9 +156,13 @@ const Report = () => {
               return (
                 <>
                   <TableRow>
-                    <TableCell>{rp.name.toString()}</TableCell>
+                    <TableCell sx={{ overflow: "scroll" }}>
+                      {rp.name.toString()}
+                    </TableCell>
                     <TableCell>{rp.totalAmount.toString()}</TableCell>
-                    <TableCell>{rp.pout_tee_amount.toString()}</TableCell>
+                    <TableCell>
+                      {rp.pout_tee_amount ? rp.pout_tee_amount.toString() : "0"}
+                    </TableCell>
 
                     <TableCell>{rp.totalWin.toString()}</TableCell>
                   </TableRow>
@@ -181,7 +185,7 @@ const Report = () => {
               </TableCell>
             </TableRow>
           )}
-          {report.memberReport.length != 0 && (
+          {report.memberReport.length !== 0 && (
             <TableRow
               style={{
                 backgroundColor: grey[300],
@@ -193,7 +197,12 @@ const Report = () => {
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                 {report.me.totalAmount}
               </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}></TableCell>
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                {report.memberReport &&
+                  report.memberReport.map((add, key) => {
+                    return add[key] !== null && add[key];
+                  })}
+              </TableCell>
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                 {report.me.totalWin}
               </TableCell>
