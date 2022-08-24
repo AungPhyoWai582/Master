@@ -1,10 +1,20 @@
 import { TextField, Stack } from "@mui/material";
 import React from "react";
 
-const BetCom = ({ style, label, onChange, name, value, required, type }) => {
+const BetCom = ({
+  style,
+  label,
+  onChange,
+  name,
+  value,
+  required,
+  type,
+  sx,
+}) => {
   return (
     <Stack sx={style}>
       <TextField
+        display={sx}
         type={type}
         name={name}
         value={value}

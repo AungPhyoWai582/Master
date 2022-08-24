@@ -314,7 +314,7 @@ const MemberCreate = ({ userinfo }) => {
                 }
               />
             </Stack>
-            <Stack spacing={1.5} padding={1}>
+            {/* <Stack spacing={1.5} padding={1}>
               <Typography variant={"caption"} component={"label"} fontSize={16}>
                 In / Out
               </Typography>
@@ -344,7 +344,7 @@ const MemberCreate = ({ userinfo }) => {
                   />
                 }
               />
-            </Stack>
+            </Stack> */}
           </Grid>
           <Grid item xs={1} md={12}>
             <Stack

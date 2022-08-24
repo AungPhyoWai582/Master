@@ -1,4 +1,5 @@
 import {
+  Add,
   AddSharp,
   ArrowBack,
   ArrowForward,
@@ -32,11 +33,8 @@ import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
-// import { content } from "../../components/TwoDSign";
 
 const Bet = () => {
-  // const choseFun = useContext(content);
-  // console.log(choseFun);
   const [beterrorcontrol, setBeterrorcontrol] = useState(false);
   const [callandBetlistctleff, setCallandBetlistctleff] = useState(true);
 
@@ -87,13 +85,6 @@ const Bet = () => {
   console.log(callList);
   console.log(agents);
 
-  // callList &&
-  //   callList.map((clist) => {
-  //     if (clist.agent.toString() === call.agent.toString()) {
-  //       showCalls.push(clist);
-  //     }
-  //   });
-
   console.log(showCalls);
 
   const { lotteryId } = useParams();
@@ -118,10 +109,8 @@ const Bet = () => {
   const choice = (e) => {
     e.preventDefault();
     if (
-      // onchange.number !== "" &&
-      onchange.number.length == 2 &&
-      // onchange.amount !== "" &&
-      onchange.amount.length !== 3
+      (onchange.number.length < 1 || onchange.number.length >= 2) &&
+      (onchange.amount != null || onchange.amount.length > 2)
     ) {
       setCall({
         ...call,
@@ -134,7 +123,7 @@ const Bet = () => {
       setEditCtlBtn(false);
       setCallandBetlistctleff(false);
     } else {
-      console.log((e) => e);
+      // console.log((e) => e);
       setBeterrorcontrol(true);
     }
   };
@@ -168,13 +157,8 @@ const Bet = () => {
     reader.readAsText(e.target.files[0]);
   };
 
-  // console.log(call);
+  console.log(call);
 
-  // const readFile = (e) => {
-  //   e.preventDefault();
-  //   console.log(e.target.file);
-  //   console.log(e.target.result);
-  // };
   const bet = (e) => {
     e.preventDefault();
     console.log(call);
@@ -201,19 +185,18 @@ const Bet = () => {
       .catch((err) => console.log(err));
   };
   // console.log(la);
+
   //callList crud
   const [editCtlBtn, setEditCtlBtn] = useState(false);
+  const [agentcallcrud, setAgentCallCrud] = useState([]);
   const [keydemo, setKeyDemo] = useState();
-  const editHandle = (key) => {
+  const editHandle = (ca, key) => {
     setEditCtlBtn(true);
-    // console.log(editCtlBtn);
-    setKeyDemo(key);
-    setOnchange({
-      number: call.numbers[key].number,
-      amount: call.numbers[key].amount,
-    });
-    // console.log(call.agent);
-    console.log(agents);
+
+    console.log(editCtlBtn);
+    console.log(ca);
+    setAgentCallCrud(ca.numbers);
+    console.log(agentcallcrud);
   };
   console.log(callcrud);
   //editReading
@@ -373,6 +356,7 @@ const Bet = () => {
           )}
         />
         <BetCom name="select" type={"file"} onChange={handleFiles} />
+
         <Stack direction={"row"} spacing={1}>
           <Button
             variant={"contained"}
@@ -404,6 +388,7 @@ const Bet = () => {
       >
         <BetCom
           width={50}
+          text={"number"}
           name="number"
           value={onchange.number}
           onChange={onChangeHandler}
@@ -412,36 +397,46 @@ const Bet = () => {
 
         {/* <TwoDSign /> */}
         <BetCom
+          text={"number"}
           name="amount"
           value={onchange.amount}
           onChange={onChangeHandler}
           label={"ထိုးငွေ"}
         />
+        <Stack padding={1}>
+          {editCtlBtn ? (
+            <IconButton onClick={editReadData} size={"small"}>
+              <Edit fontSize="8" />
+            </IconButton>
+          ) : (
+            <IconButton
+              onClick={choice}
+              size={"small"}
+              sx={{ bgcolor: green[700] }}
+            >
+              <Add fontSize="8" />
+            </IconButton>
+          )}
+        </Stack>
       </Stack>
       <Stack padding={1}>
-        {editCtlBtn ? (
-          <BetButtonCom
-            onClick={editReadData}
-            btnText={"ပြင်မည်"}
-            color={"success"}
-          />
-        ) : (
-          <BetButtonCom
-            onClick={choice}
-            btnText={"ရွေးမည်"}
-            color={"success"}
-          />
-        )}
+        <Stack
+          component={"button"}
+          // height={"5%"}
+          sx={{
+            ":hover": {
+              cursor: "pointer",
+            },
+          }}
+          textAlign="center"
+          onClick={bet}
+        >
+          <Typography margin={"auto"} textAlign={"center"}>
+            Bet
+          </Typography>
+        </Stack>
       </Stack>
-      {/* <Stack alignItems={"start"} paddingX={{ md: 4 }}>
-        <BetCom
-          style={{ marginTop: 1 }}
-          value={call.callname}
-          onChange={(e) => setCall({ ...call, callname: e.target.value })}
-          label="အမည်"
-        />
-        
-      </Stack> */}
+
       <Stack justifyContent={"right"} width={"100%"} direction={"row"}>
         <Pagination
           size="small"
@@ -471,10 +466,15 @@ const Bet = () => {
           padding={1}
           spacing={1}
         >
-          {callandBetlistctleff === true
-            ? agentcalls
+          {call.agent && call.numbers.length
+            ? call.numbers.map((cal, key) => (
+                <Stack width={"100%"} justifyContent={"normal"}>
+                  <BetListCom call={cal} key={key} />
+                </Stack>
+              ))
+            : agentcalls
                 .filter(
-                  (ag) => ag.agent._id.toString() == call.agent.toString()
+                  (ag, key) => ag.agent._id.toString() == call.agent.toString()
                 )
                 .map((cal, key) => {
                   console.log(key);
@@ -484,49 +484,17 @@ const Bet = () => {
                     <Stack
                       width={"100%"}
                       bgcolor={`${key % 2 == 0 ? grey[300] : ""}`}
+                      component={"button"}
+                      onClick={() => editHandle(cal, key)}
                     >
                       {cal.numbers.map((ca, key) => {
-                        return (
-                          <BetListCom
-                            call={ca}
-                            key={key}
-                            onClick={() => editHandle(key)}
-                          />
-                        );
+                        return <BetListCom call={ca} key={key} />;
                       })}
                     </Stack>
                   );
-                })
-            : call.numbers.map((cal, key) => (
-                <BetListCom call={cal} key={key} />
-              ))}
+                })}
         </Stack>
 
-        {/* <Stack
-          direction={"column"}
-          alignItems={"center"}
-          width={"30%"}
-          maxHeight={400}
-          height={"100%"}
-          minHeight={400}
-          boxShadow={1}
-          borderBottom={1}
-          padding={1}
-          spacing={1}
-        >
-          {callcrud !== null &&
-            callcrud.numbers.map((calc, key) => {
-              return (
-                <BetListCom call={calc}>
-                  <Stack direction={"row"} width={"60%"}>
-                    <Button size="small">
-                      <Edit fontSize="10" />
-                    </Button>
-                  </Stack>
-                </BetListCom>
-              );
-            })}
-        </Stack> */}
         <Stack
           direction={"column"}
           alignItems={"center"}
@@ -553,26 +521,7 @@ const Bet = () => {
             })}
         </Stack>
       </Stack>
-      <Stack
-        component={"button"}
-        height={"5%"}
-        sx={{
-          ":hover": {
-            cursor: "pointer",
-          },
-        }}
-        textAlign="center"
-        position={"absolute"}
-        bottom={4}
-        width="100%"
-        alignItems={"center"}
-        bgcolor="success.main"
-        onClick={bet}
-      >
-        <Typography margin={"auto"} textAlign={"center"}>
-          Bet
-        </Typography>
-      </Stack>
+
       <Dialog fullScreen open={lagerOpen}>
         <Stack alignItems={"end"}>
           <IconButton onClick={() => setLagerOpen(false)}>
