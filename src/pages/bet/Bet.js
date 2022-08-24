@@ -4,6 +4,7 @@ import {
   ArrowBack,
   ArrowForward,
   Close,
+  Delete,
   Edit,
 } from "@mui/icons-material";
 import {
@@ -50,7 +51,32 @@ const Bet = () => {
   const [agents, setAgents] = useState([]);
 
   const showCalls = [];
+
+  const { lotteryId } = useParams();
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
+  //callList crud
+  const [editCtlBtn, setEditCtlBtn] = useState(false);
+  const [agentcallcrud, setAgentCallCrud] = useState({ id: "", numbers: [] });
+  const [keydemo, setKeyDemo] = useState();
+  //For twoD sign state
+  const [autoCompleteValue, setAutoCompleteValue] = useState();
+
+  const [onchange, setOnchange] = useState({
+    number: "",
+    amount: "",
+  });
   // console.log(agents);
+  //lager open
+  const [lagerOpen, setLagerOpen] = useState(false);
+
+  //Lager Break
+  const [lagerBreak, setLagerBreak] = useState();
+  const [demoLager, setDemolager] = useState();
+  const [callDemo, setCallDemo] = useState([]);
+  //calllist control state
+  const [calllistctrl, setCalllistctrl] = useState(false);
   useEffect(() => {
     Axios.get(`/agents`, {
       headers: {
@@ -77,27 +103,17 @@ const Bet = () => {
       .then((res) => {
         setLager(res.data.data);
         setCallList(res.data.data.in.read);
+        setCalllistctrl(false);
+        // setSuccess(false);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [calllistctrl]);
 
-  console.log(lager);
-  console.log(callList);
-  console.log(agents);
+  // console.log(lager);
+  // console.log(callList);
+  // console.log(agents);
+  // console.log(showCalls);
 
-  console.log(showCalls);
-
-  const { lotteryId } = useParams();
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
-
-  //For twoD sign state
-  const [autoCompleteValue, setAutoCompleteValue] = useState();
-
-  const [onchange, setOnchange] = useState({
-    number: "",
-    amount: "",
-  });
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setOnchange({
@@ -180,42 +196,55 @@ const Bet = () => {
           number: "",
           amount: "",
         });
-        setCallandBetlistctleff(true);
+        setCalllistctrl(true);
+      })
+      .then((res) => {
+        setSuccess(false);
       })
       .catch((err) => console.log(err));
   };
   // console.log(la);
-
-  //callList crud
-  const [editCtlBtn, setEditCtlBtn] = useState(false);
-  const [agentcallcrud, setAgentCallCrud] = useState([]);
-  const [keydemo, setKeyDemo] = useState();
-  const editHandle = (ca, key) => {
+  //crud delete
+  const agentcallDelete = (key, calcrud) => {
+    console.log(calcrud);
+    // const
+  };
+  const editHandle = (cal, key) => {
+    console.log(key);
     setEditCtlBtn(true);
-
-    console.log(editCtlBtn);
-    console.log(ca);
-    setAgentCallCrud(ca.numbers);
-    console.log(agentcallcrud);
+    setOnchange({
+      number: cal.number,
+      amount: cal.amount,
+    });
   };
   console.log(callcrud);
   //editReading
-  const editReadData = () => {
-    let demo = call.numbers;
-    console.log(demo[keydemo]);
+  const updateCall = () => {
     console.log(onchange);
-    demo.splice(keydemo, 1, onchange);
-    console.log(demo);
-    setCall({ ...call, agent: call.agent, numbers: demo });
+    console.log(agentcallcrud);
+    const numbers = [...agentcallcrud.numbers];
+    const index = numbers.findIndex((obj) => obj.number == onchange.number);
+    console.log(numbers[index]);
+    numbers[index] = onchange;
+    console.log(numbers);
+    // setAgentCallCrud({ ...agentcallcrud, numbers: numbers });
+    Axios.put(
+      `/call/${lotteryId}/${agentcallcrud.id}`,
+      {
+        numbers: numbers,
+      },
+      {
+        headers: {
+          authorization: `Bearer ` + localStorage.getItem("access-token"),
+        },
+      }
+    ).then((res) => {
+      console.log(res.data.data);
+      setAgentCallCrud({ id: "", numbers: [] });
+      setEditCtlBtn(false);
+    });
   };
 
-  //lager open
-  const [lagerOpen, setLagerOpen] = useState(false);
-
-  //Lager Break
-  const [lagerBreak, setLagerBreak] = useState();
-  const [demoLager, setDemolager] = useState();
-  const [callDemo, setCallDemo] = useState([]);
   const setBreak = () => {
     console.log(demoLager);
     console.log(lagerBreak);
@@ -237,6 +266,7 @@ const Bet = () => {
     setLagerOpen(false);
   };
   console.log(callDemo);
+  console.log(agentcallcrud);
 
   // call
   useEffect(() => {
@@ -337,6 +367,7 @@ const Bet = () => {
           size="small"
           // id="combo-box-demo"
           options={agents}
+          isOptionEqualToValue={(option, value) => option.code === value}
           value={autoCompleteValue}
           sx={{ width: 200 }}
           getOptionLabel={(cus) => cus.username}
@@ -351,7 +382,7 @@ const Bet = () => {
               label="Agent"
               size="small"
               color={"success"}
-              defaultValue={autoCompleteValue}
+              // defaultValue={agents}
             />
           )}
         />
@@ -405,7 +436,7 @@ const Bet = () => {
         />
         <Stack padding={1}>
           {editCtlBtn ? (
-            <IconButton onClick={editReadData} size={"small"}>
+            <IconButton onClick={updateCall} size={"small"}>
               <Edit fontSize="8" />
             </IconButton>
           ) : (
@@ -477,15 +508,17 @@ const Bet = () => {
                   (ag, key) => ag.agent._id.toString() == call.agent.toString()
                 )
                 .map((cal, key) => {
-                  console.log(key);
-                  console.log(cal);
+                  // console.log(key);
+                  // console.log(cal);
 
                   return (
                     <Stack
                       width={"100%"}
                       bgcolor={`${key % 2 == 0 ? grey[300] : ""}`}
                       component={"button"}
-                      onClick={() => editHandle(cal, key)}
+                      onClick={() =>
+                        setAgentCallCrud({ id: cal._id, numbers: cal.numbers })
+                      }
                     >
                       {cal.numbers.map((ca, key) => {
                         return <BetListCom call={ca} key={key} />;
@@ -494,10 +527,9 @@ const Bet = () => {
                   );
                 })}
         </Stack>
-
         <Stack
           direction={"column"}
-          alignItems={"center"}
+          // alignItems={"center"}
           width={"50%"}
           maxHeight={400}
           minHeight={400}
@@ -505,20 +537,40 @@ const Bet = () => {
           boxShadow={1}
           borderBottom={1}
           padding={1}
-          spacing={1}
+          justifyContent={"space-between"}
         >
-          {callDemo !== null &&
-            callDemo.map((calc, key) => {
-              return (
-                <BetListCom call={calc}>
-                  <Stack direction={"row"}>
-                    <IconButton size="small">
-                      <Edit fontSize="10" />
-                    </IconButton>
-                  </Stack>
-                </BetListCom>
-              );
-            })}
+          {/* <Stack justifyContent="normal" width={"100%"}>
+            <Stack width={"30%"}>
+              <Button variant="contained" size="small">
+                Delete
+              </Button>
+            </Stack>
+          </Stack> */}
+          {/* {agentcallcrud && agentcallcrud.length === null */}
+          {!agentcallcrud.numbers.length
+            ? callDemo.map((calc, key) => {
+                return <BetListCom call={calc} key={key} />;
+              })
+            : agentcallcrud.numbers.map((calcrud, key) => {
+                return (
+                  <BetListCom call={calcrud}>
+                    <Stack
+                      direction={"row"}
+                      onClick={() => editHandle(calcrud, key)}
+                    >
+                      <IconButton size="small">
+                        <Edit fontSize="10" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={() => agentcallDelete(key, calcrud)}
+                      >
+                        <Delete fontSize="10" />
+                      </IconButton>
+                    </Stack>
+                  </BetListCom>
+                );
+              })}
         </Stack>
       </Stack>
 
