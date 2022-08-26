@@ -30,7 +30,8 @@ const Report = () => {
   // const { lotteryId } = location.state;
   // console.log(lotteryId);
 
-  const [report, setReport] = useState({ me: {}, memberReport: [] });
+  const [reportIn, setReportIn] = useState({ me: {}, memberReport: [] });
+  const [reportOut, setReportOut] = useState({ totalOut: {}, calls: [] });
 
   //pdf
   const [open, setOpen] = useState(false);
@@ -42,8 +43,9 @@ const Report = () => {
   const selectType = [{ label: "In" }, { label: "Out" }];
   const [inLag, setInLag] = useState([]);
   const [outLag, setOutLag] = useState([]);
+  const [selectChoice, setSelectChoice] = useState();
   const changeInOut = (e) => {
-    console.log(e.target.innerText);
+    setSelectChoice(e.target.innerText);
   };
 
   //date picker
@@ -56,26 +58,46 @@ const Report = () => {
     setOpen(!open);
   };
 
-  const searchReport = () => {
-    Axios.get(
-      `/reports/members-collections?start_date=${startDate}&end_date=${endDate}`,
-      {
-        headers: {
-          authorization: `Bearer ` + localStorage.getItem("access-token"),
-        },
-      }
-    )
-      .then((res) => {
-        console.log(res.data.report);
+  // console.log(selectChoice);
 
-        const { me, memberReport } = res.data.report;
-        console.log(me, memberReport);
-        // setReport(res.data.report);
-        setReport({ me: me, memberReport: memberReport });
-      })
-      .catch((err) => setReport({ me: {}, memberReport: [] }));
+  const searchReport = () => {
+    if (selectChoice === "In") {
+      Axios.get(
+        `/reports/members-collections?start_date=${startDate}&end_date=${endDate}`,
+        {
+          headers: {
+            authorization: `Bearer ` + localStorage.getItem("access-token"),
+          },
+        }
+      )
+        .then((res) => {
+          console.log(res.data.report);
+
+          const { me, memberReport } = res.data.report;
+          console.log(me, memberReport);
+          // setReport(res.data.report);
+          setReportIn({ me: me, memberReport: memberReport });
+        })
+        .catch((err) => setReportIn({ me: {}, memberReport: [] }));
+    }
+    if (selectChoice === "Out") {
+      Axios.get(
+        `/reports/total-out?start_date=${startDate}&end_date=${endDate}`,
+        {
+          headers: {
+            authorization: `Bearer ` + localStorage.getItem("access-token"),
+          },
+        }
+      )
+        .then((res) => {
+          const { calls, totalOut } = res.data.report;
+          setReportOut({ calls: calls, totalOut: totalOut });
+        })
+        .catch((err) => setReportOut({ calls: [], totalOut: {} }));
+    }
   };
-  console.log(report);
+  console.log(reportIn);
+  console.log(reportOut);
   return (
     <Stack>
       <Stack direction={"row"} spacing={2} padding={2} justifyContent={"start"}>
@@ -128,87 +150,180 @@ const Report = () => {
         </Button>
       </Stack>
       {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
-      <Table
-        // sx={{ minWidth: "max-content" }}
-        size="small"
-        aria-label="a dense table"
-      >
-        <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              Name
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              GameX
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              Win/Lose
-            </TableCell>
-            {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+      {selectChoice === "In" && (
+        <Table
+          // sx={{ minWidth: "max-content" }}
+          size="small"
+          aria-label="a dense table"
+        >
+          <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Name
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Bet
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                GameX
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Win/Lose
+              </TableCell>
+              {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
               More
             </TableCell> */}
-          </TableRow>
-        </TableHead>
-        <TableBody sx={{ overflow: "scroll" }}>
-          {report.memberReport && report.memberReport.length ? (
-            [...report.memberReport].map((rp) => {
-              return (
-                <>
-                  <TableRow>
-                    <TableCell sx={{ overflow: "scroll/" }}>
-                      {rp.name.toString()}
-                    </TableCell>
-                    <TableCell>{rp.totalAmount.toString()}</TableCell>
-                    <TableCell>
-                      {rp.pout_tee_amount ? rp.pout_tee_amount.toString() : "0"}
-                    </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ overflow: "scroll" }}>
+            {reportIn.memberReport && reportIn.memberReport.length ? (
+              [...reportIn.memberReport].map((rp) => {
+                return (
+                  <>
+                    <TableRow>
+                      <TableCell sx={{ overflow: "scroll/" }}>
+                        {rp.name.toString()}
+                      </TableCell>
+                      <TableCell>{rp.totalAmount.toString()}</TableCell>
+                      <TableCell>
+                        {rp.pout_tee_amount
+                          ? rp.pout_tee_amount.toString()
+                          : "0"}
+                      </TableCell>
 
-                    <TableCell>{rp.totalWin.toString()}</TableCell>
-                  </TableRow>
-                </>
-              );
-            })
-          ) : (
+                      <TableCell>{rp.totalWin.toString()}</TableCell>
+                    </TableRow>
+                  </>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Typography
+                    padding={1}
+                    fontSize={18}
+                    fontWeight={500}
+                    color={"red"}
+                    textAlign="center"
+                    gridColumn={3}
+                  >
+                    Reports Not Found !!!
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+            {reportIn.memberReport.length !== 0 && (
+              <TableRow
+                style={{
+                  backgroundColor: grey[300],
+                }}
+              >
+                <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+                  Total
+                </TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                  {reportIn.me.totalAmount}
+                </TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                  {reportIn.me.pout_tee_amount !== null
+                    ? reportIn.me.pout_tee_amount
+                    : "0"}
+                </TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                  {reportIn.me.totalWin}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+      {selectChoice === "Out" && (
+        <Table
+          // sx={{ minWidth: "max-content" }}
+          size="small"
+          aria-label="a dense table"
+        >
+          <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
             <TableRow>
-              <TableCell colSpan={3}>
-                <Typography
-                  padding={1}
-                  fontSize={18}
-                  fontWeight={500}
-                  color={"red"}
-                  textAlign="center"
-                  gridColumn={3}
-                >
-                  Reports Not Found !!!
-                </Typography>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                BetID
               </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Bet
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                GameX
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Win/Lose
+              </TableCell>
+              {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+              More
+            </TableCell> */}
             </TableRow>
-          )}
-          {report.memberReport.length !== 0 && (
-            <TableRow
-              style={{
-                backgroundColor: grey[300],
-              }}
-            >
-              <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
-                Total
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                {report.me.totalAmount}
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                {report.me.pout_tee_amount !== null
-                  ? report.me.pout_tee_amount
-                  : "0"}
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                {report.me.totalWin}
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody sx={{ overflow: "scroll" }}>
+            {reportOut.calls && reportOut.calls.length ? (
+              [...reportOut.calls].map((cal) => {
+                return (
+                  <>
+                    <TableRow>
+                      <TableCell sx={{ overflow: "scroll/" }}>
+                        {cal._id.toString()}
+                      </TableCell>
+                      <TableCell>{cal.totalAmount.toString()}</TableCell>
+                      <TableCell>
+                        {cal.pout_tee_amount
+                          ? cal.pout_tee_amount.toString()
+                          : "0"}
+                      </TableCell>
+
+                      <TableCell>{cal.win.toString()}</TableCell>
+                    </TableRow>
+                  </>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Typography
+                    padding={1}
+                    fontSize={18}
+                    fontWeight={500}
+                    color={"red"}
+                    textAlign="center"
+                    gridColumn={3}
+                  >
+                    Reports Not Found !!!
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+            {reportOut.totalOut.length !== 0 && (
+              <TableRow
+                style={{
+                  backgroundColor: grey[300],
+                }}
+              >
+                <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+                  Total
+                </TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                  {reportOut.totalOut.totalAmount}
+                </TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                  {reportOut.totalOut.pout_tee_amount !== null
+                    ? reportOut.totalOut.pout_tee_amount
+                    : "0"}
+                </TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                  {reportOut.totalOut.totalWin}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
     </Stack>
   );
 };
