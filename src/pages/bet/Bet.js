@@ -207,7 +207,9 @@ const Bet = () => {
   //crud delete
   const agentcallDelete = (key, calcrud) => {
     console.log(calcrud);
-    // const
+    const enumbers = [...calcrud];
+
+    // console.log(index);
   };
   const editHandle = (cal, key) => {
     console.log(key);
@@ -499,7 +501,7 @@ const Bet = () => {
         >
           {call.agent && call.numbers.length
             ? call.numbers.map((cal, key) => (
-                <Stack width={"100%"} justifyContent={"normal"}>
+                <Stack width={"100%"} justifyContent={"space-between"}>
                   <BetListCom call={cal} key={key} />
                 </Stack>
               ))
@@ -515,7 +517,9 @@ const Bet = () => {
                     <Stack
                       width={"100%"}
                       bgcolor={`${key % 2 == 0 ? grey[300] : ""}`}
-                      component={"button"}
+                      justifyContent={"space-around"}
+                      // component={"button"}
+                      sx={{ cursor: "pointer" }}
                       onClick={() =>
                         setAgentCallCrud({ id: cal._id, numbers: cal.numbers })
                       }

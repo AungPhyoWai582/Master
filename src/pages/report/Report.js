@@ -105,8 +105,8 @@ const Report = () => {
               <TextField {...params} size={"small"} sx={{ width: 150 }} />
             )}
           />
-        </LocalizationProvider>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          {/* </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}> */}
           <DatePicker
             label="End Date"
             value={endDate}
@@ -198,7 +198,9 @@ const Report = () => {
                 {report.me.totalAmount}
               </TableCell>
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                {report.me.pout_tee_amount}
+                {report.me.pout_tee_amount !== null
+                  ? report.me.pout_tee_amount
+                  : "0"}
               </TableCell>
               <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                 {report.me.totalWin}
