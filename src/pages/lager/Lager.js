@@ -1,11 +1,12 @@
-import { TextField, Stack } from "@mui/material";
+import { TextField, Stack, Typography } from "@mui/material";
 import React from "react";
 import LagerCom from "../../components/LagerCom";
 
 const Lager = () => {
   return (
     <Stack>
-      <LagerCom addField={true} />
+      <Typography textalign={"center"}>In Lager</Typography>
+      <LagerCom addField={false} />
     </Stack>
   );
 };

@@ -207,7 +207,7 @@ const Bet = () => {
   //crud delete
   const agentcallDelete = (key, calcrud) => {
     console.log(calcrud);
-    const enumbers = [...calcrud];
+    // const enumbers = [...calcrud];
 
     // console.log(index);
   };
@@ -280,7 +280,7 @@ const Bet = () => {
       console.log(res.data.data);
       setAgentcalls(res.data.data);
     });
-  }, []);
+  }, [calllistctrl]);
   console.log(call.agent.toString());
   // const b = [...agentcalls].filter((a) => {
   //   return call.agent.toString() === a.agent._id.toString();
