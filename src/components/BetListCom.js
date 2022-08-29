@@ -14,11 +14,11 @@ const BetListCom = ({ call, key, onClick, children }) => {
         {call.amount}
       </Typography>
 
-      {/* <Stack direction={"row"} width={"60%"}>
+      <Stack direction={"row"} width={"60%"}>
         <Button size="small" onClick={onClick}>
           <Edit fontSize="18" />
         </Button>
-      </Stack> */}
+      </Stack>
       {children}
     </Stack>
   );

@@ -13,15 +13,20 @@ import {
   Autocomplete,
   Button,
   Dialog,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   IconButton,
   Pagination,
   PaginationItem,
   Paper,
+  Radio,
+  RadioGroup,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { green, grey, red, yellow } from "@mui/material/colors";
+import { blue, green, grey, red, yellow } from "@mui/material/colors";
 import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -36,6 +41,10 @@ import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
 
 const Bet = () => {
+  const [inOutCtl, setInOutCtl] = useState();
+  const [selectChoice, setSelectChoice] = useState();
+  const [enternumtol, setEnternumtol] = useState({ number: "", total: "" });
+
   const [beterrorcontrol, setBeterrorcontrol] = useState(false);
   const [callandBetlistctleff, setCallandBetlistctleff] = useState(true);
 
@@ -53,6 +62,8 @@ const Bet = () => {
   const showCalls = [];
 
   const { lotteryId } = useParams();
+  const location = useLocation();
+  const { hot_tees } = location.state;
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -77,16 +88,32 @@ const Bet = () => {
   const [callDemo, setCallDemo] = useState([]);
   //calllist control state
   const [calllistctrl, setCalllistctrl] = useState(false);
+
+  const [agentTotalData, setAgentTotalData] = useState({
+    agent: "123456",
+    numbers: [
+      { number: "13", total: "5000" },
+      { number: "45", total: "1000" },
+      { number: "23", total: "2000" },
+      { number: "63", total: "8000" },
+      { number: "55", total: "4000" },
+      { number: "41", total: "7000" },
+      { number: "33", total: "10000" },
+      { number: "86", total: "25000" },
+    ],
+  });
   useEffect(() => {
+    // console.log(hot_tees);
+    // console.log(lotteryId);
     Axios.get(`/agents`, {
       headers: {
         authorization: `Bearer ` + localStorage.getItem("access-token"),
       },
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const agents = res.data.data;
-        console.log(agents);
+        // console.log(agents);
 
         if (agents) {
           setAgents(agents);
@@ -109,19 +136,43 @@ const Bet = () => {
       .catch((err) => console.log(err));
   }, [calllistctrl]);
 
-  // console.log(lager);
-  // console.log(callList);
-  // console.log(agents);
-  // console.log(showCalls);
-
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
+    console.log(value);
+
+    agentTotalData.numbers.map((agenTol, key) => {
+      //Check for input total
+      if (agentTotalData.numbers.map((ag) => ag.number).includes(value)) {
+        const index = agentTotalData.numbers.findIndex(
+          (obj) => obj.number === value
+        );
+        console.log(index, agentTotalData.numbers[index]);
+        // update setstate
+        setEnternumtol({
+          number: agentTotalData.numbers[index].number,
+          total: agentTotalData.numbers[index].total,
+        });
+      } else {
+        setEnternumtol({
+          number: "",
+          total: "",
+        });
+      }
+      // agentTotalData.numbers.map((ag) => ag.number).includes(value);
+      // if (agenTol.number === value) {
+      //   setEnternumtol({ number: agenTol.number, total: agenTol.total });
+      // } else {
+      //   setEnternumtol({ number: "", total: "" });
+      // }
+    });
+    // }
     setOnchange({
       ...onchange,
       [name]: value,
     });
   };
 
+  console.log(enternumtol);
   const choice = (e) => {
     e.preventDefault();
     if (
@@ -173,7 +224,7 @@ const Bet = () => {
     reader.readAsText(e.target.files[0]);
   };
 
-  console.log(call);
+  // console.log(call);
 
   const bet = (e) => {
     e.preventDefault();
@@ -219,7 +270,7 @@ const Bet = () => {
       amount: cal.amount,
     });
   };
-  console.log(callcrud);
+  // console.log(callcrud);
   //editReading
   const updateCall = () => {
     console.log(onchange);
@@ -267,8 +318,8 @@ const Bet = () => {
     // setDemolager(callDemo);
     setLagerOpen(false);
   };
-  console.log(callDemo);
-  console.log(agentcallcrud);
+  // console.log(callDemo);
+  // console.log(agentcallcrud);
 
   // call
   useEffect(() => {
@@ -281,13 +332,20 @@ const Bet = () => {
       setAgentcalls(res.data.data);
     });
   }, [calllistctrl]);
-  console.log(call.agent.toString());
+  // console.log(call.agent.toString());
   // const b = [...agentcalls].filter((a) => {
   //   return call.agent.toString() === a.agent._id.toString();
   // });
-  console.log(agentcalls);
+  // console.log(agentcalls);
   // console.log(b);
-  console.log(showCalls);
+  // console.log(showCalls);
+
+  //CallOutLager
+  const changeInOut = (e) => {
+    setSelectChoice(e.target.value);
+    console.log(selectChoice);
+  };
+
   return (
     <Stack height={"100%"}>
       {success && (
@@ -365,9 +423,26 @@ const Bet = () => {
         justifyContent={"center"}
         boxShadow={1}
       >
+        {/* <Autocomplete
+          onChange={changeInOut}
+          size="small"
+          id="combo-box-demo"
+          // sx={{ width: 50 }}
+          options={selectType}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="In/Out"
+              size={"small"}
+              sx={{ width: 100 }}
+            />
+          )}
+        /> */}
+
         <Autocomplete
           size="small"
           // id="combo-box-demo"
+          // options={selectChoice && selectChoice === "Out" ? agents : "0"}
           options={agents}
           isOptionEqualToValue={(option, value) => option.code === value}
           value={autoCompleteValue}
@@ -388,7 +463,18 @@ const Bet = () => {
             />
           )}
         />
-        <BetCom name="select" type={"file"} onChange={handleFiles} />
+
+        <Button
+          onClick={handleFiles}
+          variant="contained"
+          component="label"
+          color="success"
+          size="small"
+          // sx={{ fontSize: 14 }}
+        >
+          <Typography fontSize={13}>Read</Typography>
+          <input hidden accept={"All/*"} multiple type="file" />
+        </Button>
 
         <Stack direction={"row"} spacing={1}>
           <Button
@@ -404,12 +490,31 @@ const Bet = () => {
               Lager
             </Typography>
           </Button>
-
-          <Button variant={"contained"} size={"small"} color={"success"}>
-            <Typography fontSize={12} variant={"caption"} fontWeight={100}>
-              In/Out
-            </Typography>
-          </Button>
+          <FormControl>
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+            >
+              <FormControlLabel
+                value="In"
+                control={
+                  <Radio color="success" onChange={(e) => changeInOut(e)} />
+                }
+                label="In"
+              />
+              <FormControlLabel
+                value="Out"
+                control={
+                  <Radio
+                    color="success"
+                    onChange={(e) => console.log(e.target.value)}
+                  />
+                }
+                label="Out"
+              />
+            </RadioGroup>
+          </FormControl>
         </Stack>
       </Stack>
       <Stack
@@ -449,6 +554,13 @@ const Bet = () => {
             >
               <Add fontSize="8" />
             </IconButton>
+          )}
+        </Stack>
+        <Stack direction={"row"} textAlign={"center"} padding>
+          {enternumtol.number !== "" && (
+            <Typography textAlign={"center"}>
+              Amount : {enternumtol.total}
+            </Typography>
           )}
         </Stack>
       </Stack>
@@ -516,7 +628,7 @@ const Bet = () => {
                   return (
                     <Stack
                       width={"100%"}
-                      bgcolor={`${key % 2 == 0 ? grey[300] : ""}`}
+                      bgcolor={`${key % 2 == 0 ? blue[200] : ""}`}
                       justifyContent={"space-around"}
                       // component={"button"}
                       sx={{ cursor: "pointer" }}

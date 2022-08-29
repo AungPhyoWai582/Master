@@ -102,7 +102,13 @@ const Lottery = () => {
                   {l.play && (
                     <NavLink
                       to={`/lottery/bet/${l._id}`}
-                      state={{ lotteryId: l._id }}
+                      state={{
+                        lotteryId: l._id,
+                        hot_tees: [
+                          { hot_number: "66", hotza: "10" },
+                          { hot_number: "99", hotza: "7.5" },
+                        ],
+                      }}
                     >
                       <IconButton
                         size="small"

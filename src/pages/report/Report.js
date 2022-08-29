@@ -285,7 +285,7 @@ const Report = () => {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={3}>
+                <TableCell colSpan={4}>
                   <Typography
                     padding={1}
                     fontSize={18}
@@ -299,7 +299,7 @@ const Report = () => {
                 </TableCell>
               </TableRow>
             )}
-            {reportOut.totalOut.length !== 0 && (
+            {reportOut.totalOut.length !== 0 ? (
               <TableRow
                 style={{
                   backgroundColor: grey[300],
@@ -318,6 +318,21 @@ const Report = () => {
                 </TableCell>
                 <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                   {reportOut.totalOut.totalWin}
+                </TableCell>
+              </TableRow>
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4}>
+                  <Typography
+                    padding={1}
+                    fontSize={18}
+                    fontWeight={500}
+                    color={"red"}
+                    textAlign="center"
+                    gridColumn={3}
+                  >
+                    Reports Not Found !!!
+                  </Typography>
                 </TableCell>
               </TableRow>
             )}
