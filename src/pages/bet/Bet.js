@@ -12,6 +12,7 @@ import {
   AlertTitle,
   Autocomplete,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   FormControl,
@@ -43,6 +44,10 @@ import Lager from "../../pages/lager/Lager";
 import { startStar } from "./Betsign";
 
 const Bet = () => {
+  // For input refs
+  const textFieldForNumber = useRef(null);
+  const textFieldForAmount = useRef(null);
+
   const [inOutCtl, setInOutCtl] = useState();
   // const [singleBetCleanctlr, setSingleBetCleanctlr] = useState(false);
 
@@ -99,17 +104,8 @@ const Bet = () => {
   const [calllistctrl, setCalllistctrl] = useState(false);
 
   const [agentTotalData, setAgentTotalData] = useState({
-    agent: "123456",
-    numbers: [
-      { number: "13", total: "5000" },
-      { number: "45", total: "1000" },
-      { number: "23", total: "2000" },
-      { number: "63", total: "8000" },
-      { number: "55", total: "4000" },
-      { number: "41", total: "7000" },
-      { number: "33", total: "10000" },
-      { number: "86", total: "25000" },
-    ],
+    numsData: [],
+    numsTotal: 0,
   });
   useEffect(() => {
     // console.log(hot_tees);
@@ -140,42 +136,64 @@ const Bet = () => {
         console.log(res.data.data);
         setLager(res.data.data);
         setCallList(res.data.data.in.read);
-        setCalllistctrl(false);
         // setSuccess(false);
       })
       .catch((err) => console.log(err));
+    Axios.get(`/call/${lotteryId}`, {
+      headers: {
+        authorization: `Bearer ` + localStorage.getItem("access-token"),
+      },
+    }).then((res) => {
+      console.log(res.data.data);
+      setAgentcalls(res.data.data);
+    });
+    if (call.agent) {
+      console.log(call.agent);
+      Axios.get(`/call/${lotteryId}/call-numbers-total/${call.agent}`, {
+        headers: {
+          authorization: `Bearer ` + localStorage.getItem("access-token"),
+        },
+      }).then((res) => {
+        // console.log(res.data);
+        setAgentTotalData({
+          numsData: res.data.numsData,
+          numsTotal: res.data.numsTotal,
+        });
+      });
+    }
+    setCalllistctrl(false);
   }, [calllistctrl]);
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     console.log(value);
 
-    agentTotalData.numbers.map((agenTol, key) => {
-      //Check for input total
-      if (agentTotalData.numbers.map((ag) => ag.number).includes(value)) {
-        const index = agentTotalData.numbers.findIndex(
-          (obj) => obj.number === value
-        );
-        console.log(index, agentTotalData.numbers[index]);
-        // update setstate
-        setEnternumtol({
-          number: agentTotalData.numbers[index].number,
-          total: agentTotalData.numbers[index].total,
-        });
-      } else {
-        setEnternumtol({
-          number: "",
-          total: "",
-        });
-      }
-    });
-
+    // [...agentTotalData.numsData].map((agenTol, key) => {
+    //   //Check for input total
+    //   if (agentTotalData.numsData.map((ag) => ag.number).includes(value)) {
+    //     const index = agentTotalData.numbers.findIndex(
+    //       (obj) => obj.number === value
+    //     );
+    //     console.log(index, agentTotalData.numsData[index]);
+    //     // update setstate
+    //     setEnternumtol({
+    //       number: agentTotalData.numsData[index].number,
+    //       total: agentTotalData.numsData[index].amount,
+    //     });
+    //   } else {
+    //     setEnternumtol({
+    //       number: "",
+    //       total: "",
+    //     });
+    //   }
+    // });
     setOnchange({
       ...onchange,
       [name]: value,
     });
   };
 
+  console.log(agentTotalData);
   console.log(enternumtol);
   const choice = (e) => {
     e.preventDefault();
@@ -190,14 +208,13 @@ const Bet = () => {
         ...call,
         numbers: [...call.numbers, onchange],
       });
-      {
-        setOnchange({ number: "", amount: onchange.amount });
-      }
+
+      setOnchange({ number: "", amount: onchange.amount });
+      setBeterrorcontrol(false);
 
       setEditCtlBtn(false);
       setCallandBetlistctleff(false);
-    }
-    {
+    } else {
       setBeterrorcontrol(true);
     }
   };
@@ -334,23 +351,25 @@ const Bet = () => {
   // console.log(agentcallcrud);
 
   // call
-  useEffect(() => {
-    Axios.get(`/call/${lotteryId}`, {
-      headers: {
-        authorization: `Bearer ` + localStorage.getItem("access-token"),
-      },
-    }).then((res) => {
-      console.log(res.data.data);
-      setAgentcalls(res.data.data);
-    });
-  }, [calllistctrl]);
-  // console.log(call.agent.toString());
-  // const b = [...agentcalls].filter((a) => {
-  //   return call.agent.toString() === a.agent._id.toString();
-  // });
-  // console.log(agentcalls);
-  // console.log(b);
-  // console.log(showCalls);
+  // useEffect(() => {
+  //   Axios.get(`/call/${lotteryId}`, {
+  //     headers: {
+  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
+  //     },
+  //   }).then((res) => {
+  //     console.log(res.data.data);
+  //     setAgentcalls(res.data.data);
+  //   });
+
+  //   Axios.get(`/call/${lotteryId}/call-numbers-total/${call.agent}`, {
+  //     headers: {
+  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
+  //     },
+  //   }).then((res) => {
+  //     console.log(res.data);
+  //     setCalllistctrl(false);
+  //   });
+  // }, [calllistctrl]);
 
   //CallOutLager
   const changeInOut = (e) => {
@@ -463,6 +482,7 @@ const Bet = () => {
           onChange={(e, value) => {
             setAutoCompleteValue(value);
             setCall({ ...call, agent: value._id });
+            setCalllistctrl(true);
           }}
           renderInput={(params) => (
             <TextField
@@ -545,10 +565,47 @@ const Bet = () => {
           width={50}
           text={"number"}
           name="number"
+          autoFocus={true}
           value={onchange.number}
           onChange={onChangeHandler}
+          inputRef={textFieldForNumber}
+          style={{ position: "relative" }}
+          // numTotalCheck={
+          //   <Chip sx={{ position: "absolute", right: 0 }} label="a" />
+          // }
+          onKeyDown={(event) => {
+            if (event.key.toLowerCase() === "enter") {
+              console.log(event.target);
+              textFieldForAmount.current.focus();
+              // event.target.value.select();
+              //  const form = event.target.form;
+              //  const index = [...form].indexOf(event.target);
+              //  form.elements[index + 1].focus();
+              event.preventDefault();
+            }
+          }}
           label={"နံပါတ်"}
-        />
+        >
+          {agentTotalData.numsData
+            .map((num) => num.number)
+            .includes(onchange.number) && (
+            <Chip
+              label={
+                agentTotalData.numsData[
+                  agentTotalData.numsData.findIndex(
+                    (obj) => obj.number === onchange.number
+                  )
+                ].amount
+              }
+              sx={{
+                position: "absolute",
+                right: 4,
+                top: 4,
+                backgroundColor: green[300],
+              }}
+            />
+          )}
+        </BetCom>
 
         {/* <TwoDSign /> */}
         <BetCom
@@ -556,6 +613,22 @@ const Bet = () => {
           name="amount"
           value={onchange.amount}
           onChange={onChangeHandler}
+          inputRef={textFieldForAmount}
+          onFocus={(event) => event.target.select()}
+          onKeyDown={(event) => {
+            console.log(event.key);
+
+            if (
+              event.key.toLowerCase() === "enter" ||
+              event.key.toLowerCase() === "numpadenter"
+            ) {
+              choice(event);
+              textFieldForNumber.current.focus();
+              event.target.value.select();
+              event.preventDefault();
+            }
+          }}
+          // onFocus={false}
           label={"ထိုးငွေ"}
         />
         <Stack padding={1}>
@@ -565,7 +638,7 @@ const Bet = () => {
             </IconButton>
           ) : (
             <IconButton
-              onClick={choice}
+              onClick={bet}
               size={"small"}
               sx={{ bgcolor: green[700] }}
             >
@@ -580,8 +653,9 @@ const Bet = () => {
         width={"100%"}
         direction={"row"}
         border={1}
+        bgcolor={green[100]}
       >
-        {loading === false ? (
+        {/* {loading === false ? (
           <Stack
             component={"button"}
             // height={"5%"}
@@ -601,17 +675,7 @@ const Bet = () => {
           <Stack justifyContent={"end"}>
             <CircularProgress size={"small"} />
           </Stack>
-        )}
-        <Stack direction={"row"} textAlign={"center"} padding>
-          {enternumtol.number !== "" && (
-            <Typography
-              textAlign={"center"}
-              fontSize={{ xs: 10, sm: 12, md: 13 }}
-            >
-              Amount : {enternumtol.total}
-            </Typography>
-          )}
-        </Stack>
+        )} */}
       </Stack>
 
       <Stack justifyContent={"right"} width={"100%"} direction={"row"}>
