@@ -12,6 +12,7 @@ import {
   AlertTitle,
   Autocomplete,
   Button,
+  CircularProgress,
   Dialog,
   FormControl,
   FormControlLabel,
@@ -29,7 +30,7 @@ import {
 import { blue, green, grey, red, yellow } from "@mui/material/colors";
 import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ReactFileReader from "react-file-reader";
 import { useLocation, useParams } from "react-router-dom";
 import BetButtonCom from "../../components/BetButtonCom";
@@ -39,9 +40,17 @@ import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
+import { startStar } from "./Betsign";
 
 const Bet = () => {
   const [inOutCtl, setInOutCtl] = useState();
+  // const [singleBetCleanctlr, setSingleBetCleanctlr] = useState(false);
+
+  //loading
+  const [loading, setLoading] = useState(false);
+  const [loadSuccess, setLoadSuccess] = useState(false);
+  // const timer = useRef();
+
   const [selectChoice, setSelectChoice] = useState();
   const [enternumtol, setEnternumtol] = useState({ number: "", total: "" });
 
@@ -83,7 +92,7 @@ const Bet = () => {
   const [lagerOpen, setLagerOpen] = useState(false);
 
   //Lager Break
-  const [lagerBreak, setLagerBreak] = useState();
+  const [lagerBreak, setLagerBreak] = useState("0");
   const [demoLager, setDemolager] = useState();
   const [callDemo, setCallDemo] = useState([]);
   //calllist control state
@@ -128,6 +137,7 @@ const Bet = () => {
       },
     })
       .then((res) => {
+        console.log(res.data.data);
         setLager(res.data.data);
         setCallList(res.data.data.in.read);
         setCalllistctrl(false);
@@ -158,14 +168,8 @@ const Bet = () => {
           total: "",
         });
       }
-      // agentTotalData.numbers.map((ag) => ag.number).includes(value);
-      // if (agenTol.number === value) {
-      //   setEnternumtol({ number: agenTol.number, total: agenTol.total });
-      // } else {
-      //   setEnternumtol({ number: "", total: "" });
-      // }
     });
-    // }
+
     setOnchange({
       ...onchange,
       [name]: value,
@@ -175,9 +179,12 @@ const Bet = () => {
   console.log(enternumtol);
   const choice = (e) => {
     e.preventDefault();
+
     if (
-      (onchange.number.length < 1 || onchange.number.length >= 2) &&
-      (onchange.amount != null || onchange.amount.length > 2)
+      onchange.number.length > 1 &&
+      onchange.number.length < 3 &&
+      onchange.amount.length > 2
+      // onchange.number !== "**"
     ) {
       setCall({
         ...call,
@@ -189,8 +196,8 @@ const Bet = () => {
 
       setEditCtlBtn(false);
       setCallandBetlistctleff(false);
-    } else {
-      // console.log((e) => e);
+    }
+    {
       setBeterrorcontrol(true);
     }
   };
@@ -229,7 +236,10 @@ const Bet = () => {
   const bet = (e) => {
     e.preventDefault();
     console.log(call);
-
+    if (call.numbers.length === 0 && loading === false) {
+      setBeterrorcontrol(true);
+      return;
+    }
     Axios.post(`/call/${lotteryId}`, call, {
       headers: {
         authorization: `Bearer ` + localStorage.getItem("access-token"),
@@ -239,6 +249,7 @@ const Bet = () => {
         console.log(res.data);
 
         setSuccess(true);
+        setLoading(true);
         setCall({
           agent: "",
           numbers: [],
@@ -251,6 +262,7 @@ const Bet = () => {
       })
       .then((res) => {
         setSuccess(false);
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   };
@@ -490,7 +502,7 @@ const Bet = () => {
               Lager
             </Typography>
           </Button>
-          <FormControl>
+          <FormControl size="small">
             <RadioGroup
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
@@ -499,7 +511,11 @@ const Bet = () => {
               <FormControlLabel
                 value="In"
                 control={
-                  <Radio color="success" onChange={(e) => changeInOut(e)} />
+                  <Radio
+                    size="small"
+                    color="success"
+                    onChange={(e) => changeInOut(e)}
+                  />
                 }
                 label="In"
               />
@@ -507,6 +523,7 @@ const Bet = () => {
                 value="Out"
                 control={
                   <Radio
+                    size="small"
                     color="success"
                     onChange={(e) => console.log(e.target.value)}
                   />
@@ -556,29 +573,44 @@ const Bet = () => {
             </IconButton>
           )}
         </Stack>
+      </Stack>
+      <Stack
+        padding={1}
+        alignContent={"center"}
+        width={"100%"}
+        direction={"row"}
+        border={1}
+      >
+        {loading === false ? (
+          <Stack
+            component={"button"}
+            // height={"5%"}
+            sx={{
+              ":hover": {
+                cursor: "pointer",
+              },
+            }}
+            textAlign="center"
+            onClick={bet}
+          >
+            <Typography margin={"auto"} textAlign={"center"}>
+              Bet
+            </Typography>
+          </Stack>
+        ) : (
+          <Stack justifyContent={"end"}>
+            <CircularProgress size={"small"} />
+          </Stack>
+        )}
         <Stack direction={"row"} textAlign={"center"} padding>
           {enternumtol.number !== "" && (
-            <Typography textAlign={"center"}>
+            <Typography
+              textAlign={"center"}
+              fontSize={{ xs: 10, sm: 12, md: 13 }}
+            >
               Amount : {enternumtol.total}
             </Typography>
           )}
-        </Stack>
-      </Stack>
-      <Stack padding={1}>
-        <Stack
-          component={"button"}
-          // height={"5%"}
-          sx={{
-            ":hover": {
-              cursor: "pointer",
-            },
-          }}
-          textAlign="center"
-          onClick={bet}
-        >
-          <Typography margin={"auto"} textAlign={"center"}>
-            Bet
-          </Typography>
         </Stack>
       </Stack>
 
