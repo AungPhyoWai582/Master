@@ -15,3 +15,16 @@ export const startStar = (onChange) => {
     { number: "99", amount: onChange.amount },
   ];
 };
+
+export const r = (onChange) => {
+  return [
+    {
+      number: `${onChange.number[0]}${onChange.number[1]}`,
+      amount: onChange.amount,
+    },
+    {
+      number: `${onChange.number[1]}${onChange.number[1]}`,
+      amount: onChange.amount,
+    },
+  ];
+};

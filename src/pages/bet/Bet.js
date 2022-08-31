@@ -41,7 +41,7 @@ import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
-import { startStar } from "./Betsign";
+import { startStar, r } from "./Betsign";
 
 const Bet = () => {
   // For input refs
@@ -202,7 +202,6 @@ const Bet = () => {
       onchange.number.length > 1 &&
       onchange.number.length < 3 &&
       onchange.amount.length > 2
-      // onchange.number !== "**"
     ) {
       setCall({
         ...call,
@@ -214,6 +213,9 @@ const Bet = () => {
 
       setEditCtlBtn(false);
       setCallandBetlistctleff(false);
+    } else if (onchange.number === "r" || onchange.number === "R") {
+      const R = r(onchange);
+      setCall({ ...call, numbers: R });
     } else {
       setBeterrorcontrol(true);
     }
