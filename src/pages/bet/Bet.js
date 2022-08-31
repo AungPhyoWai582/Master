@@ -584,7 +584,7 @@ const Bet = () => {
           size="small"
           // sx={{ fontSize: 14 }}
         >
-          <Typography fontSize={13}>Read</Typography>
+          <Typography fontSize={{ xs: 8, sm: 10, md: 12 }}>Read</Typography>
           <input hidden accept={"All/*"} multiple type="file" />
         </Button>
 
@@ -598,10 +598,16 @@ const Bet = () => {
               setDemolager(lager.in.numbers);
             }}
           >
-            <Typography fontSize={12} variant={"caption"} fontWeight={100}>
+            <Typography
+              fontSize={{ xs: 8, sm: 10, md: 12 }}
+              variant={"caption"}
+              fontWeight={100}
+            >
               Lager
             </Typography>
           </Button>
+        </Stack>
+        {/* <Stack direction={"row"}>
           <FormControl size="small">
             <RadioGroup
               row
@@ -632,7 +638,7 @@ const Bet = () => {
               />
             </RadioGroup>
           </FormControl>
-        </Stack>
+        </Stack> */}
       </Stack>
       <Stack
         padding={1}
