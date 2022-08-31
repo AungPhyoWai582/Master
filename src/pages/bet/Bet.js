@@ -41,7 +41,19 @@ import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
-import { startStar, r } from "./Betsign";
+import {
+  startStar,
+  k,
+  p,
+  b,
+  Breaks,
+  aper,
+  padatha,
+  r,
+  masone,
+  sonema,
+  mmss,
+} from "./Betsign";
 
 const Bet = () => {
   // For input refs
@@ -199,23 +211,89 @@ const Bet = () => {
     e.preventDefault();
 
     if (
-      onchange.number.length > 1 &&
+      (onchange.number.length > 1 ||
+        onchange.number === "k" ||
+        onchange.number === "K" ||
+        onchange.number === "p" ||
+        onchange.number === "P" ||
+        onchange.number === "b" ||
+        onchange.number === "B") &&
       onchange.number.length < 3 &&
       onchange.amount.length > 2
     ) {
-      setCall({
-        ...call,
-        numbers: [...call.numbers, onchange],
-      });
+      if (onchange.number === "k" || onchange.number === "K") {
+        const R = k(onchange);
+        setCall({ ...call, numbers: R });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "p" || onchange.number === "P") {
+        const P = p(onchange);
+        setCall({ ...call, numbers: P });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "b" || onchange.number === "B") {
+        const B = b(onchange);
+        setCall({ ...call, numbers: B });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "**") {
+        const apu = startStar(onchange);
+        setCall({ ...call, numbers: apu });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number[1] === "/") {
+        const BR = Breaks(onchange);
+        console.log(BR);
+        setCall({ ...call, numbers: BR });
+        setOnchange({ number: "", amount: onchange.amount });
+      }
+      // else if (
+      //   (onchange.number[0]("M") || onchange.number[0]("m")) &&
+      //   (onchange.number[1]("M") || onchange.number[1]("m"))
+      // ) {
+      //   const MMSS = mmss(onchange);
+      //   setCall({ ...call, numbers: MMSS });
+      //   setOnchange({ number: "", amount: onchange.amount });
+      // }
+      else if (onchange.number[1] === "-") {
+        const AP = aper(onchange);
+        setCall({ ...call, numbers: AP });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        (onchange.number.startsWith("M") || onchange.number.startsWith("m")) &&
+        (onchange.number.endsWith("S") || onchange.number.endsWith("s"))
+      ) {
+        const MS = masone(onchange);
+        // console.log(MS);
+        setCall({ ...call, numbers: MS });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        (onchange.number.endsWith("M") || onchange.number.endsWith("m")) &&
+        (onchange.number.startsWith("S") || onchange.number.startsWith("s"))
+      ) {
+        const SM = sonema(onchange);
+        // console.log(MS);
+        setCall({ ...call, numbers: SM });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else {
+        setCall({
+          ...call,
+          numbers: [...call.numbers, onchange],
+        });
 
-      setOnchange({ number: "", amount: onchange.amount });
-      setBeterrorcontrol(false);
+        setOnchange({ number: "", amount: onchange.amount });
+        setBeterrorcontrol(false);
 
-      setEditCtlBtn(false);
-      setCallandBetlistctleff(false);
-    } else if (onchange.number === "r" || onchange.number === "R") {
+        setEditCtlBtn(false);
+        setCallandBetlistctleff(false);
+      }
+    } else if (
+      onchange.number.length === 3 &&
+      (onchange.number.endsWith("R") || onchange.number.endsWith("r"))
+    ) {
       const R = r(onchange);
       setCall({ ...call, numbers: R });
+      setOnchange({ number: "", amount: onchange.amount });
+    } else if (onchange.number.length < 6) {
+      const PDT = padatha(onchange);
+      setCall({ ...call, numbers: PDT });
+      setOnchange({ number: "", amount: onchange.amount });
     } else {
       setBeterrorcontrol(true);
     }
