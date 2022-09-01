@@ -87,7 +87,7 @@ const CallDetail = ({ authUser }) => {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody sx={{ overflowY: "scroll" }}>
+              <TableBody>
                 {call.numbers.map((cal, key) => (
                   <TableRow key={key}>
                     <TableCell align="center">{key + 1}</TableCell>

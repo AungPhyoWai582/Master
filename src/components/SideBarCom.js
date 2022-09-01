@@ -44,6 +44,7 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
   //menu sub-menu
 
   const [subopen, setSubopen] = useState(true);
+  const [reportOpen, setReportOpen] = useState(true);
   const subMember = () => {
     setSubopen(!subopen);
   };
@@ -154,31 +155,47 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
                 </NavLink>
               </List>
             </Collapse>
+            <ListItemButton
+              sx={{ ":hover": { bgcolor: teal[100] } }}
+              onClick={() => setReportOpen(!reportOpen)}
+            >
+              <ListItemIcon>
+                <ListAlt />
+              </ListItemIcon>
+              <ListItemText primary="Reports" />
+              {reportOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={!reportOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <NavLink
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  to="/reports/daily"
+                  onClick={() => setHandleOpen(false)}
+                >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
 
-            <NavLink
-              style={{ textDecoration: "none" }}
-              to="/reports"
-              onClick={() => setHandleOpen(false)}
-            >
-              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
-                <ListItemIcon>
-                  <ListAlt />
-                </ListItemIcon>
-                <ListItemText primary="Reports" />
-              </ListItem>
-            </NavLink>
-            <NavLink
-              style={{ textDecoration: "none" }}
-              to="/reports/daily"
-              onClick={() => setHandleOpen(false)}
-            >
-              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
-                <ListItemIcon>
-                  <ListAlt />
-                </ListItemIcon>
-                <ListItemText primary="Daily" />
-              </ListItem>
-            </NavLink>
+                    <ListItemText primary="Daily" />
+                  </ListItemButton>
+                </NavLink>
+                <NavLink
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  to="/reports/total"
+                  onClick={() => setHandleOpen(false)}
+                >
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <StarBorder />
+                    </ListItemIcon>
+
+                    <ListItemText primary="Total" />
+                  </ListItemButton>
+                </NavLink>
+              </List>
+            </Collapse>
+
             <NavLink
               style={{ textDecoration: "none" }}
               to="/change_password"

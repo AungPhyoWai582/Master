@@ -61,7 +61,7 @@ const Dashboard = () => {
       {/* <Route path="/lottery/calls/:lotteryId" element={<CallsList />} /> */}
       <Route path="/lottery/lager/:lotteryId" element={<Lager />} />
 
-      <Route path="/reports" element={<Report />} />
+      <Route path="/reports/total" element={<Report />} />
       <Route path="/reports/daily" element={<Daily />} />
       <Route path="/reports/daily/members" element={<DailyMembers />} />
       <Route path="/reports/daily/members/calls" element={<CallList />} />
