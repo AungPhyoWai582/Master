@@ -41,6 +41,7 @@ import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
+import "./Bet.css";
 import {
   startStar,
   k,
@@ -233,22 +234,28 @@ const Bet = () => {
         const R = k(onchange);
         setCall({ ...call, numbers: R });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number === "p" || onchange.number === "P") {
         const P = p(onchange);
         setCall({ ...call, numbers: P });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number === "b" || onchange.number === "B") {
         const B = b(onchange);
         setCall({ ...call, numbers: B });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number[1] === "/") {
         const BR = Breaks(onchange);
+        console.log(BR);
         setCall({ ...call, numbers: BR });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number[1] === "-") {
         const AP = aper(onchange);
         setCall({ ...call, numbers: AP });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (
         onchange.number === "mm" ||
         onchange.number === "MM" ||
@@ -258,6 +265,7 @@ const Bet = () => {
         const MAMA = mm(onchange);
         setCall({ ...call, numbers: MAMA });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (
         onchange.number === "ss" ||
         onchange.number === "SS" ||
@@ -267,6 +275,7 @@ const Bet = () => {
         const SS = ss(onchange);
         setCall({ ...call, numbers: SS });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (
         onchange.number[1] === "*" &&
         onchange.number[0] !== "s" &&
@@ -278,6 +287,7 @@ const Bet = () => {
         const BPate = backpate(onchange);
         setCall({ ...call, numbers: BPate });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (
         onchange.number[0] === "*" &&
         onchange.number[1] !== "s" &&
@@ -289,18 +299,22 @@ const Bet = () => {
         const FPate = forwardPate(onchange);
         setCall({ ...call, numbers: FPate });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number === "**") {
         const apu = startStar(onchange);
         setCall({ ...call, numbers: apu });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number === "s*" || onchange.number === "S*") {
         const SPU = spu(onchange);
         setCall({ ...call, numbers: SPU });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (onchange.number === "m*" || onchange.number === "M*") {
         const SPU = mpu(onchange);
         setCall({ ...call, numbers: SPU });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (
         onchange.number === "MS" ||
         onchange.number === "ms" ||
@@ -311,6 +325,7 @@ const Bet = () => {
         // console.log(MS);
         setCall({ ...call, numbers: MS });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else if (
         onchange.number === "SM" ||
         onchange.number === "sm" ||
@@ -321,6 +336,7 @@ const Bet = () => {
         // console.log(MS);
         setCall({ ...call, numbers: SM });
         setOnchange({ number: "", amount: onchange.amount });
+        setAutoCompleteCtrl(false);
       } else {
         setCall({
           ...call,
@@ -341,10 +357,12 @@ const Bet = () => {
       const R = r(onchange);
       setCall({ ...call, numbers: R });
       setOnchange({ number: "", amount: onchange.amount });
+      setAutoCompleteCtrl(false);
     } else if (onchange.number.length < 6 && onchange.amount.length) {
       const PDT = padatha(onchange);
       setCall({ ...call, numbers: PDT });
       setOnchange({ number: "", amount: onchange.amount });
+      setAutoCompleteCtrl(false);
     } else {
       setBeterrorcontrol(true);
     }
@@ -379,7 +397,7 @@ const Bet = () => {
     reader.readAsText(e.target.files[0]);
   };
 
-  // console.log(call);
+  console.log(call);
 
   const bet = (e) => {
     e.preventDefault();
@@ -796,35 +814,26 @@ const Bet = () => {
           )}
         </Stack>
       </Stack>
+
       <Stack
-        padding={1}
-        alignContent={"center"}
-        width={"100%"}
+        bgcolor={grey[300]}
+        spacing={3}
         direction={"row"}
-        border={1}
-        bgcolor={green[100]}
+        justifyContent={"center"}
       >
-        {/* {loading === false ? (
-          <Stack
-            component={"button"}
-            // height={"5%"}
-            sx={{
-              ":hover": {
-                cursor: "pointer",
-              },
-            }}
-            textAlign="center"
-            onClick={bet}
-          >
-            <Typography margin={"auto"} textAlign={"center"}>
-              Bet
-            </Typography>
-          </Stack>
-        ) : (
-          <Stack justifyContent={"end"}>
-            <CircularProgress size={"small"} />
-          </Stack>
-        )} */}
+        {hot_tees &&
+          hot_tees.map((hot, key) => {
+            return (
+              <Typography
+                color={"red"}
+                fontSize={18}
+                fontWeight={600}
+                textAlign={"center"}
+              >
+                {hot.hot_number}
+              </Typography>
+            );
+          })}
       </Stack>
 
       <Stack justifyContent={"right"} width={"100%"} direction={"row"}>

@@ -104,10 +104,7 @@ const Lottery = () => {
                       to={`/lottery/bet/${l._id}`}
                       state={{
                         lotteryId: l._id,
-                        hot_tees: [
-                          { hot_number: "66", hotza: "10" },
-                          { hot_number: "99", hotza: "7.5" },
-                        ],
+                        hot_tees: l.hot_tees,
                       }}
                     >
                       <IconButton
