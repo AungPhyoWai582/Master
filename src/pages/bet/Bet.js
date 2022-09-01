@@ -71,7 +71,9 @@ const Bet = () => {
   //loading
   const [loading, setLoading] = useState(false);
   const [loadSuccess, setLoadSuccess] = useState(false);
-  // const timer = useRef();
+
+  // autocompleter ctrl
+  const [autocompleteCtrl, setAutoCompleteCtrl] = useState(false);
 
   const [selectChoice, setSelectChoice] = useState();
   const [enternumtol, setEnternumtol] = useState({ number: "", total: "" });
@@ -103,7 +105,7 @@ const Bet = () => {
   const [agentcallcrud, setAgentCallCrud] = useState({ id: "", numbers: [] });
   const [keydemo, setKeyDemo] = useState();
   //For twoD sign state
-  const [autoCompleteValue, setAutoCompleteValue] = useState();
+  const [autoCompleteValue, setAutoCompleteValue] = useState("");
 
   const [onchange, setOnchange] = useState({
     number: "",
@@ -138,8 +140,9 @@ const Bet = () => {
         // console.log(agents);
 
         if (agents) {
-          setAgents(agents);
+          setAgents([...agents]);
           setAutoCompleteValue(agents[0]);
+          // setCalllistctrl(true);
         }
       })
       .catch((err) => console.log(err));
@@ -210,8 +213,8 @@ const Bet = () => {
     });
   };
 
-  console.log(agentTotalData);
-  console.log(enternumtol);
+  // console.log(agentTotalData);
+  // console.log(enternumtol);
   const choice = (e) => {
     e.preventDefault();
 
@@ -329,6 +332,7 @@ const Bet = () => {
 
         setEditCtlBtn(false);
         setCallandBetlistctleff(false);
+        setAutoCompleteCtrl(false);
       }
     } else if (
       onchange.number.length === 3 &&
@@ -504,6 +508,10 @@ const Bet = () => {
     console.log(selectChoice);
   };
 
+  // get autocomplete option function
+  const getAutoChoCus = (cus) => {
+    return cus.username;
+  };
   return (
     <Stack height={"100%"}>
       {success && (
@@ -599,17 +607,20 @@ const Bet = () => {
 
         <Autocomplete
           size="small"
-          // id="combo-box-demo"
-          // options={selectChoice && selectChoice === "Out" ? agents : "0"}
+          // options={selectChoice && selectChoice === "Out" ? agents : "0"
           options={agents}
-          isOptionEqualToValue={(option, value) => option.code === value}
-          value={autoCompleteValue}
+          isOptionEqualToValue={(option, value) =>
+            option.username === value.username
+          }
           sx={{ width: 200 }}
-          getOptionLabel={(cus) => cus.username}
+          getOptionLabel={(cus) => getAutoChoCus(cus)}
           onChange={(e, value) => {
+            console.log(value);
             setAutoCompleteValue(value);
             setCall({ ...call, agent: value._id });
             setCalllistctrl(true);
+            setAutoCompleteCtrl(true);
+            setCall({ agent: value._id, numbers: [] });
           }}
           renderInput={(params) => (
             <TextField
@@ -840,13 +851,14 @@ const Bet = () => {
           padding={1}
           spacing={1}
         >
-          {call.agent && call.numbers.length
+          {call.agent && autocompleteCtrl === false && call.numbers.length
             ? call.numbers.map((cal, key) => (
                 <Stack width={"100%"} justifyContent={"space-between"}>
                   <BetListCom call={cal} key={key} />
                 </Stack>
               ))
-            : agentcalls
+            : autoCompleteValue &&
+              agentcalls
                 .filter(
                   (ag, key) => ag.agent._id.toString() == call.agent.toString()
                 )
