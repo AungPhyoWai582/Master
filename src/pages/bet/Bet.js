@@ -52,7 +52,12 @@ import {
   r,
   masone,
   sonema,
-  mmss,
+  mm,
+  ss,
+  spu,
+  mpu,
+  backpate,
+  forwardPate,
 } from "./Betsign";
 
 const Bet = () => {
@@ -233,39 +238,81 @@ const Bet = () => {
         const B = b(onchange);
         setCall({ ...call, numbers: B });
         setOnchange({ number: "", amount: onchange.amount });
-      } else if (onchange.number === "**") {
-        const apu = startStar(onchange);
-        setCall({ ...call, numbers: apu });
-        setOnchange({ number: "", amount: onchange.amount });
       } else if (onchange.number[1] === "/") {
         const BR = Breaks(onchange);
-        console.log(BR);
         setCall({ ...call, numbers: BR });
         setOnchange({ number: "", amount: onchange.amount });
-      }
-      // else if (
-      //   (onchange.number[0]("M") || onchange.number[0]("m")) &&
-      //   (onchange.number[1]("M") || onchange.number[1]("m"))
-      // ) {
-      //   const MMSS = mmss(onchange);
-      //   setCall({ ...call, numbers: MMSS });
-      //   setOnchange({ number: "", amount: onchange.amount });
-      // }
-      else if (onchange.number[1] === "-") {
+      } else if (onchange.number[1] === "-") {
         const AP = aper(onchange);
         setCall({ ...call, numbers: AP });
         setOnchange({ number: "", amount: onchange.amount });
       } else if (
-        (onchange.number.startsWith("M") || onchange.number.startsWith("m")) &&
-        (onchange.number.endsWith("S") || onchange.number.endsWith("s"))
+        onchange.number === "mm" ||
+        onchange.number === "MM" ||
+        onchange.number === "Mm" ||
+        onchange.number === "mM"
+      ) {
+        const MAMA = mm(onchange);
+        setCall({ ...call, numbers: MAMA });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number === "ss" ||
+        onchange.number === "SS" ||
+        onchange.number === "Ss" ||
+        onchange.number === "sS"
+      ) {
+        const SS = ss(onchange);
+        setCall({ ...call, numbers: SS });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number[1] === "*" &&
+        onchange.number[0] !== "s" &&
+        onchange.number[0] !== "S" &&
+        onchange.number[0] !== "m" &&
+        onchange.number[0] !== "M" &&
+        onchange.number[0] !== "*"
+      ) {
+        const BPate = backpate(onchange);
+        setCall({ ...call, numbers: BPate });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number[0] === "*" &&
+        onchange.number[1] !== "s" &&
+        onchange.number[1] !== "S" &&
+        onchange.number[1] !== "m" &&
+        onchange.number[1] !== "M" &&
+        onchange.number[1] !== "*"
+      ) {
+        const FPate = forwardPate(onchange);
+        setCall({ ...call, numbers: FPate });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "**") {
+        const apu = startStar(onchange);
+        setCall({ ...call, numbers: apu });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "s*" || onchange.number === "S*") {
+        const SPU = spu(onchange);
+        setCall({ ...call, numbers: SPU });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "m*" || onchange.number === "M*") {
+        const SPU = mpu(onchange);
+        setCall({ ...call, numbers: SPU });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number === "MS" ||
+        onchange.number === "ms" ||
+        onchange.number === "Ms" ||
+        onchange.number === "mS"
       ) {
         const MS = masone(onchange);
         // console.log(MS);
         setCall({ ...call, numbers: MS });
         setOnchange({ number: "", amount: onchange.amount });
       } else if (
-        (onchange.number.endsWith("M") || onchange.number.endsWith("m")) &&
-        (onchange.number.startsWith("S") || onchange.number.startsWith("s"))
+        onchange.number === "SM" ||
+        onchange.number === "sm" ||
+        onchange.number === "Sm" ||
+        onchange.number === "sM"
       ) {
         const SM = sonema(onchange);
         // console.log(MS);
@@ -290,7 +337,7 @@ const Bet = () => {
       const R = r(onchange);
       setCall({ ...call, numbers: R });
       setOnchange({ number: "", amount: onchange.amount });
-    } else if (onchange.number.length < 6) {
+    } else if (onchange.number.length < 6 && onchange.amount.length) {
       const PDT = padatha(onchange);
       setCall({ ...call, numbers: PDT });
       setOnchange({ number: "", amount: onchange.amount });

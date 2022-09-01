@@ -1,7 +1,3 @@
-// import { Call } from "@mui/icons-material";
-
-import { PlaylistAddCheckCircleRounded } from "@mui/icons-material";
-
 export const startStar = (onChange) => {
   console.log(onChange);
   return [
@@ -199,30 +195,100 @@ export const sonema = (onChange) => {
   return result;
 };
 
-// export const mmss = (onChange) => {
-//   let ma = [];
-//   let sone = [];
-//   Array.from(Array(10), (_, x) => x).map((arr, key) => {
-//     arr % 2 !== 0 ? ma.push(arr) : sone.push(arr);
-//   });
-//   let Output =
-//     (onchange.number[0]("M") || onchange.number[0]("m")) &&
-//     (onchange.number[1]("M") || onchange.number[1]("m"))
-//       ? ma.map((m, key) => {
-//           return ma.map((m1, key) => {
-//             return {
-//               number: m.toString() + m1.toString(),
-//               amount: onChange.amount,
-//             };
-//           });
-//         })
-//       : sone.map((s, key) => {
-//           return sone.map((s1, key) => {
-//             return {
-//               number: s.toString() + s1.toString(),
-//               amount: onChange.amount,
-//             };
-//           });
-//         });
-//   return Output;
-// };
+export const mm = (onChange) => {
+  const ma = [];
+  const result = [];
+  Array.from(Array(10), (_, x) => x).map((arr, key) => {
+    arr % 2 !== 0 && ma.push(arr);
+  });
+  ma.map((m, key) => {
+    return ma.map((m1, key) => {
+      result.push({
+        number: m.toString() + m1.toString(),
+        amount: onChange.amount,
+      });
+    });
+  });
+
+  return result;
+};
+
+export const ss = (onChange) => {
+  const sone = [];
+  const result = [];
+  Array.from(Array(10), (_, x) => x).map((arr, key) => {
+    arr % 2 === 0 && sone.push(arr);
+  });
+  sone.map((s, key) => {
+    sone.map((s1, key) => {
+      result.push({
+        number: s.toString() + s1.toString(),
+        amount: onChange.amount,
+      });
+    });
+  });
+
+  return result;
+};
+
+export const spu = (onChange) => {
+  let sone = [];
+  const result = [];
+  Array.from(Array(10), (_, x) => x).map((arr, key) => {
+    arr % 2 === 0 && sone.push(arr);
+  });
+  sone.map((s, key) => {
+    sone.map((s1, key) => {
+      s === s1 &&
+        result.push({
+          number: s.toString() + s1.toString(),
+          amount: onChange.amount,
+        });
+    });
+  });
+  return result;
+};
+
+export const mpu = (onChange) => {
+  let ma = [];
+  const result = [];
+  Array.from(Array(10), (_, x) => x).map((arr, key) => {
+    arr % 2 !== 0 && ma.push(arr);
+  });
+  ma.map((m, key) => {
+    ma.map((m1, key) => {
+      m === m1 &&
+        result.push({
+          number: m.toString() + m1.toString(),
+          amount: onChange.amount,
+        });
+    });
+  });
+  return result;
+};
+
+export const backpate = (onChange) => {
+  const result = [];
+  const numb = [];
+  Array.from(Array(10), (x, _) => x).map((arr, key) => {
+    result.push({
+      number: `${onChange.number[0]}${key}`,
+      amount: onChange.amount,
+    });
+  });
+  console.log(result);
+  return result;
+};
+
+export const forwardPate = (onChange) => {
+  const result = [];
+  const numb = [];
+  Array.from(Array(10), (x, _) => x).map((arr, key) => {
+    result.push({
+      number: `${key}${onChange.number[1]}`,
+      amount: onChange.amount,
+    });
+  });
+  console.log(result);
+  return result;
+};
