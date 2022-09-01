@@ -416,6 +416,11 @@ const Bet = () => {
   };
   // console.log(la);
   //crud delete
+  const agcallcrud = (cal) => {
+    console.log(cal);
+    setAgentCallCrud({ id: cal._id, numbers: cal.numbers });
+    // setAutoCompleteCtrl(true);
+  };
   const agentcallDelete = (key, calcrud) => {
     console.log(calcrud);
     // const enumbers = [...calcrud];
@@ -908,7 +913,8 @@ const Bet = () => {
             ? callDemo.map((calc, key) => {
                 return <BetListCom call={calc} key={key} />;
               })
-            : agentcallcrud.numbers.map((calcrud, key) => {
+            : autocompleteCtrl === false &&
+              agentcallcrud.numbers.map((calcrud, key) => {
                 return (
                   <BetListCom call={calcrud}>
                     <Stack
