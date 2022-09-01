@@ -41,8 +41,29 @@ import LagerCom from "../../components/LagerCom";
 import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
+<<<<<<< HEAD
 import { startStar } from "./Betsign";
 import "./Bet.css";
+=======
+import {
+  startStar,
+  k,
+  p,
+  b,
+  Breaks,
+  aper,
+  padatha,
+  r,
+  masone,
+  sonema,
+  mm,
+  ss,
+  spu,
+  mpu,
+  backpate,
+  forwardPate,
+} from "./Betsign";
+>>>>>>> 19e9a61b5aec1e61e2bfe7f111427e062a0b0fb5
 
 const Bet = () => {
   // For input refs
@@ -55,7 +76,9 @@ const Bet = () => {
   //loading
   const [loading, setLoading] = useState(false);
   const [loadSuccess, setLoadSuccess] = useState(false);
-  // const timer = useRef();
+
+  // autocompleter ctrl
+  const [autocompleteCtrl, setAutoCompleteCtrl] = useState(false);
 
   const [selectChoice, setSelectChoice] = useState();
   const [enternumtol, setEnternumtol] = useState({ number: "", total: "" });
@@ -87,7 +110,7 @@ const Bet = () => {
   const [agentcallcrud, setAgentCallCrud] = useState({ id: "", numbers: [] });
   const [keydemo, setKeyDemo] = useState();
   //For twoD sign state
-  const [autoCompleteValue, setAutoCompleteValue] = useState();
+  const [autoCompleteValue, setAutoCompleteValue] = useState("");
 
   const [onchange, setOnchange] = useState({
     number: "",
@@ -122,8 +145,9 @@ const Bet = () => {
         // console.log(agents);
 
         if (agents) {
-          setAgents(agents);
+          setAgents([...agents]);
           setAutoCompleteValue(agents[0]);
+          // setCalllistctrl(true);
         }
       })
       .catch((err) => console.log(err));
@@ -194,27 +218,138 @@ const Bet = () => {
     });
   };
 
-  console.log(agentTotalData);
-  console.log(enternumtol);
+  // console.log(agentTotalData);
+  // console.log(enternumtol);
   const choice = (e) => {
     e.preventDefault();
 
     if (
-      onchange.number.length > 1 &&
+      (onchange.number.length > 1 ||
+        onchange.number === "k" ||
+        onchange.number === "K" ||
+        onchange.number === "p" ||
+        onchange.number === "P" ||
+        onchange.number === "b" ||
+        onchange.number === "B") &&
       onchange.number.length < 3 &&
       onchange.amount.length > 2
-      // onchange.number !== "**"
     ) {
-      setCall({
-        ...call,
-        numbers: [...call.numbers, onchange],
-      });
+      if (onchange.number === "k" || onchange.number === "K") {
+        const R = k(onchange);
+        setCall({ ...call, numbers: R });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "p" || onchange.number === "P") {
+        const P = p(onchange);
+        setCall({ ...call, numbers: P });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "b" || onchange.number === "B") {
+        const B = b(onchange);
+        setCall({ ...call, numbers: B });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number[1] === "/") {
+        const BR = Breaks(onchange);
+        setCall({ ...call, numbers: BR });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number[1] === "-") {
+        const AP = aper(onchange);
+        setCall({ ...call, numbers: AP });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number === "mm" ||
+        onchange.number === "MM" ||
+        onchange.number === "Mm" ||
+        onchange.number === "mM"
+      ) {
+        const MAMA = mm(onchange);
+        setCall({ ...call, numbers: MAMA });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number === "ss" ||
+        onchange.number === "SS" ||
+        onchange.number === "Ss" ||
+        onchange.number === "sS"
+      ) {
+        const SS = ss(onchange);
+        setCall({ ...call, numbers: SS });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number[1] === "*" &&
+        onchange.number[0] !== "s" &&
+        onchange.number[0] !== "S" &&
+        onchange.number[0] !== "m" &&
+        onchange.number[0] !== "M" &&
+        onchange.number[0] !== "*"
+      ) {
+        const BPate = backpate(onchange);
+        setCall({ ...call, numbers: BPate });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number[0] === "*" &&
+        onchange.number[1] !== "s" &&
+        onchange.number[1] !== "S" &&
+        onchange.number[1] !== "m" &&
+        onchange.number[1] !== "M" &&
+        onchange.number[1] !== "*"
+      ) {
+        const FPate = forwardPate(onchange);
+        setCall({ ...call, numbers: FPate });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "**") {
+        const apu = startStar(onchange);
+        setCall({ ...call, numbers: apu });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "s*" || onchange.number === "S*") {
+        const SPU = spu(onchange);
+        setCall({ ...call, numbers: SPU });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (onchange.number === "m*" || onchange.number === "M*") {
+        const SPU = mpu(onchange);
+        setCall({ ...call, numbers: SPU });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number === "MS" ||
+        onchange.number === "ms" ||
+        onchange.number === "Ms" ||
+        onchange.number === "mS"
+      ) {
+        const MS = masone(onchange);
+        // console.log(MS);
+        setCall({ ...call, numbers: MS });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else if (
+        onchange.number === "SM" ||
+        onchange.number === "sm" ||
+        onchange.number === "Sm" ||
+        onchange.number === "sM"
+      ) {
+        const SM = sonema(onchange);
+        // console.log(MS);
+        setCall({ ...call, numbers: SM });
+        setOnchange({ number: "", amount: onchange.amount });
+      } else {
+        setCall({
+          ...call,
+          numbers: [...call.numbers, onchange],
+        });
 
+        setOnchange({ number: "", amount: onchange.amount });
+        setBeterrorcontrol(false);
+
+        setEditCtlBtn(false);
+        setCallandBetlistctleff(false);
+        setAutoCompleteCtrl(false);
+      }
+    } else if (
+      onchange.number.length === 3 &&
+      (onchange.number.endsWith("R") || onchange.number.endsWith("r"))
+    ) {
+      const R = r(onchange);
+      setCall({ ...call, numbers: R });
       setOnchange({ number: "", amount: onchange.amount });
-      setBeterrorcontrol(false);
-
-      setEditCtlBtn(false);
-      setCallandBetlistctleff(false);
+    } else if (onchange.number.length < 6 && onchange.amount.length) {
+      const PDT = padatha(onchange);
+      setCall({ ...call, numbers: PDT });
+      setOnchange({ number: "", amount: onchange.amount });
     } else {
       setBeterrorcontrol(true);
     }
@@ -378,6 +513,10 @@ const Bet = () => {
     console.log(selectChoice);
   };
 
+  // get autocomplete option function
+  const getAutoChoCus = (cus) => {
+    return cus.username;
+  };
   return (
     <Stack height={"100%"}>
       {success && (
@@ -473,17 +612,20 @@ const Bet = () => {
 
         <Autocomplete
           size="small"
-          // id="combo-box-demo"
-          // options={selectChoice && selectChoice === "Out" ? agents : "0"}
+          // options={selectChoice && selectChoice === "Out" ? agents : "0"
           options={agents}
-          isOptionEqualToValue={(option, value) => option.code === value}
-          value={autoCompleteValue}
+          isOptionEqualToValue={(option, value) =>
+            option.username === value.username
+          }
           sx={{ width: 200 }}
-          getOptionLabel={(cus) => cus.username}
+          getOptionLabel={(cus) => getAutoChoCus(cus)}
           onChange={(e, value) => {
+            console.log(value);
             setAutoCompleteValue(value);
             setCall({ ...call, agent: value._id });
             setCalllistctrl(true);
+            setAutoCompleteCtrl(true);
+            setCall({ agent: value._id, numbers: [] });
           }}
           renderInput={(params) => (
             <TextField
@@ -505,7 +647,7 @@ const Bet = () => {
           size="small"
           // sx={{ fontSize: 14 }}
         >
-          <Typography fontSize={13}>Read</Typography>
+          <Typography fontSize={{ xs: 8, sm: 10, md: 12 }}>Read</Typography>
           <input hidden accept={"All/*"} multiple type="file" />
         </Button>
 
@@ -519,10 +661,16 @@ const Bet = () => {
               setDemolager(lager.in.numbers);
             }}
           >
-            <Typography fontSize={12} variant={"caption"} fontWeight={100}>
+            <Typography
+              fontSize={{ xs: 8, sm: 10, md: 12 }}
+              variant={"caption"}
+              fontWeight={100}
+            >
               Lager
             </Typography>
           </Button>
+        </Stack>
+        {/* <Stack direction={"row"}>
           <FormControl size="small">
             <RadioGroup
               row
@@ -553,7 +701,7 @@ const Bet = () => {
               />
             </RadioGroup>
           </FormControl>
-        </Stack>
+        </Stack> */}
       </Stack>
       <Stack
         padding={1}
@@ -699,13 +847,14 @@ const Bet = () => {
           padding={1}
           spacing={1}
         >
-          {call.agent && call.numbers.length
+          {call.agent && autocompleteCtrl === false && call.numbers.length
             ? call.numbers.map((cal, key) => (
                 <Stack width={"100%"} justifyContent={"space-between"}>
                   <BetListCom call={cal} key={key} />
                 </Stack>
               ))
-            : agentcalls
+            : autoCompleteValue &&
+              agentcalls
                 .filter(
                   (ag, key) => ag.agent._id.toString() == call.agent.toString()
                 )
