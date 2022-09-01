@@ -31,40 +31,40 @@ const CallDetail = ({ authUser }) => {
       <Box boxShadow={1} margin={"auto"} padding={1}>
         <Paper sx={{ backgroundColor: "success.light" }}>
           <Stack
-            direction={"row"}
+            // direction={"row"}
             padding={1}
-            spacing={3}
-            justifyContent={"space-around"}
+            // spacing={3}
+            justifyContent={{
+              xs: "flex-start",
+              md: "flex-start",
+              sm: "space-between",
+            }}
+            flexDirection={"row"}
+            flexWrap={"wrap"}
           >
-            <Stack spacing={2} padding={1} direction={"column"}>
-              <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}>BetId :</Typography>
-                <Typography> {call._id}</Typography>
-              </Stack>
-              <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}>Time :</Typography>
-                <Typography> {call.betTime}</Typography>
-              </Stack>
-              {/* <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}>Call :</Typography>
-                <Typography> {call.callname}</Typography>
-              </Stack> */}
+            {/* <Stack spacing={2} padding={1} direction={"column"}> */}
+            <Stack direction={"row"} spacing={2}>
+              <Typography fontWeight={"bold"}>BetId :</Typography>
+              <Typography> {call._id}</Typography>
             </Stack>
-            <Stack spacing={2} padding={1} direction={"column"}></Stack>
-            <Stack spacing={2} padding={1} direction={"column"}>
-              <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}>Total :</Typography>
-                <Typography> {call.totalAmount}</Typography>
-              </Stack>
-              <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}>Status :</Typography>
-                <Typography> {call.status}</Typography>
-              </Stack>
-              <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}> Win :</Typography>
-                <Typography> {call.win}</Typography>
-              </Stack>
+            <Stack direction={"row"} spacing={2}>
+              <Typography fontWeight={"bold"}>Time :</Typography>
+              <Typography> {call.betTime}</Typography>
             </Stack>
+
+            <Stack direction={"row"} spacing={2}>
+              <Typography fontWeight={"bold"}>Total :</Typography>
+              <Typography> {call.totalAmount}</Typography>
+            </Stack>
+            <Stack direction={"row"} spacing={2}>
+              <Typography fontWeight={"bold"}>Status :</Typography>
+              <Typography> {call.status}</Typography>
+            </Stack>
+            <Stack direction={"row"} spacing={2}>
+              <Typography fontWeight={"bold"}> Win :</Typography>
+              <Typography> {call.win}</Typography>
+            </Stack>
+            {/* </Stack> */}
           </Stack>
           <Stack
             direction={"row"}
@@ -73,7 +73,7 @@ const CallDetail = ({ authUser }) => {
             // justifyContent={"flex-end"}
           >
             {/* <TableContainer sx={{ backgroundColor: "white" }}> */}
-            <Table sx={{ backgroundColor: "white" }}>
+            <Table sx={{ backgroundColor: "white" }} stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell align="center">

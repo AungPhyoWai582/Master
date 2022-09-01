@@ -46,60 +46,64 @@ const Daily = () => {
 
   return (
     <Stack>
-      {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
-      {/* {selectChoice === "In" && ( */}
-      <Table
-        // sx={{ minWidth: "max-content" }}
-        size="small"
-        aria-label="a dense table"
-      >
-        <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              Member Name
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell>
-            {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell> */}
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              GameX
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              Win/Lose
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              more
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody sx={{ overflow: "scroll" }}>
-          {memberReport.map((mem) => {
-            // const date = new Date(lg._date);
-            return (
-              <>
-                <TableRow>
-                  <TableCell sx={{ overflow: "scroll/" }}>
-                    {mem.member.name}
-                  </TableCell>
-                  <TableCell>{mem.totalAmount.toString()}</TableCell>
-                  <TableCell>0</TableCell>
+      <TableContainer component={Paper} sx={{ padding: "1px" }}>
+        {/* {selectChoice === "In" && ( */}
+        <Table
+          // sx={{ minWidth: "700px", overflowX: "scroll" }}
+          size="small"
+          aria-label="a dense table"
+          stickyHeader
+        >
+          <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Member Name
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Bet
+              </TableCell>
+              {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell> */}
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                GameX
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Win/Lose
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                more
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {memberReport.map((mem) => {
+              // const date = new Date(lg._date);
+              return (
+                <>
+                  <TableRow>
+                    <TableCell sx={{ overflow: "scroll/" }}>
+                      {mem.member.name}
+                    </TableCell>
+                    <TableCell>{mem.totalAmount.toString()}</TableCell>
+                    <TableCell>0</TableCell>
 
-                  <TableCell>{mem.totalWin}</TableCell>
-                  <TableCell>
-                    <NavLink
-                      to={"/reports/daily/members/calls"}
-                      state={{ callLists: mem.callLists }}
-                    >
-                      <IconButton size="small" color="success">
-                        <RemoveRedEye fontSize="12" />
-                      </IconButton>
-                    </NavLink>
-                  </TableCell>
-                </TableRow>
-              </>
-            );
-          })}
-        </TableBody>
-      </Table>
+                    <TableCell>{mem.totalWin}</TableCell>
+                    <TableCell>
+                      <NavLink
+                        to={"/reports/daily/members/calls"}
+                        state={{ callLists: mem.callLists }}
+                      >
+                        <IconButton size="small" color="success">
+                          <RemoveRedEye fontSize="12" />
+                        </IconButton>
+                      </NavLink>
+                    </TableCell>
+                  </TableRow>
+                </>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Stack>
   );
 };

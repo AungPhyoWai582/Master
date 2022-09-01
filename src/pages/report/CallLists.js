@@ -46,56 +46,63 @@ const CallList = () => {
 
   return (
     <Stack>
-      {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
-      {/* {selectChoice === "In" && ( */}
-      <Table
-        // sx={{ minWidth: "max-content" }}
-        size="small"
-        aria-label="a dense table"
-      >
-        <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>id</TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell>
-            {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell> */}
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              gameX
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              Win/Lose
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-              detail
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody sx={{ overflow: "scroll" }}>
-          {callLists.map((cal) => {
-            // const date = new Date(lg._date);
-            return (
-              <>
-                <TableRow>
-                  <TableCell sx={{ overflow: "scroll/" }}>{cal._id}</TableCell>
-                  <TableCell>{cal.totalAmount.toString()}</TableCell>
-                  <TableCell>0</TableCell>
+      <TableContainer component={Paper} sx={{ padding: "1px" }}>
+        <Table
+          // sx={{ minWidth: "max-content", overflowX: "scroll" }}
+          size="small"
+          aria-label="a dense table"
+          stickyHeader
+        >
+          <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                id
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Bet
+              </TableCell>
+              {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>Bet</TableCell> */}
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                gameX
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                Win/Lose
+              </TableCell>
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                detail
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {callLists.map((cal) => {
+              // const date = new Date(lg._date);
+              return (
+                <>
+                  <TableRow>
+                    <TableCell sx={{ overflow: "scroll/" }}>
+                      {cal._id}
+                    </TableCell>
+                    <TableCell>{cal.totalAmount.toString()}</TableCell>
+                    <TableCell>0</TableCell>
 
-                  <TableCell>{cal.win.toString()}</TableCell>
-                  <TableCell>
-                    <NavLink
-                      to={"/reports/daily/members/calls/details"}
-                      state={{ call: cal }}
-                    >
-                      <IconButton size="small" color="success">
-                        <RemoveRedEye fontSize="12" />
-                      </IconButton>
-                    </NavLink>
-                  </TableCell>
-                </TableRow>
-              </>
-            );
-          })}
-        </TableBody>
-      </Table>
+                    <TableCell>{cal.win.toString()}</TableCell>
+                    <TableCell>
+                      <NavLink
+                        to={"/reports/daily/members/calls/details"}
+                        state={{ call: cal }}
+                      >
+                        <IconButton size="small" color="success">
+                          <RemoveRedEye fontSize="12" />
+                        </IconButton>
+                      </NavLink>
+                    </TableCell>
+                  </TableRow>
+                </>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Stack>
   );
 };

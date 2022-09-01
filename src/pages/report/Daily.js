@@ -125,6 +125,7 @@ const Daily = () => {
         // sx={{ minWidth: "max-content" }}
         size="small"
         aria-label="a dense table"
+        stickyHeader
       >
         <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
           <TableRow>
@@ -144,7 +145,7 @@ const Daily = () => {
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody sx={{ overflow: "scroll" }}>
+        <TableBody>
           {lager.length ? (
             lager.map((lg) => {
               const date = new Date(lg._date);
