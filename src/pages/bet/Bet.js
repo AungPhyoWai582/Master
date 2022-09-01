@@ -42,6 +42,7 @@ import TwoDSign from "../../components/TwoDSign";
 import Axios from "../../shared/Axios";
 import Lager from "../../pages/lager/Lager";
 import { startStar } from "./Betsign";
+import "./Bet.css";
 
 const Bet = () => {
   // For input refs
@@ -647,35 +648,26 @@ const Bet = () => {
           )}
         </Stack>
       </Stack>
+
       <Stack
-        padding={1}
-        alignContent={"center"}
-        width={"100%"}
+        bgcolor={grey[300]}
+        spacing={3}
         direction={"row"}
-        border={1}
-        bgcolor={green[100]}
+        justifyContent={"center"}
       >
-        {/* {loading === false ? (
-          <Stack
-            component={"button"}
-            // height={"5%"}
-            sx={{
-              ":hover": {
-                cursor: "pointer",
-              },
-            }}
-            textAlign="center"
-            onClick={bet}
-          >
-            <Typography margin={"auto"} textAlign={"center"}>
-              Bet
-            </Typography>
-          </Stack>
-        ) : (
-          <Stack justifyContent={"end"}>
-            <CircularProgress size={"small"} />
-          </Stack>
-        )} */}
+        {hot_tees &&
+          hot_tees.map((hot, key) => {
+            return (
+              <Typography
+                color={"red"}
+                fontSize={18}
+                fontWeight={600}
+                textAlign={"center"}
+              >
+                {hot.hot_number}
+              </Typography>
+            );
+          })}
       </Stack>
 
       <Stack justifyContent={"right"} width={"100%"} direction={"row"}>

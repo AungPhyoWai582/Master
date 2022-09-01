@@ -169,6 +169,18 @@ const SideBarCom = ({ setHandleOpen, handdleopen, name, setAuthUser }) => {
             </NavLink>
             <NavLink
               style={{ textDecoration: "none" }}
+              to="/reports/daily"
+              onClick={() => setHandleOpen(false)}
+            >
+              <ListItem sx={{ ":hover": { bgcolor: teal[100] } }}>
+                <ListItemIcon>
+                  <ListAlt />
+                </ListItemIcon>
+                <ListItemText primary="Daily" />
+              </ListItem>
+            </NavLink>
+            <NavLink
+              style={{ textDecoration: "none" }}
               to="/change_password"
               onClick={() => setHandleOpen(false)}
             >

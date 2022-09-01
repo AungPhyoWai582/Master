@@ -12,30 +12,18 @@ import {
 import { blue, blueGrey, cyan, teal } from "@mui/material/colors";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Axios from "../../shared/Axios";
 
 const CallDetail = ({ authUser }) => {
-  const [call, setCall] = useState([]);
+  // const [call, setCall] = useState([]);
   const [numbers, setNumbers] = useState([]);
+  const location = useLocation();
+  const { call } = location.state;
   // console.log(localStorage.getItem("access-token"));
 
   let { callId, lotteryId, agentId } = useParams();
-  useEffect(() => {
-    console.log("Report Call detail");
-
-    Axios.get(`/reports/agent/${agentId}/calls/${lotteryId}/${callId}`, {
-      headers: {
-        authorization: `Bearer ` + localStorage.getItem("access-token"),
-      },
-    })
-      .then((res) => {
-        console.log(res.data.data);
-        setCall(res.data.data);
-        setNumbers(res.data.data.numbers);
-      })
-      .catch((err) => console.log(err.message));
-  }, []);
+  console.log(call);
   console.log(numbers);
 
   return (
@@ -57,10 +45,10 @@ const CallDetail = ({ authUser }) => {
                 <Typography fontWeight={"bold"}>Time :</Typography>
                 <Typography> {call.betTime}</Typography>
               </Stack>
-              <Stack direction={"row"} spacing={2}>
+              {/* <Stack direction={"row"} spacing={2}>
                 <Typography fontWeight={"bold"}>Call :</Typography>
                 <Typography> {call.callname}</Typography>
-              </Stack>
+              </Stack> */}
             </Stack>
             <Stack spacing={2} padding={1} direction={"column"}></Stack>
             <Stack spacing={2} padding={1} direction={"column"}>
@@ -73,7 +61,7 @@ const CallDetail = ({ authUser }) => {
                 <Typography> {call.status}</Typography>
               </Stack>
               <Stack direction={"row"} spacing={2}>
-                <Typography fontWeight={"bold"}>User Win :</Typography>
+                <Typography fontWeight={"bold"}> Win :</Typography>
                 <Typography> {call.win}</Typography>
               </Stack>
             </Stack>
@@ -99,8 +87,8 @@ const CallDetail = ({ authUser }) => {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {numbers.map((cal, key) => (
+              <TableBody sx={{ overflowY: "scroll" }}>
+                {call.numbers.map((cal, key) => (
                   <TableRow key={key}>
                     <TableCell align="center">{key + 1}</TableCell>
                     <TableCell align="center">{cal.number}</TableCell>

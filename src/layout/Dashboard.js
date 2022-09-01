@@ -14,11 +14,13 @@ import CallDetail from "../pages/report/CallDetail";
 import Lager from "../pages/lager/Lager";
 import View from "../pages/view/View";
 import LagerReport from "../pages/view/LagerReport";
-import CallsList from "../pages/calls/CallsList";
 import MemberCreate from "../pages/customer/MemberCreate";
 import MemberList from "../pages/customer/MemberList";
 import Customer from "../pages/customer/Customer";
 import AgentReport from "../pages/view/AgentReport";
+import Daily from "../pages/report/Daily";
+import DailyMembers from "../pages/report/DailyMembers";
+import CallList from "../pages/report/CallLists";
 
 const Dashboard = () => {
   const [authUser, setAuthUser] = useState({
@@ -56,10 +58,18 @@ const Dashboard = () => {
       <Route path="/report/agent" element={<AgentReport />} />
 
       <Route path="/lottery/bet/:lotteryId" element={<Bet />} />
-      <Route path="/lottery/calls/:lotteryId" element={<CallsList />} />
+      {/* <Route path="/lottery/calls/:lotteryId" element={<CallsList />} /> */}
       <Route path="/lottery/lager/:lotteryId" element={<Lager />} />
 
       <Route path="/reports" element={<Report />} />
+      <Route path="/reports/daily" element={<Daily />} />
+      <Route path="/reports/daily/members" element={<DailyMembers />} />
+      <Route path="/reports/daily/members/calls" element={<CallList />} />
+      <Route
+        path="/reports/daily/members/calls/details"
+        element={<CallDetail />}
+      />
+
       <Route
         path="/reports/agent/:agentId/calls/:lotteryId"
         element={<ReportCalls />}
