@@ -21,6 +21,9 @@ import AgentReport from "../pages/view/AgentReport";
 import Daily from "../pages/report/Daily";
 import DailyMembers from "../pages/report/DailyMembers";
 import CallList from "../pages/report/CallLists";
+import ShortCup from "../pages/report/ShortCut";
+import MemberDetail from "../pages/customer/MemberDetail";
+import { grey } from "@mui/material/colors";
 
 const Dashboard = () => {
   const [authUser, setAuthUser] = useState({
@@ -61,7 +64,7 @@ const Dashboard = () => {
       {/* <Route path="/lottery/calls/:lotteryId" element={<CallsList />} /> */}
       <Route path="/lottery/lager/:lotteryId" element={<Lager />} />
 
-      <Route path="/reports/total" element={<Report />} />
+      <Route path="/reports/total" element={<ShortCup />} />
       <Route path="/reports/daily" element={<Daily />} />
       <Route path="/reports/daily/members" element={<DailyMembers />} />
       <Route path="/reports/daily/members/calls" element={<CallList />} />
@@ -86,6 +89,7 @@ const Dashboard = () => {
       <Route path="/customer" element={<Customer />} />
 
       <Route path="/agents/agent_list" element={<MemberList />} />
+      <Route path="/agents/detail" element={<MemberDetail />} />
       <Route path="/agents/agent_create" element={<MemberCreate />} />
     </Routes>
   );
