@@ -66,8 +66,9 @@ const Bet = () => {
   const textFieldForNumber = useRef(null);
   const textFieldForAmount = useRef(null);
 
-  const [inOutCtl, setInOutCtl] = useState();
+  // const [inOutCtl, setInOutCtl] = useState();
   // const [singleBetCleanctlr, setSingleBetCleanctlr] = useState(false);
+  const [callTotal, setCallTotal] = useState(0);
 
   //loading
   const [loading, setLoading] = useState(false);
@@ -98,6 +99,8 @@ const Bet = () => {
   const { lotteryId } = useParams();
   const location = useLocation();
   const { hot_tees } = location.state;
+
+  console.log(hot_tees);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -175,7 +178,7 @@ const Bet = () => {
           authorization: `Bearer ` + localStorage.getItem("access-token"),
         },
       }).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setAgentTotalData({
           numsData: res.data.numsData,
           numsTotal: res.data.numsTotal,
@@ -531,6 +534,8 @@ const Bet = () => {
     console.log(selectChoice);
   };
 
+  console.log(agentTotalData.numsData);
+
   // get autocomplete option function
   const getAutoChoCus = (cus) => {
     return cus.username;
@@ -798,7 +803,7 @@ const Bet = () => {
           // onFocus={false}
           label={"ထိုးငွေ"}
         />
-        <Stack padding={1}>
+        <Stack alignItems={"center"}>
           {editCtlBtn ? (
             <IconButton onClick={updateCall} size={"small"}>
               <Edit fontSize="8" />
@@ -815,28 +820,7 @@ const Bet = () => {
         </Stack>
       </Stack>
 
-      <Stack
-        bgcolor={grey[300]}
-        spacing={3}
-        direction={"row"}
-        justifyContent={"center"}
-      >
-        {hot_tees &&
-          hot_tees.map((hot, key) => {
-            return (
-              <Typography
-                color={"red"}
-                fontSize={18}
-                fontWeight={600}
-                textAlign={"center"}
-              >
-                {hot.hot_number}
-              </Typography>
-            );
-          })}
-      </Stack>
-
-      <Stack justifyContent={"right"} width={"100%"} direction={"row"}>
+      <Stack justifyContent={"right"} width={"100%"}>
         <Pagination
           size="small"
           page={call.numbers}
@@ -852,23 +836,65 @@ const Bet = () => {
           )}
         />
       </Stack>
-      <Stack direction={"row"}>
+
+      <Stack direction={"row"} spacing={{ xs: 0.5, sm: 1, md: 1 }}>
         <Stack
-          direction={"column"}
+          // display={{ md: "none" }}
+          bgcolor={grey[300]}
+          spacing={3}
+          direction={"row"}
+          justifyContent={"center"}
+          width={{ xs: 30, sm: "20%", md: "25%" }}
+        >
+          {hot_tees &&
+            hot_tees.map((hot, key) => {
+              console.log(hot);
+              return (
+                <Typography
+                  color={"red"}
+                  fontSize={18}
+                  fontWeight={600}
+                  textAlign={"center"}
+                >
+                  {hot}
+                </Typography>
+              );
+            })}
+        </Stack>
+
+        <Stack
+          // display={"block"}
+          // position={"initial"}
+          // direction={"column"}
           alignItems={"center"}
-          width={"50%"}
+          width={"40%"}
           maxHeight={400}
           minHeight={400}
-          overflow={"scroll"}
-          boxShadow={1}
-          borderBottom={1}
-          padding={1}
-          spacing={1}
+          overflow={"auto"}
+          // boxShadow={1}
+          // borderBottom={1}
+          // padding={1}
+          // spacing={1}
         >
           {call.agent && autocompleteCtrl === false && call.numbers.length
             ? call.numbers.map((cal, key) => (
-                <Stack width={"100%"} justifyContent={"space-between"}>
+                // <Stack
+                //   width={"100%"}
+                //   alignItems={"center"}
+                //   bgcolor={"ActiveBorder"}
+                // >
+                <Stack
+                  direction={"row"}
+                  // width={{ sx: 180 }}
+                  marginY={0.3}
+                  justifyContent={{
+                    sx: "space-between",
+                    sm: "space-around",
+                    md: "space-around",
+                  }}
+                >
                   <BetListCom call={cal} key={key} />
+                  {/* </Stack> */}
                 </Stack>
               ))
             : autoCompleteValue &&
@@ -882,33 +908,36 @@ const Bet = () => {
 
                   return (
                     <Stack
-                      width={"100%"}
-                      bgcolor={`${key % 2 == 0 ? blue[200] : ""}`}
+                      bgcolor={`${key % 2 == 0 ? green[200] : ""}`}
+                      borderLeft={0.5}
+                      borderRight={0.5}
                       justifyContent={"space-around"}
                       // component={"button"}
                       sx={{ cursor: "pointer" }}
-                      onClick={() =>
-                        setAgentCallCrud({ id: cal._id, numbers: cal.numbers })
-                      }
+                      onClick={() => {
+                        setAgentCallCrud({ id: cal._id, numbers: cal.numbers });
+                        setCallTotal(cal.totalAmount);
+                        setAutoCompleteCtrl(true);
+                      }}
                     >
                       {cal.numbers.map((ca, key) => {
                         return <BetListCom call={ca} key={key} />;
                       })}
                     </Stack>
                   );
-                })}
+                })
+                .reverse()}
         </Stack>
         <Stack
-          direction={"column"}
-          // alignItems={"center"}
-          width={"50%"}
+          alignItems={"center"}
+          // width={"30%"}
           maxHeight={400}
           minHeight={400}
           overflow={"scroll"}
           boxShadow={1}
-          borderBottom={1}
-          padding={1}
-          justifyContent={"space-between"}
+          // borderBottom={1}
+          // padding={1}
+          // justifyContent={"space-between"}
         >
           {/* <Stack justifyContent="normal" width={"100%"}>
             <Stack width={"30%"}>
@@ -920,9 +949,17 @@ const Bet = () => {
           {/* {agentcallcrud && agentcallcrud.length === null */}
           {!agentcallcrud.numbers.length
             ? callDemo.map((calc, key) => {
-                return <BetListCom call={calc} key={key} />;
+                <Stack
+                  borderLeft={0.5}
+                  borderRight={0.5}
+                  // padding={1}
+                  // direction={"row"}
+                  justifyContent={"space-around"}
+                >
+                  <BetListCom call={calc} key={key} />;
+                </Stack>;
               })
-            : autocompleteCtrl === false &&
+            : autocompleteCtrl === true &&
               agentcallcrud.numbers.map((calcrud, key) => {
                 return (
                   <BetListCom call={calcrud}>
@@ -931,19 +968,39 @@ const Bet = () => {
                       onClick={() => editHandle(calcrud, key)}
                     >
                       <IconButton size="small">
-                        <Edit fontSize="10" />
+                        <Edit fontSize="6" />
                       </IconButton>
                       <IconButton
                         size="small"
                         onClick={() => agentcallDelete(key, calcrud)}
                       >
-                        <Delete fontSize="10" />
+                        <Delete fontSize="6" />
                       </IconButton>
                     </Stack>
                   </BetListCom>
                 );
               })}
         </Stack>
+      </Stack>
+      <Stack
+        padding={1}
+        border={1}
+        direction={"row"}
+        justifyContent={{
+          xs: "space-between",
+          sm: "space-between",
+          md: "flex-start",
+        }}
+        spacing={{ xs: 1, sm: 2, md: 3 }}
+      >
+        <Typography fontWeight={900}>
+          <span style={{ color: "red" }}>Call Total</span> :{" "}
+          {callTotal.toString()}
+        </Typography>
+        <Typography fontWeight={900}>
+          <span style={{ color: "red" }}>Net Total</span> :{" "}
+          {agentTotalData.numsTotal.toString()}
+        </Typography>
       </Stack>
 
       <Dialog fullScreen open={lagerOpen}>

@@ -40,6 +40,7 @@ const Lottery = () => {
         lottery
           // .filter((lot) => lot.play === true)
           .map((l) => {
+            console.log(l.hot_tees);
             const date = new Date(l._date);
             // if (l.play === true) {
             return (
@@ -104,7 +105,7 @@ const Lottery = () => {
                       to={`/lottery/bet/${l._id}`}
                       state={{
                         lotteryId: l._id,
-                        hot_tees: l.hot_tees,
+                        hot_tees: l.hot_tee,
                       }}
                     >
                       <IconButton

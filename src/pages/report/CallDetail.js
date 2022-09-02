@@ -32,37 +32,49 @@ const CallDetail = ({ authUser }) => {
         <Paper sx={{ backgroundColor: "success.light" }}>
           <Stack
             // direction={"row"}
-            padding={1}
+            margin={1}
             // spacing={3}
             justifyContent={{
-              xs: "flex-start",
+              xs: "space-between",
               md: "flex-start",
               sm: "space-between",
             }}
-            flexDirection={"row"}
+            flexDirection={"initial"}
             flexWrap={"wrap"}
+            flexGrow={"inherit"}
           >
             {/* <Stack spacing={2} padding={1} direction={"column"}> */}
             <Stack direction={"row"} spacing={2}>
-              <Typography fontWeight={"bold"}>BetId :</Typography>
-              <Typography> {call._id}</Typography>
+              {/* <Typography fontWeight={"bold"}> :</Typography> */}
+              <Typography fontSize={{ xs: 12, sm: 14, md: 16 }}>
+                {" "}
+                BetId - {call._id}
+              </Typography>
             </Stack>
             <Stack direction={"row"} spacing={2}>
-              <Typography fontWeight={"bold"}>Time :</Typography>
-              <Typography> {call.betTime}</Typography>
+              {/* <Typography fontWeight={"bold"}> :</Typography> */}
+              <Typography fontSize={{ xs: 12, sm: 14, md: 16 }}>
+                Time - {call.betTime}
+              </Typography>
             </Stack>
 
             <Stack direction={"row"} spacing={2}>
-              <Typography fontWeight={"bold"}>Total :</Typography>
-              <Typography> {call.totalAmount}</Typography>
+              {/* <Typography fontWeight={"bold"}> :</Typography> */}
+              <Typography fontSize={{ xs: 12, sm: 14, md: 16 }}>
+                Total - {call.totalAmount}
+              </Typography>
             </Stack>
             <Stack direction={"row"} spacing={2}>
-              <Typography fontWeight={"bold"}>Status :</Typography>
-              <Typography> {call.status}</Typography>
+              {/* <Typography fontWeight={"bold"}> :</Typography> */}
+              <Typography fontSize={{ xs: 12, sm: 14, md: 16 }}>
+                Status - {call.status}
+              </Typography>
             </Stack>
             <Stack direction={"row"} spacing={2}>
-              <Typography fontWeight={"bold"}> Win :</Typography>
-              <Typography> {call.win}</Typography>
+              {/* <Typography fontWeight={"bold"}>  :</Typography> */}
+              <Typography fontSize={{ xs: 12, sm: 14, md: 16 }}>
+                Win - {call.win}
+              </Typography>
             </Stack>
             {/* </Stack> */}
           </Stack>

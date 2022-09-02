@@ -120,24 +120,12 @@ export const aper = (onChange) => {
 
 export const padatha = (onChange) => {
   let result = [];
-  let arr = Array.from(Array(10), (_, x) => x);
-  let arry = Array.from(Array(10), (_, x) => x);
-
-  arr.map((x, key) => {
-    arry.map((y, key) => {
-      if (
-        (y.toString() === onChange.number[0] ||
-          y.toString() === onChange.number[1] ||
-          y.toString() === onChange.number[2] ||
-          y.toString() === onChange.number[3] ||
-          y.toString() === onChange.number[4]) &&
-        x.toString() !== y.toString()
-      ) {
-        result.push({
-          number: y.toString() + x.toString(),
-          amount: onChange.amount,
-        });
-      }
+  let arr = Array.from(Array(onChange.number.length)).map(
+    (pdt, key) => onChange.number[key]
+  );
+  arr.map((pdt, key) => {
+    arr.map((pdt1, key) => {
+      result.push({ number: `${pdt1}${pdt}`, amount: onChange.amount });
     });
   });
   console.log(result);
