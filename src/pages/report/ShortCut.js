@@ -1,0 +1,316 @@
+import {
+  Autocomplete,
+  Button,
+  FormControl,
+  FormControlLabel,
+  MenuItem,
+  Radio,
+  Select,
+  Stack,
+  Table,
+  TableHead,
+  TableCell,
+  TableRow,
+  TextField,
+  Typography,
+  TableBody,
+} from "@mui/material";
+import { blue, green, grey } from "@mui/material/colors";
+import React from "react";
+
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useState } from "react";
+import { Search } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
+import Axios from "../../shared/Axios";
+
+const ShortCup = () => {
+  const location = useLocation();
+
+  const [reportIn, setReportIn] = useState({ me: {}, memberReport: [] });
+  const [reportOut, setReportOut] = useState({ totalOut: {}, calls: [] });
+
+  //pdf
+  const [open, setOpen] = useState(false);
+
+  const [detailreportopen, setDetailreportopen] = useState(false);
+
+  //in/out autocomplete
+  const selectType = [{ label: "In" }, { label: "Out" }];
+  const [inLag, setInLag] = useState([]);
+  const [outLag, setOutLag] = useState([]);
+  const [selectChoice, setSelectChoice] = useState();
+  const changeInOut = (e) => {
+    setSelectChoice(e.target.innerText);
+  };
+  //date picker
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const [age, setAge] = React.useState("All");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  // For Search Function
+  const searchReport = () => {
+    // if (selectChoice === "In") {
+    Axios.get(
+      `/reports/members-collections?start_date=${startDate}&end_date=${endDate}`,
+      {
+        headers: {
+          authorization: `Bearer ` + localStorage.getItem("access-token"),
+        },
+      }
+    )
+      .then((res) => {
+        console.log(res.data.report);
+
+        const { me, memberReport } = res.data.report;
+        console.log(me, memberReport);
+        // setReport(res.data.report);
+        setReportIn({ me: me, memberReport: memberReport });
+      })
+      .catch((err) => setReportIn({ me: {}, memberReport: [] }));
+
+    // if (selectChoice === "Out") {
+    //   Axios.get(
+    //     `/reports/total-out?start_date=${startDate}&end_date=${endDate}`,
+    //     {
+    //       headers: {
+    //         authorization: `Bearer ` + localStorage.getItem("access-token"),
+    //       },
+    //     }
+    //   )
+    //     .then((res) => {
+    //       const { calls, totalOut } = res.data.report;
+    //       setReportOut({ calls: calls, totalOut: totalOut });
+    //     })
+    //     .catch((err) => setReportOut({ calls: [], totalOut: {} }));
+    // }
+  };
+
+  return (
+    <Stack padding={2} spacing={1}>
+      <Stack
+        direction={"row"}
+        justifyContent="space-start"
+        spacing={2}
+        padding={1}
+        paddingLeft={3}
+        bgcolor={grey[300]}
+        borderRadius={1}
+      >
+        <FormControl size="small">
+          <FormControlLabel
+            // label={"Time"}
+            // labelPlacement="start"
+            control={
+              <Select
+                sx={{ width: 150, height: 30, backgroundColor: "white" }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={age}
+                // label="Age"
+                onChange={handleChange}
+              >
+                <MenuItem value={"All"}>All</MenuItem>
+                <MenuItem value={"AM"}>AM</MenuItem>
+                <MenuItem value={"PM"}>PM</MenuItem>
+              </Select>
+            }
+          />
+        </FormControl>
+
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="Start Date"
+            value={startDate}
+            onChange={(newValue) => {
+              setStartDate(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} size={"small"} sx={{ width: 150 }} />
+            )}
+          />
+
+          <DatePicker
+            label="End Date"
+            value={endDate}
+            onChange={(newValue) => {
+              setEndDate(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} size={"small"} sx={{ width: 150 }} />
+            )}
+          />
+        </LocalizationProvider>
+
+        <Button
+          sx={{ bgcolor: "ButtonShadow" }}
+          size="small"
+          color={"success"}
+          onClick={searchReport}
+        >
+          <Search fontSize="10" color={"success"} />
+        </Button>
+      </Stack>
+      <Stack
+        direction={"row"}
+        justifyContent="space-start"
+        spacing={2}
+        padding={1}
+        paddingLeft={3}
+        bgcolor={grey[300]}
+        borderRadius={1}
+        alignItems={"center"}
+      >
+        <FormControl size="small">
+          <FormControlLabel
+            label={"In"}
+            labelPlacement="end"
+            control={<Radio />}
+          />
+        </FormControl>
+        <FormControl size="small">
+          <FormControlLabel
+            label={"Out"}
+            labelPlacement="end"
+            control={<Radio />}
+          />
+        </FormControl>
+        <FormControl size="small">
+          <FormControlLabel
+            label={"Customers: "}
+            labelPlacement="start"
+            control={
+              <Select
+                sx={{ width: 150, height: 30, backgroundColor: "white" }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={age}
+                // label="Age"
+                onChange={handleChange}
+              >
+                <MenuItem value={"AM"}>APW</MenuItem>
+                <MenuItem value={"PM"}>NNZ</MenuItem>
+              </Select>
+            }
+          />
+        </FormControl>
+
+        <Button
+          variant="contained"
+          color={"success"}
+          sx={{ width: 100, height: 30 }}
+        >
+          <Typography fontWeight={"bold"} textTransform="none">
+            Print
+          </Typography>
+        </Button>
+      </Stack>
+
+      <Table
+        // sx={{ minWidth: "max-content" }}
+        size="small"
+        aria-label="a dense table"
+      >
+        <TableHead sx={{ bgcolor: green[300], fontSize: 12 }}>
+          <TableRow>
+            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="left">
+              Name
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="center">
+              Bet
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="center">
+              GameX
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="center">
+              Win/Lose
+            </TableCell>
+            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="right">
+              Date
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        {/* {selectChoice === "In" && ( */}
+        <TableBody sx={{ overflow: "scroll" }}>
+          {reportIn.memberReport && reportIn.memberReport.length ? (
+            [...reportIn.memberReport].map((rp) => {
+              return (
+                <>
+                  <TableRow>
+                    <TableCell align="left">{rp.name.toString()}</TableCell>
+                    <TableCell align="center">{rp.totalAmount.toString()}</TableCell>
+                    <TableCell align="center">
+                      {rp.pout_tee_amount ? rp.pout_tee_amount.toString() : "0"}
+                    </TableCell>
+
+                    <TableCell align="center">
+                      {rp.totalWin.toString()}
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontSize: 16, fontWeight: 500 }}
+                      align="right"
+                    >
+                      {/* {reportIn.me.totalWin} */}
+                      27/08/2022
+                    </TableCell>
+                  </TableRow>
+                </>
+              );
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={3}>
+                <Typography
+                  padding={1}
+                  fontSize={18}
+                  fontWeight={500}
+                  color={"red"}
+                  textAlign="center"
+                  gridColumn={3}
+                >
+                  Reports Not Found !!!
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
+          {reportIn.memberReport.length !== 0 && (
+            <TableRow
+              style={{
+                backgroundColor: grey[300],
+              }}
+            >
+              <TableCell sx={{ fontSize: 16, fontWeight: 600 }} align={"left"}>
+                Total
+              </TableCell>
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="center">
+                {reportIn.me.totalAmount}
+              </TableCell>
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="center">
+                {reportIn.me.pout_tee_amount !== null
+                  ? reportIn.me.pout_tee_amount
+                  : "0"}
+              </TableCell>
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="center">
+                {reportIn.me.totalWin}
+              </TableCell>
+              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="right">
+                {/* {reportIn.me.totalWin} */}
+                27/08/2022 - 02/09/2022
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+        {/* )} */}
+      </Table>
+      {/* </Stack> */}
+    </Stack>
+  );
+};
+
+export default ShortCup;
