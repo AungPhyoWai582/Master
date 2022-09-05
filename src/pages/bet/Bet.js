@@ -229,9 +229,40 @@ const Bet = () => {
         onchange.number === "p" ||
         onchange.number === "P" ||
         onchange.number === "b" ||
-        onchange.number === "B" ||
-        onchange.number[3] !== "*") &&
+        onchange.number === "B") &&
       onchange.number.length < 3 &&
+      (onchange.number[0] === "1" ||
+        onchange.number[0] === "2" ||
+        onchange.number[0] === "3" ||
+        onchange.number[0] === "4" ||
+        onchange.number[0] === "5" ||
+        onchange.number[0] === "6" ||
+        onchange.number[0] === "7" ||
+        onchange.number[0] === "8" ||
+        onchange.number[0] === "9" ||
+        onchange.number[0] === "0" ||
+        onchange.number[0] === "*" ||
+        onchange.number[0] === "m" ||
+        onchange.number[0] === "M" ||
+        onchange.number[0] === "S" ||
+        onchange.number[0] === "s") &&
+      (onchange.number[1] === "1" ||
+        onchange.number[1] === "2" ||
+        onchange.number[1] === "3" ||
+        onchange.number[1] === "4" ||
+        onchange.number[1] === "5" ||
+        onchange.number[1] === "6" ||
+        onchange.number[1] === "7" ||
+        onchange.number[1] === "8" ||
+        onchange.number[1] === "9" ||
+        onchange.number[1] === "0" ||
+        onchange.number[1] === "*" ||
+        onchange.number[1] === "s" ||
+        onchange.number[1] === "S" ||
+        onchange.number[1] === "M" ||
+        onchange.number[1] === "m" ||
+        onchange.number[1] === "-" ||
+        onchange.number[1] === "/") &&
       onchange.amount.length > 2
     ) {
       if (onchange.number === "k" || onchange.number === "K") {
@@ -286,7 +317,17 @@ const Bet = () => {
         onchange.number[0] !== "S" &&
         onchange.number[0] !== "m" &&
         onchange.number[0] !== "M" &&
-        onchange.number[0] !== "*"
+        onchange.number[0] !== "*" &&
+        (onchange.number[0] === "1" ||
+          onchange.number[0] === "2" ||
+          onchange.number[0] === "3" ||
+          onchange.number[0] === "4" ||
+          onchange.number[0] === "5" ||
+          onchange.number[0] === "6" ||
+          onchange.number[0] === "7" ||
+          onchange.number[0] === "8" ||
+          onchange.number[0] === "9" ||
+          onchange.number[0] === "0")
       ) {
         const BPate = backpate(onchange);
         setCall({ ...call, numbers: BPate });
@@ -298,7 +339,17 @@ const Bet = () => {
         onchange.number[1] !== "S" &&
         onchange.number[1] !== "m" &&
         onchange.number[1] !== "M" &&
-        onchange.number[1] !== "*"
+        (onchange.number[1] === "1" ||
+          onchange.number[1] === "2" ||
+          onchange.number[1] === "3" ||
+          onchange.number[1] === "4" ||
+          onchange.number[1] === "5" ||
+          onchange.number[1] === "6" ||
+          onchange.number[1] === "7" ||
+          onchange.number[1] === "8" ||
+          onchange.number[1] === "9" ||
+          onchange.number[1] === "0")
+        // onchange.number[1] !== "*"
       ) {
         const FPate = forwardPate(onchange);
         setCall({ ...call, numbers: FPate });
@@ -375,6 +426,8 @@ const Bet = () => {
         setEditCtlBtn(false);
         setCallandBetlistctleff(false);
         setAutoCompleteCtrl(false);
+      } else {
+        setBeterrorcontrol(true);
       }
     } else if (
       onchange.number.length === 3 &&
@@ -385,10 +438,11 @@ const Bet = () => {
       setOnchange({ number: "", amount: onchange.amount });
       setAutoCompleteCtrl(false);
     } else if (
-      onchange.number.length < 6 &&
-      onchange.number >= 3 &&
-      onchange.amount.length &&
-      (!onchange.number.endsWith("*") || onchange.number.endsWith("*"))
+      (onchange.number.length < 6 &&
+        onchange.number.length >= 3 &&
+        onchange.amount.length) ||
+      !onchange.number[3] === "*" ||
+      onchange.number[4] === "*"
     ) {
       const PDT = padatha(onchange);
       setCall({ ...call, numbers: PDT });
