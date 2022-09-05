@@ -341,7 +341,29 @@ const Bet = () => {
         setCall({ ...call, numbers: SM });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
-      } else {
+      } else if (
+        (onchange.number[0] === "1" ||
+          onchange.number[0] === "2" ||
+          onchange.number[0] === "3" ||
+          onchange.number[0] === "4" ||
+          onchange.number[0] === "5" ||
+          onchange.number[0] === "6" ||
+          onchange.number[0] === "7" ||
+          onchange.number[0] === "8" ||
+          onchange.number[0] === "9" ||
+          onchange.number[0] === "0") &&
+        (onchange.number[1] === "1" ||
+          onchange.number[1] === "2" ||
+          onchange.number[1] === "3" ||
+          onchange.number[1] === "4" ||
+          onchange.number[1] === "5" ||
+          onchange.number[1] === "6" ||
+          onchange.number[1] === "7" ||
+          onchange.number[1] === "8" ||
+          onchange.number[1] === "9" ||
+          onchange.number[1] === "0")
+      ) {
+        // console.log();
         setCall({
           ...call,
           numbers: [...call.numbers, onchange],
