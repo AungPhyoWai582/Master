@@ -120,15 +120,70 @@ export const aper = (onChange) => {
 
 export const padatha = (onChange) => {
   let result = [];
-  let arr = Array.from(Array(onChange.number.length)).map(
-    (pdt, key) => onChange.number[key]
-  );
-  arr.map((pdt, key) => {
-    arr.map((pdt1, key) => {
-      result.push({ number: `${pdt1}${pdt}`, amount: onChange.amount });
-    });
-  });
-  console.log(result);
+  let onChangeLength = onChange && onChange.number.length;
+  const numOnChange = [];
+  const numOnChangeStar = [];
+  // numOnChange;
+  console.log(onChangeLength);
+  if (onChange.number.endsWith("*")) {
+    Array.from(Array(onChangeLength), (x, _) => x).map((pdt, key) =>
+      onChange.number[key] === "*"
+        ? numOnChange.push(onChange.number[key])
+        : numOnChangeStar.push(onChange.number[key])
+    );
+    numOnChangeStar &&
+      numOnChangeStar.map((pdt, key) => {
+        numOnChangeStar.map((pdt1, key) => {
+          result.push({ number: `${pdt}${pdt1}`, amount: onChange.amount });
+        });
+      });
+  } else {
+    Array.from(Array(onChangeLength), (x, _) => x).map((pdt, key) =>
+      onChange.number[key] === "*"
+        ? numOnChange.push(onChange.number[key])
+        : numOnChangeStar.push(onChange.number[key])
+    );
+    numOnChangeStar &&
+      numOnChangeStar.map((pdt, key) => {
+        numOnChangeStar.map((pdt1, key) => {
+          pdt !== pdt1 &&
+            result.push({ number: `${pdt}${pdt1}`, amount: onChange.amount });
+        });
+      });
+  }
+
+  // console.log(numOnChange);
+  // console.log(numOnChangeStar);
+  // numOnChange.map((pdt, key) => {
+  //   numOnChange.map((pdt1, key) => {
+  //     // pdt[key] === '*' && pdt1[key] == "*" ? numOnChange.pop();
+  //     console.log(numOnChange)
+  //   });
+  // });
+  // numOnChange.en
+  // if (
+  //   onChange &&
+  //   onChange.number.length < 6 &&
+  //   onChange.number.length >= 3
+  //   // onChange.number.endWud
+  // ) {
+  //   arr.map((pdt, key) => {
+  //     arr.map((pdt1, key) => {
+  //       result.push({ number: `${pdt}${pdt1}`, amount: onChange.amount });
+  //     });
+  //   });
+  // } else if (
+  //   onChange.number.length < 5 &&
+  //   onChange.number.length > 2 &&
+  //   onChange.number[5] !== "*"
+  // ) {
+  //   arr.map((pdt, key) => {
+  //     arr.map((pdt1, key) => {
+  //       pdt1 !== pdt &&
+  //         result.push({ number: `${pdt}${pdt1}`, amount: onChange.amount });
+  //     });
+  //   });
+  // }
   return result;
 };
 
