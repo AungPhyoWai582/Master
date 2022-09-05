@@ -14,6 +14,8 @@ import {
   TextField,
   Typography,
   TableBody,
+  FormLabel,
+  RadioGroup,
 } from "@mui/material";
 import { blue, green, grey } from "@mui/material/colors";
 import React from "react";
@@ -24,9 +26,13 @@ import { useState } from "react";
 import { Search } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 import Axios from "../../shared/Axios";
+import { useEffect } from "react";
 
 const ShortCup = () => {
   const location = useLocation();
+
+  const [agents, setAgents] = useState([]);
+  const [autoCompleteValue, setAutoCompleteValue] = useState();
 
   const [reportIn, setReportIn] = useState({ me: {}, memberReport: [] });
   const [reportOut, setReportOut] = useState({ totalOut: {}, calls: [] });
@@ -48,17 +54,48 @@ const ShortCup = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const [age, setAge] = React.useState("All");
+  const [customer, setCustomer] = React.useState([]);
+  const [time,setTime] = useState(['All','AM','PM']);
+  const [timeselect,setTimeSelect]=useState();
+
+  useEffect(() => {
+    Axios.get(`/agents`, {
+      headers: {
+        authorization: `Bearer ` + localStorage.getItem("access-token"),
+      },
+    }).then((res) => {
+      const agents = res.data.data;
+      // console.log(agents);
+
+      if (agents) {
+        setAgents([...agents]);
+        const ag = agents.map((ag) => {
+          return { name: ag.name, value: ag._id };
+        });
+        setCustomer([{name:'All',value:'All'}, ...ag]);
+        // setAutoCompleteValue('All');
+      }
+    });
+  }, []);
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    // console.log(event.target.value);
+    setAutoCompleteValue(event.target.value);
+  };
+
+  console.log(customer, autoCompleteValue);
+
+  // get autocomplete option function
+  const getAutoChoCus = (cus) => {
+    return cus.username;
   };
 
   // For Search Function
   const searchReport = () => {
+    console.log(autoCompleteValue,timeselect);
     // if (selectChoice === "In") {
     Axios.get(
-      `/reports/members-collections?start_date=${startDate}&end_date=${endDate}`,
+      `/reports/members-collections?In=${"In"}&start_date=${startDate}&end_date=${endDate}&customer=${autoCompleteValue}&time=${timeselect}`,
       {
         headers: {
           authorization: `Bearer ` + localStorage.getItem("access-token"),
@@ -92,6 +129,8 @@ const ShortCup = () => {
     // }
   };
 
+  console.log(agents, customer);
+
   return (
     <Stack padding={2} spacing={1}>
       <Stack
@@ -112,13 +151,15 @@ const ShortCup = () => {
                 sx={{ width: 150, height: 30, backgroundColor: "white" }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age}
+                value={timeselect}
                 // label="Age"
-                onChange={handleChange}
-              >
-                <MenuItem value={"All"}>All</MenuItem>
-                <MenuItem value={"AM"}>AM</MenuItem>
-                <MenuItem value={"PM"}>PM</MenuItem>
+                onChange={(e)=>setTimeSelect(e.target.value)}
+              >{
+                
+                time.map(t=><MenuItem value={t}>{t}</MenuItem>)
+              }
+                {/* <MenuItem value={"AM"}>AM</MenuItem>
+                <MenuItem value={"PM"}>PM</MenuItem> */}
               </Select>
             }
           />
@@ -167,19 +208,19 @@ const ShortCup = () => {
         borderRadius={1}
         alignItems={"center"}
       >
-        <FormControl size="small">
-          <FormControlLabel
-            label={"In"}
-            labelPlacement="end"
-            control={<Radio />}
-          />
-        </FormControl>
-        <FormControl size="small">
-          <FormControlLabel
-            label={"Out"}
-            labelPlacement="end"
-            control={<Radio />}
-          />
+        <FormControl>
+          {/* <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel> */}
+          <RadioGroup
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="controlled-radio-buttons-group"
+            // value={value}
+            // onChange={handleChange}
+          >
+            <Stack direction={"row"}>
+              <FormControlLabel value="In" control={<Radio />} label="In" />
+              <FormControlLabel value="Out" control={<Radio />} label="Out" />
+            </Stack>
+          </RadioGroup>
         </FormControl>
         <FormControl size="small">
           <FormControlLabel
@@ -190,12 +231,18 @@ const ShortCup = () => {
                 sx={{ width: 150, height: 30, backgroundColor: "white" }}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age}
+                value={autoCompleteValue}
+                // defaultValue={customer[0].value}
                 // label="Age"
                 onChange={handleChange}
               >
-                <MenuItem value={"AM"}>APW</MenuItem>
-                <MenuItem value={"PM"}>NNZ</MenuItem>
+                {customer.map((cus) => (
+                  <MenuItem value={cus.value}>
+                    {cus.name}
+                  </MenuItem>
+                ))}
+                {/* <MenuItem value={"AM"}>APW</MenuItem>
+                <MenuItem value={"PM"}>NNZ</MenuItem> */}
               </Select>
             }
           />
@@ -244,7 +291,9 @@ const ShortCup = () => {
                 <>
                   <TableRow>
                     <TableCell align="left">{rp.name.toString()}</TableCell>
-                    <TableCell align="center">{rp.totalAmount.toString()}</TableCell>
+                    <TableCell align="center">
+                      {rp.totalAmount.toString()}
+                    </TableCell>
                     <TableCell align="center">
                       {rp.pout_tee_amount ? rp.pout_tee_amount.toString() : "0"}
                     </TableCell>
@@ -257,7 +306,6 @@ const ShortCup = () => {
                       align="right"
                     >
                       {/* {reportIn.me.totalWin} */}
-                      27/08/2022
                     </TableCell>
                   </TableRow>
                 </>
