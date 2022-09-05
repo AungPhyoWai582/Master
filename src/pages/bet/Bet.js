@@ -229,7 +229,8 @@ const Bet = () => {
         onchange.number === "p" ||
         onchange.number === "P" ||
         onchange.number === "b" ||
-        onchange.number === "B") &&
+        onchange.number === "B" ||
+        onchange.number[3] !== "*") &&
       onchange.number.length < 3 &&
       onchange.amount.length > 2
     ) {
@@ -362,9 +363,10 @@ const Bet = () => {
       setOnchange({ number: "", amount: onchange.amount });
       setAutoCompleteCtrl(false);
     } else if (
-      (onchange.number.length < 6 || onchange.number >= 3) &&
-      onchange.amount.length
-      // (!onchange.number.endsWith("*") || onchange.number.endsWith("*"))
+      onchange.number.length < 6 &&
+      onchange.number >= 3 &&
+      onchange.amount.length &&
+      (!onchange.number.endsWith("*") || onchange.number.endsWith("*"))
     ) {
       const PDT = padatha(onchange);
       setCall({ ...call, numbers: PDT });
