@@ -267,28 +267,28 @@ const Bet = () => {
     ) {
       if (onchange.number === "k" || onchange.number === "K") {
         const R = k(onchange);
-        setCall({ ...call, numbers: R });
+        setCall({ ...call, numbers: [...call.numbers, R] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number === "p" || onchange.number === "P") {
         const P = p(onchange);
-        setCall({ ...call, numbers: P });
+        setCall({ ...call, numbers: [...call.numbers, P] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number === "b" || onchange.number === "B") {
         const B = b(onchange);
-        setCall({ ...call, numbers: B });
+        setCall({ ...call, numbers: [...call.numbers, B] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number[1] === "/") {
         const BR = Breaks(onchange);
         console.log(BR);
-        setCall({ ...call, numbers: BR });
+        setCall({ ...call, numbers: [...call.numbers, BR] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number[1] === "-") {
         const AP = aper(onchange);
-        setCall({ ...call, numbers: AP });
+        setCall({ ...call, numbers: [...call.numbers, AP] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -298,7 +298,7 @@ const Bet = () => {
         onchange.number === "mM"
       ) {
         const MAMA = mm(onchange);
-        setCall({ ...call, numbers: MAMA });
+        setCall({ ...call, numbers: [...call.numbers, MAMA] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -308,7 +308,7 @@ const Bet = () => {
         onchange.number === "sS"
       ) {
         const SS = ss(onchange);
-        setCall({ ...call, numbers: SS });
+        setCall({ ...call, numbers: [...call.numbers, SS] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -330,7 +330,7 @@ const Bet = () => {
           onchange.number[0] === "0")
       ) {
         const BPate = backpate(onchange);
-        setCall({ ...call, numbers: BPate });
+        setCall({ ...call, numbers: [...call.numbers, BPate] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -352,22 +352,22 @@ const Bet = () => {
         // onchange.number[1] !== "*"
       ) {
         const FPate = forwardPate(onchange);
-        setCall({ ...call, numbers: FPate });
+        setCall({ ...call, numbers: [...call.numbers, ...FPate] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number === "**") {
         const apu = startStar(onchange);
-        setCall({ ...call, numbers: apu });
+        setCall({ ...call, numbers: [...call.numbers, ...apu] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number === "s*" || onchange.number === "S*") {
         const SPU = spu(onchange);
-        setCall({ ...call, numbers: SPU });
+        setCall({ ...call, numbers: [...call.numbers, ...SPU] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (onchange.number === "m*" || onchange.number === "M*") {
         const SPU = mpu(onchange);
-        setCall({ ...call, numbers: SPU });
+        setCall({ ...call, numbers: [...call.numbers, ...SPU] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -378,7 +378,7 @@ const Bet = () => {
       ) {
         const MS = masone(onchange);
         // console.log(MS);
-        setCall({ ...call, numbers: MS });
+        setCall({ ...call, numbers: [...call.numbers, ...MS] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -389,7 +389,7 @@ const Bet = () => {
       ) {
         const SM = sonema(onchange);
         // console.log(MS);
-        setCall({ ...call, numbers: SM });
+        setCall({ ...call, numbers: [...call.numbers, ...SM] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
       } else if (
@@ -434,7 +434,7 @@ const Bet = () => {
       (onchange.number.endsWith("R") || onchange.number.endsWith("r"))
     ) {
       const R = r(onchange);
-      setCall({ ...call, numbers: R });
+      setCall({ ...call, numbers: [...call.numbers, ...R] });
       setOnchange({ number: "", amount: onchange.amount });
       setAutoCompleteCtrl(false);
     } else if (
@@ -445,7 +445,7 @@ const Bet = () => {
       onchange.number[4] === "*"
     ) {
       const PDT = padatha(onchange);
-      setCall({ ...call, numbers: PDT });
+      setCall({ ...call, numbers: [...call.numbers, ...PDT] });
       setOnchange({ number: "", amount: onchange.amount });
       setAutoCompleteCtrl(false);
     } else {
@@ -586,29 +586,6 @@ const Bet = () => {
     // setDemolager(callDemo);
     setLagerOpen(false);
   };
-  // console.log(callDemo);
-  // console.log(agentcallcrud);
-
-  // call
-  // useEffect(() => {
-  //   Axios.get(`/call/${lotteryId}`, {
-  //     headers: {
-  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
-  //     },
-  //   }).then((res) => {
-  //     console.log(res.data.data);
-  //     setAgentcalls(res.data.data);
-  //   });
-
-  //   Axios.get(`/call/${lotteryId}/call-numbers-total/${call.agent}`, {
-  //     headers: {
-  //       authorization: `Bearer ` + localStorage.getItem("access-token"),
-  //     },
-  //   }).then((res) => {
-  //     console.log(res.data);
-  //     setCalllistctrl(false);
-  //   });
-  // }, [calllistctrl]);
 
   //CallOutLager
   const changeInOut = (e) => {
@@ -699,25 +676,9 @@ const Bet = () => {
         justifyContent={"center"}
         boxShadow={1}
       >
-        {/* <Autocomplete
-          onChange={changeInOut}
-          size="small"
-          id="combo-box-demo"
-          // sx={{ width: 50 }}
-          options={selectType}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="In/Out"
-              size={"small"}
-              sx={{ width: 100 }}
-            />
-          )}
-        /> */}
-
         <Autocomplete
           size="small"
-          // options={selectChoice && selectChoice === "Out" ? agents : "0"
+          options={selectChoice && selectChoice === "Out" ? agents : "0"}
           options={agents}
           isOptionEqualToValue={(option, value) =>
             option.username === value.username
@@ -775,38 +736,6 @@ const Bet = () => {
             </Typography>
           </Button>
         </Stack>
-        {/* <Stack direction={"row"}>
-          <FormControl size="small">
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <FormControlLabel
-                value="In"
-                control={
-                  <Radio
-                    size="small"
-                    color="success"
-                    onChange={(e) => changeInOut(e)}
-                  />
-                }
-                label="In"
-              />
-              <FormControlLabel
-                value="Out"
-                control={
-                  <Radio
-                    size="small"
-                    color="success"
-                    onChange={(e) => console.log(e.target.value)}
-                  />
-                }
-                label="Out"
-              />
-            </RadioGroup>
-          </FormControl>
-        </Stack> */}
       </Stack>
       <Stack
         padding={1}
@@ -938,7 +867,7 @@ const Bet = () => {
                   fontWeight={600}
                   textAlign={"center"}
                 >
-                  {hot}
+                  {hot.number}
                 </Typography>
               );
             })}
@@ -959,26 +888,28 @@ const Bet = () => {
           // spacing={1}
         >
           {call.agent && autocompleteCtrl === false && call.numbers.length
-            ? call.numbers.map((cal, key) => (
-                // <Stack
-                //   width={"100%"}
-                //   alignItems={"center"}
-                //   bgcolor={"ActiveBorder"}
-                // >
-                <Stack
-                  direction={"row"}
-                  // width={{ sx: 180 }}
-                  marginY={0.3}
-                  justifyContent={{
-                    sx: "space-between",
-                    sm: "space-around",
-                    md: "space-around",
-                  }}
-                >
-                  <BetListCom call={cal} key={key} />
-                  {/* </Stack> */}
-                </Stack>
-              ))
+            ? call.numbers
+                .map((cal, key) => (
+                  // <Stack
+                  //   width={"100%"}
+                  //   alignItems={"center"}
+                  //   bgcolor={"ActiveBorder"}
+                  // >
+                  <Stack
+                    direction={"row"}
+                    // width={{ sx: 180 }}
+                    marginY={0.3}
+                    justifyContent={{
+                      sx: "space-between",
+                      sm: "space-around",
+                      md: "space-around",
+                    }}
+                  >
+                    <BetListCom call={cal} key={key} />
+                    {/* </Stack> */}
+                  </Stack>
+                ))
+                .reverse()
             : autoCompleteValue &&
               agentcalls
                 .filter(
