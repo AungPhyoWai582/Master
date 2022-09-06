@@ -45,6 +45,7 @@ const Report = () => {
   const [outLag, setOutLag] = useState([]);
   const [selectChoice, setSelectChoice] = useState();
   const changeInOut = (e) => {
+    console.log(e.target.value);
     setSelectChoice(e.target.innerText);
   };
 
@@ -97,7 +98,7 @@ const Report = () => {
     }
   };
   console.log(reportIn);
-  console.log(reportOut);
+  console.log(selectChoice);
   return (
     <Stack>
       <Stack direction={"row"} spacing={2} padding={2} justifyContent={"start"}>
@@ -107,6 +108,7 @@ const Report = () => {
           id="combo-box-demo"
           // sx={{ width: 50 }}
           options={selectType}
+          value={selectChoice}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -127,7 +129,7 @@ const Report = () => {
               <TextField {...params} size={"small"} sx={{ width: 150 }} />
             )}
           />
-      
+
           <DatePicker
             label="End Date"
             value={endDate}
@@ -150,193 +152,199 @@ const Report = () => {
       </Stack>
       {/* <TableContainer component={Paper} sx={{ padding: "1px" }}> */}
       {selectChoice === "In" && (
-        <Table
-          // sx={{ minWidth: "max-content" }}
-          size="small"
-          aria-label="a dense table"
-        >
-          <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                Name
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                Bet
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                GameX
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                Win/Lose
-              </TableCell>
-              {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+        <TableContainer sx={{ padding: "1px" }}>
+          <Table
+            // sx={{ minWidth: "max-content" }}
+            size="small"
+            aria-label="a dense table"
+            stickyHeader
+          >
+            <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  Name
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  Bet
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  GameX
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  Win/Lose
+                </TableCell>
+                {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
               More
             </TableCell> */}
-            </TableRow>
-          </TableHead>
-          <TableBody sx={{ overflow: "scroll" }}>
-            {reportIn.memberReport && reportIn.memberReport.length ? (
-              [...reportIn.memberReport].map((rp) => {
-                return (
-                  <>
-                    <TableRow>
-                      <TableCell sx={{ overflow: "scroll/" }}>
-                        {rp.name.toString()}
-                      </TableCell>
-                      <TableCell>{rp.totalAmount.toString()}</TableCell>
-                      <TableCell>
-                        {rp.pout_tee_amount
-                          ? rp.pout_tee_amount.toString()
-                          : "0"}
-                      </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reportIn.memberReport && reportIn.memberReport.length ? (
+                [...reportIn.memberReport].map((rp) => {
+                  return (
+                    <>
+                      <TableRow>
+                        <TableCell sx={{ overflow: "scroll/" }}>
+                          {rp.name.toString()}
+                        </TableCell>
+                        <TableCell>{rp.totalAmount.toString()}</TableCell>
+                        <TableCell>
+                          {rp.pout_tee_amount
+                            ? rp.pout_tee_amount.toString()
+                            : "0"}
+                        </TableCell>
 
-                      <TableCell>{rp.totalWin.toString()}</TableCell>
-                    </TableRow>
-                  </>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={3}>
-                  <Typography
-                    padding={1}
-                    fontSize={18}
-                    fontWeight={500}
-                    color={"red"}
-                    textAlign="center"
-                    gridColumn={3}
-                  >
-                    Reports Not Found !!!
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )}
-            {reportIn.memberReport.length !== 0 && (
-              <TableRow
-                style={{
-                  backgroundColor: grey[300],
-                }}
-              >
-                <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
-                  Total
-                </TableCell>
-                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                  {reportIn.me.totalAmount}
-                </TableCell>
-                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                  {reportIn.me.pout_tee_amount !== null
-                    ? reportIn.me.pout_tee_amount
-                    : "0"}
-                </TableCell>
-                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                  {reportIn.me.totalWin}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                        <TableCell>{rp.totalWin.toString()}</TableCell>
+                      </TableRow>
+                    </>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3}>
+                    <Typography
+                      padding={1}
+                      fontSize={18}
+                      fontWeight={500}
+                      color={"red"}
+                      textAlign="center"
+                      gridColumn={3}
+                    >
+                      Reports Not Found !!!
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+              {reportIn.memberReport.length !== 0 && (
+                <TableRow
+                  style={{
+                    backgroundColor: grey[300],
+                  }}
+                >
+                  <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+                    Total
+                  </TableCell>
+                  <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                    {reportIn.me.totalAmount}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                    {reportIn.me.pout_tee_amount !== null
+                      ? reportIn.me.pout_tee_amount
+                      : "0"}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                    {reportIn.me.totalWin}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
       {selectChoice === "Out" && (
-        <Table
-          // sx={{ minWidth: "max-content" }}
-          size="small"
-          aria-label="a dense table"
-        >
-          <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                BetID
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                Bet
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                GameX
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
-                Win/Lose
-              </TableCell>
-              {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+        <TableContainer sx={{ padding: "1px" }}>
+          <Table
+            // sx={{ minWidth: "max-content" }}
+            size="small"
+            aria-label="a dense table"
+            stickyHeader
+          >
+            <TableHead sx={{ bgcolor: "success.light", fontSize: 12 }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  BetID
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  Bet
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  GameX
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
+                  Win/Lose
+                </TableCell>
+                {/* <TableCell sx={{ fontWeight: "bold", fontSize: 12 }}>
               More
             </TableCell> */}
-            </TableRow>
-          </TableHead>
-          <TableBody sx={{ overflow: "scroll" }}>
-            {reportOut.calls && reportOut.calls.length ? (
-              [...reportOut.calls].map((cal) => {
-                return (
-                  <>
-                    <TableRow>
-                      <TableCell sx={{ overflow: "scroll/" }}>
-                        {cal._id.toString()}
-                      </TableCell>
-                      <TableCell>{cal.totalAmount.toString()}</TableCell>
-                      <TableCell>
-                        {cal.pout_tee_amount
-                          ? cal.pout_tee_amount.toString()
-                          : "0"}
-                      </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reportOut.calls && reportOut.calls.length ? (
+                [...reportOut.calls].map((cal) => {
+                  return (
+                    <>
+                      <TableRow>
+                        <TableCell sx={{ overflow: "scroll/" }}>
+                          {cal._id.toString()}
+                        </TableCell>
+                        <TableCell>{cal.totalAmount.toString()}</TableCell>
+                        <TableCell>
+                          {cal.pout_tee_amount
+                            ? cal.pout_tee_amount.toString()
+                            : "0"}
+                        </TableCell>
 
-                      <TableCell>{cal.win.toString()}</TableCell>
-                    </TableRow>
-                  </>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4}>
-                  <Typography
-                    padding={1}
-                    fontSize={18}
-                    fontWeight={500}
-                    color={"red"}
-                    textAlign="center"
-                    gridColumn={3}
-                  >
-                    Reports Not Found !!!
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )}
-            {reportOut.totalOut.length !== 0 ? (
-              <TableRow
-                style={{
-                  backgroundColor: grey[300],
-                }}
-              >
-                <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
-                  Total
-                </TableCell>
-                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                  {reportOut.totalOut.totalAmount}
-                </TableCell>
-                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                  {reportOut.totalOut.pout_tee_amount !== null
-                    ? reportOut.totalOut.pout_tee_amount
-                    : "0"}
-                </TableCell>
-                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
-                  {reportOut.totalOut.totalWin}
-                </TableCell>
-              </TableRow>
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4}>
-                  <Typography
-                    padding={1}
-                    fontSize={18}
-                    fontWeight={500}
-                    color={"red"}
-                    textAlign="center"
-                    gridColumn={3}
-                  >
-                    Reports Not Found !!!
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                        <TableCell>{cal.win.toString()}</TableCell>
+                      </TableRow>
+                    </>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <Typography
+                      padding={1}
+                      fontSize={18}
+                      fontWeight={500}
+                      color={"red"}
+                      textAlign="center"
+                      gridColumn={3}
+                    >
+                      Reports Not Found !!!
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+              {reportOut.totalOut.length !== 0 ? (
+                <TableRow
+                  style={{
+                    backgroundColor: grey[300],
+                  }}
+                >
+                  <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+                    Total
+                  </TableCell>
+                  <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                    {reportOut.totalOut.totalAmount}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                    {reportOut.totalOut.pout_tee_amount !== null
+                      ? reportOut.totalOut.pout_tee_amount
+                      : "0"}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
+                    {reportOut.totalOut.totalWin}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <Typography
+                      padding={1}
+                      fontSize={18}
+                      fontWeight={500}
+                      color={"red"}
+                      textAlign="center"
+                      gridColumn={3}
+                    >
+                      Reports Not Found !!!
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </Stack>
   );

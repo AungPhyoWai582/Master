@@ -16,6 +16,8 @@ import {
   TableBody,
   FormLabel,
   RadioGroup,
+  Paper,
+  TableContainer,
 } from "@mui/material";
 import { blue, green, grey } from "@mui/material/colors";
 import React from "react";
@@ -43,10 +45,9 @@ const ShortCup = () => {
   const [detailreportopen, setDetailreportopen] = useState(false);
 
   //in/out autocomplete
-  const selectType = [{ label: "In" }, { label: "Out" }];
+  const [InOutControl, setInOutControl] = useState("In");
   const [inLag, setInLag] = useState([]);
   const [outLag, setOutLag] = useState([]);
-  const [selectChoice, setSelectChoice] = useState();
   const changeInOut = (e) => {
     setSelectChoice(e.target.innerText);
   };
@@ -55,8 +56,9 @@ const ShortCup = () => {
   const [endDate, setEndDate] = useState(null);
 
   const [customer, setCustomer] = React.useState([]);
-  const [time,setTime] = useState(['All','AM','PM']);
-  const [timeselect,setTimeSelect]=useState();
+  const [time, setTime] = useState(["All", "AM", "PM"]);
+  const [timeselect, setTimeSelect] = useState();
+  const [selectChoice, setSelectChoice] = useState();
 
   useEffect(() => {
     Axios.get(`/agents`, {
@@ -72,7 +74,7 @@ const ShortCup = () => {
         const ag = agents.map((ag) => {
           return { name: ag.name, value: ag._id };
         });
-        setCustomer([{name:'All',value:'All'}, ...ag]);
+        setCustomer([{ name: "All", value: "All" }, ...ag]);
         // setAutoCompleteValue('All');
       }
     });
@@ -92,44 +94,45 @@ const ShortCup = () => {
 
   // For Search Function
   const searchReport = () => {
-    console.log(autoCompleteValue,timeselect);
-    // if (selectChoice === "In") {
-    Axios.get(
-      `/reports/members-collections?In=${"In"}&start_date=${startDate}&end_date=${endDate}&customer=${autoCompleteValue}&time=${timeselect}`,
-      {
-        headers: {
-          authorization: `Bearer ` + localStorage.getItem("access-token"),
-        },
-      }
-    )
-      .then((res) => {
-        console.log(res.data.report);
+    console.log(autoCompleteValue, timeselect);
+    if (InOutControl === "In") {
+      Axios.get(
+        `/reports/members-collections?&start_date=${startDate}&end_date=${endDate}&customer=${autoCompleteValue}&time=${timeselect}`,
+        {
+          headers: {
+            authorization: `Bearer ` + localStorage.getItem("access-token"),
+          },
+        }
+      )
+        .then((res) => {
+          console.log(res.data.report);
 
-        const { me, memberReport } = res.data.report;
-        console.log(me, memberReport);
-        // setReport(res.data.report);
-        setReportIn({ me: me, memberReport: memberReport });
-      })
-      .catch((err) => setReportIn({ me: {}, memberReport: [] }));
-
-    // if (selectChoice === "Out") {
-    //   Axios.get(
-    //     `/reports/total-out?start_date=${startDate}&end_date=${endDate}`,
-    //     {
-    //       headers: {
-    //         authorization: `Bearer ` + localStorage.getItem("access-token"),
-    //       },
-    //     }
-    //   )
-    //     .then((res) => {
-    //       const { calls, totalOut } = res.data.report;
-    //       setReportOut({ calls: calls, totalOut: totalOut });
-    //     })
-    //     .catch((err) => setReportOut({ calls: [], totalOut: {} }));
-    // }
+          const { me, memberReport } = res.data.report;
+          console.log(me, memberReport);
+          // setReport(res.data.report);
+          setReportIn({ me: me, memberReport: memberReport });
+        })
+        .catch((err) => setReportIn({ me: {}, memberReport: [] }));
+    }
+    if (InOutControl === "Out") {
+      Axios.get(
+        `/reports/total-out?start_date=${startDate}&end_date=${endDate}&time=${time}`,
+        {
+          headers: {
+            authorization: `Bearer ` + localStorage.getItem("access-token"),
+          },
+        }
+      )
+        .then((res) => {
+          const { calls, totalOut } = res.data.report;
+          setReportOut({ calls: calls, totalOut: totalOut });
+        })
+        .catch((err) => setReportOut({ calls: [], totalOut: {} }));
+    }
   };
 
   console.log(agents, customer);
+  console.log(reportIn, reportOut);
 
   return (
     <Stack padding={2} spacing={1}>
@@ -142,27 +145,19 @@ const ShortCup = () => {
         bgcolor={grey[300]}
         borderRadius={1}
       >
-        <FormControl size="small">
-          <FormControlLabel
-            // label={"Time"}
-            // labelPlacement="start"
-            control={
-              <Select
-                sx={{ width: 150, height: 30, backgroundColor: "white" }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={timeselect}
-                // label="Age"
-                onChange={(e)=>setTimeSelect(e.target.value)}
-              >{
-                
-                time.map(t=><MenuItem value={t}>{t}</MenuItem>)
-              }
-                {/* <MenuItem value={"AM"}>AM</MenuItem>
-                <MenuItem value={"PM"}>PM</MenuItem> */}
-              </Select>
-            }
-          />
+        <FormControl>
+          {/* <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel> */}
+          <RadioGroup
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="controlled-radio-buttons-group"
+            value={InOutControl}
+            onChange={(e) => setInOutControl(e.target.value)}
+          >
+            <Stack direction={"row"}>
+              <FormControlLabel value="In" control={<Radio />} label="In" />
+              <FormControlLabel value="Out" control={<Radio />} label="Out" />
+            </Stack>
+          </RadioGroup>
         </FormControl>
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -190,12 +185,13 @@ const ShortCup = () => {
         </LocalizationProvider>
 
         <Button
-          sx={{ bgcolor: "ButtonShadow" }}
+          // sx={{ bgcolor: green[300] }}
           size="small"
+          variant="contained"
           color={"success"}
           onClick={searchReport}
         >
-          <Search fontSize="10" color={"success"} />
+          <Search sx={{ fontWeight: "bold" }} color={"primary"} />
         </Button>
       </Stack>
       <Stack
@@ -208,21 +204,33 @@ const ShortCup = () => {
         borderRadius={1}
         alignItems={"center"}
       >
-        <FormControl>
-          {/* <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel> */}
-          <RadioGroup
-            aria-labelledby="demo-controlled-radio-buttons-group"
-            name="controlled-radio-buttons-group"
-            // value={value}
-            // onChange={handleChange}
-          >
-            <Stack direction={"row"}>
-              <FormControlLabel value="In" control={<Radio />} label="In" />
-              <FormControlLabel value="Out" control={<Radio />} label="Out" />
-            </Stack>
-          </RadioGroup>
-        </FormControl>
         <FormControl size="small">
+          <FormControlLabel
+            // label={"Time"}
+            // labelPlacement="start"
+            control={
+              <Select
+                sx={{ width: 150, height: 30, backgroundColor: "white" }}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={timeselect}
+                // label="Age"
+                onChange={(e) => setTimeSelect(e.target.value)}
+              >
+                {time.map((t) => (
+                  <MenuItem value={t}>{t}</MenuItem>
+                ))}
+                {/* <MenuItem value={"AM"}>AM</MenuItem>
+                <MenuItem value={"PM"}>PM</MenuItem> */}
+              </Select>
+            }
+          />
+        </FormControl>
+
+        <FormControl
+          size="small"
+          disabled={InOutControl === "Out" ? true : false}
+        >
           <FormControlLabel
             label={"Customers: "}
             labelPlacement="start"
@@ -237,9 +245,7 @@ const ShortCup = () => {
                 onChange={handleChange}
               >
                 {customer.map((cus) => (
-                  <MenuItem value={cus.value}>
-                    {cus.name}
-                  </MenuItem>
+                  <MenuItem value={cus.value}>{cus.name}</MenuItem>
                 ))}
                 {/* <MenuItem value={"AM"}>APW</MenuItem>
                 <MenuItem value={"PM"}>NNZ</MenuItem> */}
@@ -258,104 +264,242 @@ const ShortCup = () => {
           </Typography>
         </Button>
       </Stack>
-
-      <Table
-        // sx={{ minWidth: "max-content" }}
-        size="small"
-        aria-label="a dense table"
-      >
-        <TableHead sx={{ bgcolor: green[300], fontSize: 12 }}>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="left">
-              Name
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="center">
-              Bet
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="center">
-              GameX
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="center">
-              Win/Lose
-            </TableCell>
-            <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="right">
-              Date
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        {/* {selectChoice === "In" && ( */}
-        <TableBody sx={{ overflow: "scroll" }}>
-          {reportIn.memberReport && reportIn.memberReport.length ? (
-            [...reportIn.memberReport].map((rp) => {
-              return (
-                <>
-                  <TableRow>
-                    <TableCell align="left">{rp.name.toString()}</TableCell>
-                    <TableCell align="center">
-                      {rp.totalAmount.toString()}
-                    </TableCell>
-                    <TableCell align="center">
-                      {rp.pout_tee_amount ? rp.pout_tee_amount.toString() : "0"}
-                    </TableCell>
-
-                    <TableCell align="center">
-                      {rp.totalWin.toString()}
-                    </TableCell>
-                    <TableCell
-                      sx={{ fontSize: 16, fontWeight: 500 }}
-                      align="right"
-                    >
-                      {/* {reportIn.me.totalWin} */}
-                    </TableCell>
-                  </TableRow>
-                </>
-              );
-            })
-          ) : (
+      <TableContainer sx={{ padding: "1px" }}>
+        <Table
+          // sx={{ minWidth: "max-content" }}
+          size="small"
+          aria-label="a dense table"
+          stickyHeader
+        >
+          <TableHead sx={{ bgcolor: green[300], fontSize: 12 }}>
             <TableRow>
-              <TableCell colSpan={3}>
-                <Typography
-                  padding={1}
-                  fontSize={18}
-                  fontWeight={500}
-                  color={"red"}
-                  textAlign="center"
-                  gridColumn={3}
+              <TableCell sx={{ fontWeight: "bold", fontSize: 12 }} align="left">
+                {/* {InOutControl === 'In'?'Name':'ID'} */}
+                Name
+              </TableCell>
+              <TableCell
+                sx={{ fontWeight: "bold", fontSize: 12 }}
+                align="center"
+              >
+                Bet
+              </TableCell>
+              <TableCell
+                sx={{ fontWeight: "bold", fontSize: 12 }}
+                align="center"
+              >
+                GameX
+              </TableCell>
+              <TableCell
+                sx={{ fontWeight: "bold", fontSize: 12 }}
+                align="center"
+              >
+                Win/Lose
+              </TableCell>
+              <TableCell
+                sx={{ fontWeight: "bold", fontSize: 12 }}
+                align="right"
+              >
+                Date
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          {InOutControl === "In" && (
+            <TableBody>
+              {reportIn.memberReport && reportIn.memberReport.length ? (
+                [...reportIn.memberReport].map((rp) => {
+                  return (
+                    <>
+                      <TableRow>
+                        <TableCell align="left">{rp.name.toString()}</TableCell>
+                        <TableCell align="center">
+                          {rp.totalAmount.toString()}
+                        </TableCell>
+                        <TableCell align="center">
+                          {rp.pout_tee_amount
+                            ? rp.pout_tee_amount.toString()
+                            : "0"}
+                        </TableCell>
+
+                        <TableCell align="center">
+                          {rp.totalWin.toString()}
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontSize: 16, fontWeight: 500 }}
+                          align="right"
+                        >
+                          {/* {reportIn.me.totalWin} */}
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={3}>
+                    <Typography
+                      padding={1}
+                      fontSize={18}
+                      fontWeight={500}
+                      color={"red"}
+                      textAlign="center"
+                      gridColumn={3}
+                    >
+                      Reports Not Found !!!
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+              {reportIn.memberReport.length !== 0 && (
+                <TableRow
+                  style={{
+                    backgroundColor: grey[300],
+                  }}
                 >
-                  Reports Not Found !!!
-                </Typography>
-              </TableCell>
-            </TableRow>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 600 }}
+                    align={"left"}
+                  >
+                    Total
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="center"
+                  >
+                    {reportIn.me.totalAmount}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="center"
+                  >
+                    {reportIn.me.pout_tee_amount !== null
+                      ? reportIn.me.pout_tee_amount
+                      : "0"}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="center"
+                  >
+                    {reportIn.me.totalWin}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="right"
+                  >
+                    {/* {reportIn.me.totalWin} */}
+                    27/08/2022 - 02/09/2022
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
           )}
-          {reportIn.memberReport.length !== 0 && (
-            <TableRow
-              style={{
-                backgroundColor: grey[300],
-              }}
-            >
-              <TableCell sx={{ fontSize: 16, fontWeight: 600 }} align={"left"}>
-                Total
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="center">
-                {reportIn.me.totalAmount}
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="center">
-                {reportIn.me.pout_tee_amount !== null
-                  ? reportIn.me.pout_tee_amount
-                  : "0"}
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="center">
-                {reportIn.me.totalWin}
-              </TableCell>
-              <TableCell sx={{ fontSize: 16, fontWeight: 500 }} align="right">
-                {/* {reportIn.me.totalWin} */}
-                27/08/2022 - 02/09/2022
-              </TableCell>
-            </TableRow>
+          {InOutControl === "Out" && (
+            <TableBody>
+              {reportOut.calls && reportOut.calls.length ? (
+                [...reportOut.calls].map((cal) => {
+                  return (
+                    <>
+                      <TableRow>
+                        <TableCell sx={{ overflow: "scroll/" }} align="left">
+                          {cal.user.name.toString()}
+                        </TableCell>
+                        <TableCell align="center">
+                          {cal.totalAmount.toString()}
+                        </TableCell>
+                        <TableCell align="center">
+                          {cal.pout_tee_amount
+                            ? cal.pout_tee_amount.toString()
+                            : "0"}
+                        </TableCell>
+
+                        <TableCell align="center">
+                          {cal.win.toString()}
+                        </TableCell>
+                        <TableCell
+                          sx={{ fontSize: 16, fontWeight: 500 }}
+                          align="right"
+                        >
+                          {/* {reportIn.me.totalWin} */}
+                          27/08/2022 - 02/09/2022
+                        </TableCell>
+                      </TableRow>
+                    </>
+                  );
+                })
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <Typography
+                      padding={1}
+                      fontSize={18}
+                      fontWeight={500}
+                      color={"red"}
+                      textAlign="center"
+                      gridColumn={3}
+                    >
+                      Reports Not Found !!!
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+              {reportOut.totalOut.length !== 0 ? (
+                <TableRow
+                  style={{
+                    backgroundColor: grey[300],
+                  }}
+                >
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 600 }}
+                    align="left"
+                  >
+                    Total
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="center"
+                  >
+                    {reportOut.totalOut.totalAmount}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="center"
+                  >
+                    {reportOut.totalOut.pout_tee_amount !== null
+                      ? reportOut.totalOut.pout_tee_amount
+                      : "0"}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="center"
+                  >
+                    {reportOut.totalOut.totalWin}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: 16, fontWeight: 500 }}
+                    align="right"
+                  >
+                    27/08/2022 - 02/09/2022
+                  </TableCell>
+                </TableRow>
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4}>
+                    <Typography
+                      padding={1}
+                      fontSize={18}
+                      fontWeight={500}
+                      color={"red"}
+                      textAlign="center"
+                      gridColumn={3}
+                    >
+                      Reports Not Found !!!
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
           )}
-        </TableBody>
-        {/* )} */}
-      </Table>
+        </Table>
+      </TableContainer>
       {/* </Stack> */}
     </Stack>
   );
