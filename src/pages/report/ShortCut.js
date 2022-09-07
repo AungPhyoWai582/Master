@@ -60,6 +60,9 @@ const ShortCup = () => {
   const [timeselect, setTimeSelect] = useState();
   const [selectChoice, setSelectChoice] = useState();
 
+  //in out control
+  const [inoutctl, setInoutctl] = useState(false);
+
   useEffect(() => {
     Axios.get(`/agents`, {
       headers: {
@@ -145,8 +148,8 @@ const ShortCup = () => {
         bgcolor={grey[300]}
         borderRadius={1}
       >
-        <FormControl>
-          {/* <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel> */}
+        {/* <FormControl>
+          <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
             name="controlled-radio-buttons-group"
@@ -158,7 +161,19 @@ const ShortCup = () => {
               <FormControlLabel value="Out" control={<Radio />} label="Out" />
             </Stack>
           </RadioGroup>
-        </FormControl>
+        </FormControl> */}
+        <Button
+          variant={"contained"}
+          va
+          size="small"
+          color="success"
+          onClick={(e) => {
+            setInoutctl(!true);
+            console.log(e.target.innerText);
+          }}
+        >
+          {inoutctl ? "In" : "Out"}
+        </Button>
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker

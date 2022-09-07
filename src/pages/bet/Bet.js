@@ -28,7 +28,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { blue, green, grey, red, yellow } from "@mui/material/colors";
+import {
+  blue,
+  cyan,
+  green,
+  grey,
+  lightBlue,
+  orange,
+  red,
+  yellow,
+} from "@mui/material/colors";
 import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -187,212 +196,230 @@ const Bet = () => {
     }
     setCalllistctrl(false);
   }, [calllistctrl]);
-
+  const SignArr = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "+",
+    "/",
+    "-",
+    "*",
+    "S",
+    "M",
+    "m",
+    "s",
+    "k",
+    "K",
+    "P",
+    "p",
+    "B",
+    "b",
+  ];
+  const numarr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    console.log(value);
-
-    // [...agentTotalData.numsData].map((agenTol, key) => {
-    //   //Check for input total
-    //   if (agentTotalData.numsData.map((ag) => ag.number).includes(value)) {
-    //     const index = agentTotalData.numbers.findIndex(
-    //       (obj) => obj.number === value
-    //     );
-    //     console.log(index, agentTotalData.numsData[index]);
-    //     // update setstate
-    //     setEnternumtol({
-    //       number: agentTotalData.numsData[index].number,
-    //       total: agentTotalData.numsData[index].amount,
-    //     });
-    //   } else {
-    //     setEnternumtol({
-    //       number: "",
-    //       total: "",
-    //     });
-    //   }
-    // });
-    setOnchange({
-      ...onchange,
-      [name]: value,
-    });
+    // console.log(value);
+    if (name) {
+      // for (const s of value) {
+      //   // console.log(s);
+      //   if (SignArr.includes(s)) {
+      //     console.log(onchange.number + s);
+      //     setOnchange({ number: value });
+      //     // console.log()
+      //     // setOnchange({ ...onchange, [name]: s });
+      //   }
+      //   if (name === "amount") {
+      //     console.log(name);
+      //     setOnchange({ ...onchange, amount: value });
+      //   }
+      // }
+      name === "number"
+        ? setOnchange({ ...onchange, number: value })
+        : setOnchange({ ...onchange, amount: value });
+    }
+    console.log(onchange);
   };
 
-  // console.log(agentTotalData);
-  // console.log(enternumtol);
   const choice = (e) => {
     e.preventDefault();
-
-    if (
-      (onchange.number.length > 1 ||
-        onchange.number === "k" ||
-        onchange.number === "K" ||
-        onchange.number === "p" ||
-        onchange.number === "P" ||
-        onchange.number === "b" ||
-        onchange.number === "B") &&
-      onchange.number.length < 3 &&
-      (onchange.number[0] === "1" ||
-        onchange.number[0] === "2" ||
-        onchange.number[0] === "3" ||
-        onchange.number[0] === "4" ||
-        onchange.number[0] === "5" ||
-        onchange.number[0] === "6" ||
-        onchange.number[0] === "7" ||
-        onchange.number[0] === "8" ||
-        onchange.number[0] === "9" ||
-        onchange.number[0] === "0" ||
-        onchange.number[0] === "*" ||
-        onchange.number[0] === "m" ||
-        onchange.number[0] === "M" ||
-        onchange.number[0] === "S" ||
-        onchange.number[0] === "s") &&
-      (onchange.number[1] === "1" ||
-        onchange.number[1] === "2" ||
-        onchange.number[1] === "3" ||
-        onchange.number[1] === "4" ||
-        onchange.number[1] === "5" ||
-        onchange.number[1] === "6" ||
-        onchange.number[1] === "7" ||
-        onchange.number[1] === "8" ||
-        onchange.number[1] === "9" ||
-        onchange.number[1] === "0" ||
-        onchange.number[1] === "*" ||
-        onchange.number[1] === "s" ||
-        onchange.number[1] === "S" ||
-        onchange.number[1] === "M" ||
-        onchange.number[1] === "m" ||
-        onchange.number[1] === "-" ||
-        onchange.number[1] === "/") &&
-      onchange.amount.length > 2
-    ) {
-      if (onchange.number === "k" || onchange.number === "K") {
+    if (onchange.number.length === 1 && onchange.amount.length > 2) {
+      if (onchange.number[0] === "k" || onchange.number[0] === "K") {
         const R = k(onchange);
-        setCall({ ...call, numbers: [...call.numbers, R] });
+        setCall({ ...call, numbers: [...call.numbers, ...R] });
+        console.log(call);
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
-      } else if (onchange.number === "p" || onchange.number === "P") {
+      } else if (onchange.number[0] === "p" || onchange.number[0] === "P") {
         const P = p(onchange);
-        setCall({ ...call, numbers: [...call.numbers, P] });
+        setCall({ ...call, numbers: [...call.numbers, ...P] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
-      } else if (onchange.number === "b" || onchange.number === "B") {
+      } else if (onchange.number[0] === "b" || onchange.number[0] === "B") {
         const B = b(onchange);
-        setCall({ ...call, numbers: [...call.numbers, B] });
+        setCall({ ...call, numbers: [...call.numbers, ...B] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
-      } else if (onchange.number[1] === "/") {
-        const BR = Breaks(onchange);
-        console.log(BR);
-        setCall({ ...call, numbers: [...call.numbers, BR] });
+      } else if (onchange.number[0] === "b" || onchange.number[0] === "B") {
+        const B = b(onchange);
+        setCall({ ...call, numbers: [...call.numbers, ...B] });
         setOnchange({ number: "", amount: onchange.amount });
         setAutoCompleteCtrl(false);
-      } else if (onchange.number[1] === "-") {
-        const AP = aper(onchange);
-        setCall({ ...call, numbers: [...call.numbers, AP] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
+      } else {
+        setBeterrorcontrol(true);
+      }
+    } else if (onchange.number.length === 2) {
+      if (onchange.number.startsWith("*")) {
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const apu = startStar(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...apu] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          (onchange.number.endsWith("0") ||
+            onchange.number.endsWith("1") ||
+            onchange.number.endsWith("2") ||
+            onchange.number.endsWith("3") ||
+            onchange.number.endsWith("4") ||
+            onchange.number.endsWith("5") ||
+            onchange.number.endsWith("6") ||
+            onchange.number.endsWith("7") ||
+            onchange.number.endsWith("8") ||
+            onchange.number.endsWith("9")) &&
+          onchange.amount.length > 2
+        ) {
+          const FPate = forwardPate(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...FPate] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
       } else if (
-        onchange.number === "mm" ||
-        onchange.number === "MM" ||
-        onchange.number === "Mm" ||
-        onchange.number === "mM"
+        onchange.number.startsWith("S") ||
+        onchange.number.startsWith("s")
       ) {
-        const MAMA = mm(onchange);
-        setCall({ ...call, numbers: [...call.numbers, MAMA] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const SPU = spu(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...SPU] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          (onchange.number.endsWith("S") || onchange.number.endsWith("s")) &&
+          onchange.amount.length > 2
+        ) {
+          const SS = ss(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...SS] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          (onchange.number.endsWith("M") || onchange.number.endsWith("m")) &&
+          onchange.amount.length > 2
+        ) {
+          const SM = sonema(onchange);
+          // console.log(MS);
+          setCall({ ...call, numbers: [...call.numbers, ...SM] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
       } else if (
-        onchange.number === "ss" ||
-        onchange.number === "SS" ||
-        onchange.number === "Ss" ||
-        onchange.number === "sS"
+        onchange.number.startsWith("M") ||
+        onchange.number.startsWith("m")
       ) {
-        const SS = ss(onchange);
-        setCall({ ...call, numbers: [...call.numbers, SS] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const MPU = mpu(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...MPU] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          (onchange.number.endsWith("S") || onchange.number.endsWith("s")) &&
+          onchange.amount.length > 2
+        ) {
+          const MS = masone(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...MS] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          (onchange.number.endsWith("M") || onchange.number.endsWith("m")) &&
+          onchange.amount.length > 2
+        ) {
+          const SM = sonema(onchange);
+          // console.log(MS);
+          setCall({ ...call, numbers: [...call.numbers, ...SM] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
       } else if (
-        onchange.number[1] === "*" &&
-        onchange.number[0] !== "s" &&
-        onchange.number[0] !== "S" &&
-        onchange.number[0] !== "m" &&
-        onchange.number[0] !== "M" &&
-        onchange.number[0] !== "*" &&
-        (onchange.number[0] === "1" ||
-          onchange.number[0] === "2" ||
-          onchange.number[0] === "3" ||
-          onchange.number[0] === "4" ||
-          onchange.number[0] === "5" ||
-          onchange.number[0] === "6" ||
-          onchange.number[0] === "7" ||
-          onchange.number[0] === "8" ||
-          onchange.number[0] === "9" ||
-          onchange.number[0] === "0")
+        onchange.number.startsWith("0") ||
+        onchange.number.startsWith("1") ||
+        onchange.number.startsWith("2") ||
+        onchange.number.startsWith("3") ||
+        onchange.number.startsWith("4") ||
+        onchange.number.startsWith("5") ||
+        onchange.number.startsWith("6") ||
+        onchange.number.startsWith("7") ||
+        onchange.number.startsWith("8") ||
+        onchange.number.startsWith("9")
       ) {
-        const BPate = backpate(onchange);
-        setCall({ ...call, numbers: [...call.numbers, BPate] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (
-        onchange.number[0] === "*" &&
-        onchange.number[1] !== "s" &&
-        onchange.number[1] !== "S" &&
-        onchange.number[1] !== "m" &&
-        onchange.number[1] !== "M" &&
-        (onchange.number[1] === "1" ||
-          onchange.number[1] === "2" ||
-          onchange.number[1] === "3" ||
-          onchange.number[1] === "4" ||
-          onchange.number[1] === "5" ||
-          onchange.number[1] === "6" ||
-          onchange.number[1] === "7" ||
-          onchange.number[1] === "8" ||
-          onchange.number[1] === "9" ||
-          onchange.number[1] === "0")
-        // onchange.number[1] !== "*"
-      ) {
-        const FPate = forwardPate(onchange);
-        setCall({ ...call, numbers: [...call.numbers, ...FPate] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (onchange.number === "**") {
-        const apu = startStar(onchange);
-        setCall({ ...call, numbers: [...call.numbers, ...apu] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (onchange.number === "s*" || onchange.number === "S*") {
-        const SPU = spu(onchange);
-        setCall({ ...call, numbers: [...call.numbers, ...SPU] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (onchange.number === "m*" || onchange.number === "M*") {
-        const SPU = mpu(onchange);
-        setCall({ ...call, numbers: [...call.numbers, ...SPU] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (
-        onchange.number === "MS" ||
-        onchange.number === "ms" ||
-        onchange.number === "Ms" ||
-        onchange.number === "mS"
-      ) {
-        const MS = masone(onchange);
-        // console.log(MS);
-        setCall({ ...call, numbers: [...call.numbers, ...MS] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (
-        onchange.number === "SM" ||
-        onchange.number === "sm" ||
-        onchange.number === "Sm" ||
-        onchange.number === "sM"
-      ) {
-        const SM = sonema(onchange);
-        // console.log(MS);
-        setCall({ ...call, numbers: [...call.numbers, ...SM] });
-        setOnchange({ number: "", amount: onchange.amount });
-        setAutoCompleteCtrl(false);
-      } else if (
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const BPate = backpate(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...BPate] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("-") &&
+          onchange.amount.length > 2
+        ) {
+          const AP = aper(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...AP] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("/") &&
+          onchange.amount.length > 2
+        ) {
+          const BR = Breaks(onchange);
+          console.log(BR);
+          setCall({ ...call, numbers: [...call.numbers, ...BR] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("0") ||
+          onchange.number.endsWith("1") ||
+          onchange.number.endsWith("2") ||
+          onchange.number.endsWith("3") ||
+          onchange.number.endsWith("4") ||
+          onchange.number.endsWith("5") ||
+          onchange.number.endsWith("6") ||
+          onchange.number.endsWith("7") ||
+          onchange.number.endsWith("8") ||
+          onchange.number.endsWith("9")
+        ) {
+          setCall({
+            ...call,
+            numbers: [...call.numbers, onchange],
+          });
+          setOnchange({ number: "", amount: onchange.amount });
+          setBeterrorcontrol(false);
+          setEditCtlBtn(false);
+          setCallandBetlistctleff(false);
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
+      }
+    } else if (onchange.number.length === 3) {
+      if (
         (onchange.number[0] === "1" ||
           onchange.number[0] === "2" ||
           onchange.number[0] === "3" ||
@@ -414,40 +441,155 @@ const Bet = () => {
           onchange.number[1] === "9" ||
           onchange.number[1] === "0")
       ) {
-        // console.log();
-        setCall({
-          ...call,
-          numbers: [...call.numbers, onchange],
-        });
-
-        setOnchange({ number: "", amount: onchange.amount });
-        setBeterrorcontrol(false);
-
-        setEditCtlBtn(false);
-        setCallandBetlistctleff(false);
-        setAutoCompleteCtrl(false);
-      } else {
-        setBeterrorcontrol(true);
+        if (onchange.number.endsWith("+")) {
+          const R = r(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...R] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("1") ||
+          onchange.number.endsWith("2") ||
+          onchange.number.endsWith("3") ||
+          onchange.number.endsWith("4") ||
+          onchange.number.endsWith("5") ||
+          onchange.number.endsWith("6") ||
+          onchange.number.endsWith("7") ||
+          onchange.number.endsWith("8") ||
+          onchange.number.endsWith("9") ||
+          onchange.number.endsWith("0")
+        ) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        }
       }
-    } else if (
-      onchange.number.length === 3 &&
-      (onchange.number.endsWith("R") || onchange.number.endsWith("r"))
-    ) {
-      const R = r(onchange);
-      setCall({ ...call, numbers: [...call.numbers, ...R] });
-      setOnchange({ number: "", amount: onchange.amount });
-      setAutoCompleteCtrl(false);
-    } else if (
-      (onchange.number.length < 6 &&
-        onchange.number.length >= 3 &&
-        onchange.amount.length) ||
-      !onchange.number[3] === "*" ||
-      onchange.number[4] === "*"
-    ) {
-      const PDT = padatha(onchange);
-      setCall({ ...call, numbers: [...call.numbers, ...PDT] });
-      setOnchange({ number: "", amount: onchange.amount });
-      setAutoCompleteCtrl(false);
+    } else if (onchange.number.length === 4) {
+      if (
+        (onchange.number[0] === "1" ||
+          onchange.number[0] === "2" ||
+          onchange.number[0] === "3" ||
+          onchange.number[0] === "4" ||
+          onchange.number[0] === "5" ||
+          onchange.number[0] === "6" ||
+          onchange.number[0] === "7" ||
+          onchange.number[0] === "8" ||
+          onchange.number[0] === "9" ||
+          onchange.number[0] === "0") &&
+        (onchange.number[1] === "1" ||
+          onchange.number[1] === "2" ||
+          onchange.number[1] === "3" ||
+          onchange.number[1] === "4" ||
+          onchange.number[1] === "5" ||
+          onchange.number[1] === "6" ||
+          onchange.number[1] === "7" ||
+          onchange.number[1] === "8" ||
+          onchange.number[1] === "9" ||
+          onchange.number[1] === "0") &&
+        (onchange.number[2] === "1" ||
+          onchange.number[2] === "2" ||
+          onchange.number[2] === "3" ||
+          onchange.number[2] === "4" ||
+          onchange.number[2] === "5" ||
+          onchange.number[2] === "6" ||
+          onchange.number[2] === "7" ||
+          onchange.number[2] === "8" ||
+          onchange.number[2] === "9" ||
+          onchange.number[2] === "0")
+      ) {
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("1") ||
+          onchange.number.endsWith("2") ||
+          onchange.number.endsWith("3") ||
+          onchange.number.endsWith("4") ||
+          onchange.number.endsWith("5") ||
+          onchange.number.endsWith("6") ||
+          onchange.number.endsWith("7") ||
+          onchange.number.endsWith("8") ||
+          onchange.number.endsWith("9") ||
+          onchange.number.endsWith("0")
+        ) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
+      }
+    } else if (onchange.number.length === 5) {
+      if (
+        (onchange.number[0] === "1" ||
+          onchange.number[0] === "2" ||
+          onchange.number[0] === "3" ||
+          onchange.number[0] === "4" ||
+          onchange.number[0] === "5" ||
+          onchange.number[0] === "6" ||
+          onchange.number[0] === "7" ||
+          onchange.number[0] === "8" ||
+          onchange.number[0] === "9" ||
+          onchange.number[0] === "0") &&
+        (onchange.number[1] === "1" ||
+          onchange.number[1] === "2" ||
+          onchange.number[1] === "3" ||
+          onchange.number[1] === "4" ||
+          onchange.number[1] === "5" ||
+          onchange.number[1] === "6" ||
+          onchange.number[1] === "7" ||
+          onchange.number[1] === "8" ||
+          onchange.number[1] === "9" ||
+          onchange.number[1] === "0") &&
+        (onchange.number[2] === "1" ||
+          onchange.number[2] === "2" ||
+          onchange.number[2] === "3" ||
+          onchange.number[2] === "4" ||
+          onchange.number[2] === "5" ||
+          onchange.number[2] === "6" ||
+          onchange.number[2] === "7" ||
+          onchange.number[2] === "8" ||
+          onchange.number[2] === "9" ||
+          onchange.number[2] === "0") &&
+        (onchange.number[3] === "1" ||
+          onchange.number[3] === "2" ||
+          onchange.number[3] === "3" ||
+          onchange.number[3] === "4" ||
+          onchange.number[3] === "5" ||
+          onchange.number[3] === "6" ||
+          onchange.number[3] === "7" ||
+          onchange.number[3] === "8" ||
+          onchange.number[3] === "9" ||
+          onchange.number[3] === "0")
+      ) {
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("1") ||
+          onchange.number.endsWith("2") ||
+          onchange.number.endsWith("3") ||
+          onchange.number.endsWith("4") ||
+          onchange.number.endsWith("5") ||
+          onchange.number.endsWith("6") ||
+          onchange.number.endsWith("7") ||
+          onchange.number.endsWith("8") ||
+          onchange.number.endsWith("9") ||
+          onchange.number.endsWith("0")
+        ) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
+      }
     } else {
       setBeterrorcontrol(true);
     }
@@ -600,7 +742,7 @@ const Bet = () => {
     return cus.username;
   };
   return (
-    <Stack height={"100%"}>
+    <Stack height={"100%"} bgcolor={"white"}>
       {success && (
         <Alert
           severity="success"
@@ -678,7 +820,7 @@ const Bet = () => {
       >
         <Autocomplete
           size="small"
-          options={selectChoice && selectChoice === "Out" ? agents : "0"}
+          // options={selectChoice && selectChoice === "Out" ? agents : "0"}
           options={agents}
           isOptionEqualToValue={(option, value) =>
             option.username === value.username
@@ -895,19 +1037,20 @@ const Bet = () => {
                   //   alignItems={"center"}
                   //   bgcolor={"ActiveBorder"}
                   // >
-                  <Stack
-                    direction={"row"}
-                    // width={{ sx: 180 }}
-                    marginY={0.3}
-                    justifyContent={{
-                      sx: "space-between",
-                      sm: "space-around",
-                      md: "space-around",
-                    }}
-                  >
-                    <BetListCom call={cal} key={key} />
-                    {/* </Stack> */}
-                  </Stack>
+                  <>
+                    <Stack
+                      direction={"row"}
+                      // width={{ sx: 180 }}
+                      marginY={0.3}
+                      justifyContent={{
+                        sx: "space-between",
+                        sm: "space-around",
+                        md: "space-around",
+                      }}
+                    >
+                      <BetListCom call={cal} key={key} />
+                    </Stack>
+                  </>
                 ))
                 .reverse()
             : autoCompleteValue &&
@@ -1009,6 +1152,9 @@ const Bet = () => {
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Call Total</span> :{" "}
           {callTotal.toString()}
+        </Typography>
+        <Typography fontWeight={900}>
+          <span style={{ color: "red" }}>Count</span> : {call.numbers.length}
         </Typography>
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Net Total</span> :{" "}
