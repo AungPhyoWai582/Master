@@ -9,6 +9,7 @@ import {
   Stack,
   TextField,
   Typography,
+  Checkbox,
 } from "@mui/material";
 import { green, grey, red, teal } from "@mui/material/colors";
 import React, { useState } from "react";
@@ -25,6 +26,8 @@ const MemberCreate = ({ userinfo }) => {
     divider: "",
     twoDz: "",
     commission: "",
+    accLimit: false,
+    acc_limit_created: "",
   });
   const selectType = [
     { label: "Cash" },
@@ -32,6 +35,16 @@ const MemberCreate = ({ userinfo }) => {
     // { label: 50 },
     { label: 25 },
   ];
+
+  const [checked, setChecked] = React.useState(true);
+
+  const handleChange = (event) => {
+    // setChecked(event.target.checked);
+    setAgent({
+      ...agent,
+      accLimit: event.target.checked,
+    });
+  };
 
   const onChangeHandler = (e) => {
     console.log(e.target.name);
@@ -74,6 +87,8 @@ const MemberCreate = ({ userinfo }) => {
           divider: "",
           twoDz: "",
           commission: "",
+          accLimit: false,
+          acc_limit_created: "",
         });
       })
       .catch((err) => setError(true));
@@ -314,37 +329,39 @@ const MemberCreate = ({ userinfo }) => {
                 }
               />
             </Stack>
-            {/* <Stack spacing={1.5} padding={1}>
-              <Typography variant={"caption"} component={"label"} fontSize={16}>
-                In / Out
+            <Stack
+              marginTop={1}
+              // spacing={1.5}
+              padding={1}
+              alignItems="center"
+              // bgcolor={"red"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              sx={{ display: "flex", flexWrap: "wrap" }}
+            >
+              <Typography variant={"caption"} fontSize={16}>
+                Acc Limit:
               </Typography>
-              <FormControlLabel
-                // label="Divider"
-                control={
-                  <Autocomplete
-                    disablePortal
-                    size={"small"}
-                    fullWidth
-                    id="selectType"
-                    sx={{ bgcolor: teal[50] }}
-                    options={selectType}
-                    renderInput={(params) => (
-                      <TextField
-                        sx={{ bgcolor: teal[50] }}
-                        color={"success"}
-                        {...params}
-                        label="Select Type"
-                      />
-                    )}
-                    name="divider"
-                    value={agent.divider}
-                    onChange={(e, value) =>
-                      onSelectHandler(e, "divider", value)
-                    }
-                  />
-                }
-              />
-            </Stack> */}
+
+              <Stack direction={"row"} alignItems={"center"}>
+                <Checkbox
+                  color="success"
+                  checked={agent.accLimit}
+                  onChange={handleChange}
+                  //  inputProps={{ "aria-label": "controlled" }}
+                />
+                <TextField
+                  disabled={agent.accLimit ? false : true}
+                  size="small"
+                  variant="outlined"
+                  value={agent.acc_limit_created}
+                  sx={{ bgcolor: agent.accLimit ? teal[50] : grey[300] }}
+                  color={"secondary"}
+                  name="acc_limit_created"
+                  onChange={onChangeHandler}
+                />
+              </Stack>
+            </Stack>
           </Grid>
           <Grid item xs={1} md={12}>
             <Stack
