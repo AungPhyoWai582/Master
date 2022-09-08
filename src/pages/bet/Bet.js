@@ -136,8 +136,8 @@ const Bet = () => {
   const [calllistctrl, setCalllistctrl] = useState(false);
 
   const [agentTotalData, setAgentTotalData] = useState({
-    numsData: [],
-    numsTotal: 0,
+    Data: [],
+    Total: 0,
   });
   useEffect(() => {
     // console.log(hot_tees);
@@ -189,8 +189,8 @@ const Bet = () => {
       }).then((res) => {
         console.log(res.data);
         setAgentTotalData({
-          numsData: res.data.numsData,
-          numsTotal: res.data.numsTotal,
+          Data: res.data.numsData,
+          Total: res.data.numsTotal,
         });
       });
     }
@@ -462,6 +462,8 @@ const Bet = () => {
           setCall({ ...call, numbers: [...call.numbers, ...PDT] });
           setOnchange({ number: "", amount: onchange.amount });
           setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
         }
       }
     } else if (onchange.number.length === 4) {
@@ -661,10 +663,12 @@ const Bet = () => {
   };
   // console.log(la);
   //crud delete
-  const agcallcrud = (cal) => {
-    console.log(cal);
-    setAgentCallCrud({ id: cal._id, numbers: cal.numbers });
-    // setAutoCompleteCtrl(true);
+  const agcallcrud = (cal, key) => {
+    const afterDelete = call.numbers.filter((arr, key1) => key1 !== key);
+    console.log(afterDelete);
+    setCall({ ...call, numbers: afterDelete });
+    setAutoCompleteCtrl(false);
+    console.log(call);
   };
   const agentcallDelete = (key, calcrud) => {
     console.log(calcrud);
@@ -911,13 +915,13 @@ const Bet = () => {
           }}
           label={"နံပါတ်"}
         >
-          {agentTotalData.numsData
-            .map((num) => num.number)
-            .includes(onchange.number) && (
+          {agentTotalData.Data.map((num) => num.number).includes(
+            onchange.number
+          ) && (
             <Chip
               label={
-                agentTotalData.numsData[
-                  agentTotalData.numsData.findIndex(
+                agentTotalData.Data[
+                  agentTotalData.Data.findIndex(
                     (obj) => obj.number === onchange.number
                   )
                 ].amount
@@ -1048,7 +1052,24 @@ const Bet = () => {
                         md: "space-around",
                       }}
                     >
-                      <BetListCom call={cal} key={key} />
+                      <BetListCom call={cal} key={key}>
+                        <IconButton
+                          size="small"
+                          onClick={() => agcallcrud(cal, key)}
+                        >
+                          <Typography
+                            fontSize={8}
+                            textAlign={"center"}
+                            width={20}
+                          >
+                            {key + 1}
+                          </Typography>
+                          <Delete
+                            sx={{ textalign: "center" }}
+                            fontSize="small"
+                          />
+                        </IconButton>
+                      </BetListCom>
                     </Stack>
                   </>
                 ))
@@ -1103,8 +1124,9 @@ const Bet = () => {
             </Stack>
           </Stack> */}
           {/* {agentcallcrud && agentcallcrud.length === null */}
-          {!agentcallcrud.numbers.length
-            ? callDemo.map((calc, key) => {
+          {
+            !agentcallcrud.numbers.length &&
+              callDemo.map((calc, key) => {
                 <Stack
                   borderLeft={0.5}
                   borderRight={0.5}
@@ -1115,27 +1137,28 @@ const Bet = () => {
                   <BetListCom call={calc} key={key} />;
                 </Stack>;
               })
-            : autocompleteCtrl === true &&
-              agentcallcrud.numbers.map((calcrud, key) => {
-                return (
-                  <BetListCom call={calcrud}>
-                    <Stack
-                      direction={"row"}
-                      onClick={() => editHandle(calcrud, key)}
-                    >
-                      <IconButton size="small">
-                        <Edit fontSize="6" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => agentcallDelete(key, calcrud)}
-                      >
-                        <Delete fontSize="6" />
-                      </IconButton>
-                    </Stack>
-                  </BetListCom>
-                );
-              })}
+            // : autocompleteCtrl === true &&
+            //   agentcallcrud.numbers.map((calcrud, key) => {
+            //     return (
+            //       <BetListCom call={calcrud}>
+            //         <Stack
+            //           direction={"row"}
+            //           onClick={() => editHandle(calcrud, key)}
+            //         >
+            //           <IconButton size="small">
+            //             <Edit fontSize="6" />
+            //           </IconButton>
+            //           <IconButton
+            //             size="small"
+            //             onClick={() => agentcallDelete(key, calcrud)}
+            //           >
+            //             <Delete fontSize="6" />
+            //           </IconButton>
+            //         </Stack>
+            //       </BetListCom>
+            //     );
+            //   })
+          }
         </Stack>
       </Stack>
       <Stack
@@ -1149,7 +1172,7 @@ const Bet = () => {
         }}
         spacing={{ xs: 1, sm: 2, md: 3 }}
       >
-        {/* <Typography fontWeight={900}>
+        <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Call Total</span> :{" "}
           {callTotal ? callTotal.toString() : "0"}
         </Typography>
@@ -1159,8 +1182,8 @@ const Bet = () => {
         </Typography>
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Net Total</span> :{" "}
-          {agentTotalData ? agentTotalData.numsTotal.toString() : "0"}
-        </Typography> */}
+          {agentTotalData.Total}
+        </Typography>
       </Stack>
 
       <Dialog fullScreen open={lagerOpen}>

@@ -20,19 +20,9 @@ const LagerCom = ({ addField }) => {
     }).then((res) => {
       console.log(res.data.data);
       setLagerIn(res.data.data);
-      // // const { in} = res.data.data;
-      // setInData(res.data.data.in);
     });
   }, []);
-  // console.log(LagerIn);
-  // console.log(Lager.call);
-  // const date = new Date(Lager.info.date);
 
-  //   const call = Lager.call.map((c) => {
-  //     return { number: c.number, amount: Number(c.amount) };
-  //   });
-  //   const sort = call.sort((a, b) => b.amount - a.amount);
-  //   console.log(sort);
   //LagerBreak
   const [lagerBreak, setLagerBreak] = useState();
   console.log(inData);
@@ -113,16 +103,6 @@ const LagerCom = ({ addField }) => {
                             >
                               {amount}
                             </Typography>
-
-                            {/* <Typography
-                          margin={"auto"}
-                          display={"flex-end"}
-                          flexWrap={"wrap"}
-                          textAlign={"right"}
-                          width={{ md: 70, sm: 30 }}
-                        >
-                          0
-                        </Typography> */}
                           </Stack>
                         </td>
                       </>
