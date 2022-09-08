@@ -46,10 +46,10 @@ const Lager = () => {
           onChange={(e) => sentLagerBreak(e)}
         />
       </Stack>
-      <Stack margin={1}>
-        <Typography textalign={"center"} margin={0.5}>
+      <Stack margin={1} overflow={"auto"}>
+        {/* <Typography textalign={"center"} margin={0.5}>
           In Lager
-        </Typography>
+        </Typography> */}
         {/* <LagerCom addField={false} /> */}
         <LagerTable />
       </Stack>

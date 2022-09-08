@@ -69,6 +69,7 @@ import {
   backpate,
   forwardPate,
 } from "./Betsign";
+import LagerTable from "../../components/LagerTable";
 
 const Bet = () => {
   // For input refs
@@ -222,24 +223,11 @@ const Bet = () => {
     "B",
     "b",
   ];
-  const numarr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    // console.log(value);
+
     if (name) {
-      // for (const s of value) {
-      //   // console.log(s);
-      //   if (SignArr.includes(s)) {
-      //     console.log(onchange.number + s);
-      //     setOnchange({ number: value });
-      //     // console.log()
-      //     // setOnchange({ ...onchange, [name]: s });
-      //   }
-      //   if (name === "amount") {
-      //     console.log(name);
-      //     setOnchange({ ...onchange, amount: value });
-      //   }
-      // }
       name === "number"
         ? setOnchange({ ...onchange, number: value })
         : setOnchange({ ...onchange, amount: value });
@@ -249,6 +237,9 @@ const Bet = () => {
 
   const choice = (e) => {
     e.preventDefault();
+    if (onchange.number.includes(hot_tees)) {
+      console.log(onchange.number);
+    }
     if (onchange.number.length === 1 && onchange.amount.length > 2) {
       if (onchange.number[0] === "k" || onchange.number[0] === "K") {
         const R = k(onchange);
@@ -566,6 +557,172 @@ const Bet = () => {
           onchange.number[3] === "8" ||
           onchange.number[3] === "9" ||
           onchange.number[3] === "0")
+      ) {
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("1") ||
+          onchange.number.endsWith("2") ||
+          onchange.number.endsWith("3") ||
+          onchange.number.endsWith("4") ||
+          onchange.number.endsWith("5") ||
+          onchange.number.endsWith("6") ||
+          onchange.number.endsWith("7") ||
+          onchange.number.endsWith("8") ||
+          onchange.number.endsWith("9") ||
+          onchange.number.endsWith("0")
+        ) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
+      }
+    } else if (onchange.number.length === 6) {
+      if (
+        (onchange.number[0] === "1" ||
+          onchange.number[0] === "2" ||
+          onchange.number[0] === "3" ||
+          onchange.number[0] === "4" ||
+          onchange.number[0] === "5" ||
+          onchange.number[0] === "6" ||
+          onchange.number[0] === "7" ||
+          onchange.number[0] === "8" ||
+          onchange.number[0] === "9" ||
+          onchange.number[0] === "0") &&
+        (onchange.number[1] === "1" ||
+          onchange.number[1] === "2" ||
+          onchange.number[1] === "3" ||
+          onchange.number[1] === "4" ||
+          onchange.number[1] === "5" ||
+          onchange.number[1] === "6" ||
+          onchange.number[1] === "7" ||
+          onchange.number[1] === "8" ||
+          onchange.number[1] === "9" ||
+          onchange.number[1] === "0") &&
+        (onchange.number[2] === "1" ||
+          onchange.number[2] === "2" ||
+          onchange.number[2] === "3" ||
+          onchange.number[2] === "4" ||
+          onchange.number[2] === "5" ||
+          onchange.number[2] === "6" ||
+          onchange.number[2] === "7" ||
+          onchange.number[2] === "8" ||
+          onchange.number[2] === "9" ||
+          onchange.number[2] === "0") &&
+        (onchange.number[3] === "1" ||
+          onchange.number[3] === "2" ||
+          onchange.number[3] === "3" ||
+          onchange.number[3] === "4" ||
+          onchange.number[3] === "5" ||
+          onchange.number[3] === "6" ||
+          onchange.number[3] === "7" ||
+          onchange.number[3] === "8" ||
+          onchange.number[3] === "9" ||
+          onchange.number[3] === "0") &&
+        (onchange.number[4] === "1" ||
+          onchange.number[4] === "2" ||
+          onchange.number[4] === "3" ||
+          onchange.number[4] === "4" ||
+          onchange.number[4] === "5" ||
+          onchange.number[4] === "6" ||
+          onchange.number[4] === "7" ||
+          onchange.number[4] === "8" ||
+          onchange.number[4] === "9" ||
+          onchange.number[4] === "0")
+      ) {
+        if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else if (
+          onchange.number.endsWith("1") ||
+          onchange.number.endsWith("2") ||
+          onchange.number.endsWith("3") ||
+          onchange.number.endsWith("4") ||
+          onchange.number.endsWith("5") ||
+          onchange.number.endsWith("6") ||
+          onchange.number.endsWith("7") ||
+          onchange.number.endsWith("8") ||
+          onchange.number.endsWith("9") ||
+          onchange.number.endsWith("0")
+        ) {
+          const PDT = padatha(onchange);
+          setCall({ ...call, numbers: [...call.numbers, ...PDT] });
+          setOnchange({ number: "", amount: onchange.amount });
+          setAutoCompleteCtrl(false);
+        } else {
+          setBeterrorcontrol(true);
+        }
+      }
+    } else if (onchange.number.length === 7) {
+      if (
+        (onchange.number[0] === "1" ||
+          onchange.number[0] === "2" ||
+          onchange.number[0] === "3" ||
+          onchange.number[0] === "4" ||
+          onchange.number[0] === "5" ||
+          onchange.number[0] === "6" ||
+          onchange.number[0] === "7" ||
+          onchange.number[0] === "8" ||
+          onchange.number[0] === "9" ||
+          onchange.number[0] === "0") &&
+        (onchange.number[1] === "1" ||
+          onchange.number[1] === "2" ||
+          onchange.number[1] === "3" ||
+          onchange.number[1] === "4" ||
+          onchange.number[1] === "5" ||
+          onchange.number[1] === "6" ||
+          onchange.number[1] === "7" ||
+          onchange.number[1] === "8" ||
+          onchange.number[1] === "9" ||
+          onchange.number[1] === "0") &&
+        (onchange.number[2] === "1" ||
+          onchange.number[2] === "2" ||
+          onchange.number[2] === "3" ||
+          onchange.number[2] === "4" ||
+          onchange.number[2] === "5" ||
+          onchange.number[2] === "6" ||
+          onchange.number[2] === "7" ||
+          onchange.number[2] === "8" ||
+          onchange.number[2] === "9" ||
+          onchange.number[2] === "0") &&
+        (onchange.number[3] === "1" ||
+          onchange.number[3] === "2" ||
+          onchange.number[3] === "3" ||
+          onchange.number[3] === "4" ||
+          onchange.number[3] === "5" ||
+          onchange.number[3] === "6" ||
+          onchange.number[3] === "7" ||
+          onchange.number[3] === "8" ||
+          onchange.number[3] === "9" ||
+          onchange.number[3] === "0") &&
+        (onchange.number[4] === "1" ||
+          onchange.number[4] === "2" ||
+          onchange.number[4] === "3" ||
+          onchange.number[4] === "4" ||
+          onchange.number[4] === "5" ||
+          onchange.number[4] === "6" ||
+          onchange.number[4] === "7" ||
+          onchange.number[4] === "8" ||
+          onchange.number[4] === "9" ||
+          onchange.number[4] === "0") &&
+        (onchange.number[4] === "1" ||
+          onchange.number[4] === "2" ||
+          onchange.number[4] === "3" ||
+          onchange.number[4] === "4" ||
+          onchange.number[4] === "5" ||
+          onchange.number[4] === "6" ||
+          onchange.number[4] === "7" ||
+          onchange.number[4] === "8" ||
+          onchange.number[4] === "9" ||
+          onchange.number[4] === "0")
       ) {
         if (onchange.number.endsWith("*") && onchange.amount.length > 2) {
           const PDT = padatha(onchange);
@@ -998,9 +1155,10 @@ const Bet = () => {
         <Stack
           // display={{ md: "none" }}
           bgcolor={grey[300]}
-          spacing={3}
-          direction={"row"}
-          justifyContent={"center"}
+          // spacing={3}
+          flexDirection={{ xs: "column", sm: "column", md: "row" }}
+          flexWrap={"wrap"}
+          justifyContent={{ xs: "start", sm: "start", md: "start" }}
           width={{ xs: 30, sm: "20%", md: "25%" }}
         >
           {hot_tees &&
@@ -1061,6 +1219,7 @@ const Bet = () => {
                             fontSize={8}
                             textAlign={"center"}
                             width={20}
+                            color={green[900]}
                           >
                             {key + 1}
                           </Typography>
@@ -1174,7 +1333,11 @@ const Bet = () => {
       >
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Call Total</span> :{" "}
-          {callTotal ? callTotal.toString() : "0"}
+          {callTotal
+            ? callTotal.toString()
+            : call.numbers
+            ? call.numbers.reduce((p, n) => p + n.amount, 0).toString()
+            : "0"}
         </Typography>
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Count</span> :{" "}
@@ -1182,7 +1345,7 @@ const Bet = () => {
         </Typography>
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Net Total</span> :{" "}
-          {agentTotalData.Total}
+          {agentTotalData !== null ? agentTotalData.Total.toString() : "0"}
         </Typography>
       </Stack>
 
@@ -1209,7 +1372,7 @@ const Bet = () => {
               Set
             </Button>
           </Stack>
-          <LagerCom />
+          <LagerTable hot={hot_tees} />
         </Stack>
       </Dialog>
     </Stack>
