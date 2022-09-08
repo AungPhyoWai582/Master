@@ -1149,17 +1149,18 @@ const Bet = () => {
         }}
         spacing={{ xs: 1, sm: 2, md: 3 }}
       >
-        <Typography fontWeight={900}>
+        {/* <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Call Total</span> :{" "}
-          {callTotal.toString()}
+          {callTotal ? callTotal.toString() : "0"}
         </Typography>
         <Typography fontWeight={900}>
-          <span style={{ color: "red" }}>Count</span> : {call.numbers.length}
+          <span style={{ color: "red" }}>Count</span> :{" "}
+          {call ? call.numbers.length : "0"}
         </Typography>
         <Typography fontWeight={900}>
           <span style={{ color: "red" }}>Net Total</span> :{" "}
-          {agentTotalData.numsTotal.toString()}
-        </Typography>
+          {agentTotalData ? agentTotalData.numsTotal.toString() : "0"}
+        </Typography> */}
       </Stack>
 
       <Dialog fullScreen open={lagerOpen}>
