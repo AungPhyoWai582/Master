@@ -39,11 +39,7 @@ const LagerTable = (hot) => {
               return (
                 <TableRow style={{ display: "flex" }}>
                   <TableCell>
-                    {hot.includes((n, k) => n.number === dlag.number) ? (
-                      <span style={{ color: "red" }}>{dlag.number}</span>
-                    ) : (
-                      <span>{dlag.number}</span>
-                    )}
+                    <span>{dlag.number}</span>
                   </TableCell>
                   <TableCell>{dlag.amount}</TableCell>
                 </TableRow>
